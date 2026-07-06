@@ -101,8 +101,11 @@ def start_test(request, test_id):
     # Create a new test attempt
     attempt = TestAttempt.objects.create(user=request.user, test=test)
 
-    # Get all questions for this test
+    # Get all questions for this test and shuffle them
     questions = list(test.questions.all())
+    random.shuffle(questions)
+    # Store shuffled order in session so it stays consistent
+    request.session[f"attempt_{attempt.id}_order"] = [q.id for q in questions]
 
     # Redirect to the first question (index 0)
     return redirect(reverse("take_question", args=[attempt.id, 0]))
@@ -126,7 +129,17 @@ def take_question(request, attempt_id, question_index):
         TestAttempt, id=attempt_id, user=request.user, completed=False
     )
     test = attempt.test
-    questions = list(test.questions.all())
+
+    # Load questions in the stored shuffled order from session
+    order = request.session.get(f"attempt_{attempt.id}_order")
+    if order:
+        questions = list(Question.objects.filter(id__in=order))
+        questions = sorted(questions, key=lambda q: order.index(q.id))
+    else:
+        questions = list(test.questions.all())
+        random.shuffle(questions)
+        request.session[f"attempt_{attempt.id}_order"] = [q.id for q in questions]
+
     total_questions = len(questions)
 
     if question_index >= total_questions:
