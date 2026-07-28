@@ -27,6 +27,7 @@ urlpatterns = [
     # 'path('accounts/', include('django.contrib.auth.urls'))' in quiz_project/urls.py
 
     # Test Views (User Facing)
+    path('study/', views.study_view, name='study'),
     path('tests/', test_list, name='test_list'),
     path('tests/reorder/', reorder_tests, name='reorder_tests'),
     path('tests/start/<int:test_id>/', start_test, name='start_test'),

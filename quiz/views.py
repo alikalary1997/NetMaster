@@ -69,6 +69,10 @@ def landing_page(request):
     return render(request, "quiz/landing_page.html")
 
 
+def study_view(request):
+    return render(request, "quiz/study.html")
+
+
 @login_required
 def test_list(request):
     # --- MODIFIED: Annotate tests with question_count and order by position ---

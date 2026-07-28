@@ -1,0 +1,54 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+<div class="min-h-[70vh] flex items-center justify-center px-4">
+    <div class="max-w-xl w-full">
+        <!-- Icon -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20 mb-4">
+                <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-base-content">Study</h1>
+            <p class="text-base-content/50 mt-1 text-sm uppercase tracking-widest">Your CCNA Journey Starts Here</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card bg-base-100 border border-base-300 shadow-lg">
+            <div class="card-body items-center text-center p-8">
+                <!-- Status Badge -->
+                <span class="badge badge-warning badge-lg gap-2 mb-4 px-4 py-4 text-sm font-medium">
+                    <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Coming Soon
+                </span>
+
+                <h2 class="text-xl font-semibold mb-3">We're Building Something Great</h2>
+
+                <p class="text-base-content/60 leading-relaxed mb-6">
+                    We're crafting a comprehensive CCNA study experience with organized
+                    materials, detailed explanations, and practice resources to help you
+                    master every exam topic with confidence.
+                </p>
+
+                <!-- Feature Pills -->
+                <div class="flex flex-wrap justify-center gap-2 mb-6">
+                    <span class="badge badge-ghost badge-lg px-3 py-1">📖 Study Guides</span>
+                    <span class="badge badge-ghost badge-lg px-3 py-1">🎯 Practice Labs</span>
+                    <span class="badge badge-ghost badge-lg px-3 py-1">📝 Exam Tips</span>
+                    <span class="badge badge-ghost badge-lg px-3 py-1">📊 Progress Tracking</span>
+                </div>
+
+                <!-- Divider -->
+                <div class="divider my-1"></div>
+
+                <!-- Bottom message -->
+                <p class="text-base-content/40 text-sm italic">
+                    Stay tuned — launching soon.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
