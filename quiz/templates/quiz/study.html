@@ -2,6 +2,13 @@
 {% block content %}
 <div class="min-h-[70vh] flex items-center justify-center px-4">
     <div class="max-w-xl w-full">
+        <!-- Language Switcher -->
+        <div class="flex justify-center gap-2 mb-8">
+            <button onclick="switchLang('en')" id="btn-en" class="btn btn-sm btn-primary lang-btn">English</button>
+            <button onclick="switchLang('ar')" id="btn-ar" class="btn btn-sm btn-ghost lang-btn">العربية</button>
+            <button onclick="switchLang('ku')" id="btn-ku" class="btn btn-sm btn-ghost lang-btn">کوردی</button>
+        </div>
+
         <!-- Icon -->
         <div class="text-center mb-8">
             <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20 mb-4">
@@ -9,46 +16,87 @@
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/>
                 </svg>
             </div>
-            <h1 class="text-3xl font-bold text-base-content">Study</h1>
-            <p class="text-base-content/50 mt-1 text-sm uppercase tracking-widest">Your CCNA Journey Starts Here</p>
+            <h1 class="text-3xl font-bold text-base-content lang" data-lang="title">🚧 Study Section Coming Soon</h1>
         </div>
 
         <!-- Main Card -->
         <div class="card bg-base-100 border border-base-300 shadow-lg">
             <div class="card-body items-center text-center p-8">
-                <!-- Status Badge -->
-                <span class="badge badge-warning badge-lg gap-2 mb-4 px-4 py-4 text-sm font-medium">
-                    <svg class="w-4 h-4 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    Coming Soon
-                </span>
-
-                <h2 class="text-xl font-semibold mb-3">We're Building Something Great</h2>
-
-                <p class="text-base-content/60 leading-relaxed mb-6">
-                    We're crafting a comprehensive CCNA study experience with organized
-                    materials, detailed explanations, and practice resources to help you
-                    master every exam topic with confidence.
+                <p class="text-base-content/70 leading-relaxed mb-4 lang" data-lang="p1">
+                    We're working hard to bring you a complete CCNA learning experience.
+                </p>
+                <p class="text-base-content/60 leading-relaxed mb-4 lang" data-lang="p2">
+                    Soon, this section will include organized study materials, detailed explanations,
+                    practice questions, and resources to help you prepare for the CCNA certification with confidence.
+                </p>
+                <p class="text-base-content/60 leading-relaxed mb-4 lang" data-lang="p3">
+                    Thank you for your patience and support. We're committed to making this the best place to learn and succeed.
                 </p>
 
-                <!-- Feature Pills -->
-                <div class="flex flex-wrap justify-center gap-2 mb-6">
-                    <span class="badge badge-ghost badge-lg px-3 py-1">📖 Study Guides</span>
-                    <span class="badge badge-ghost badge-lg px-3 py-1">🎯 Practice Labs</span>
-                    <span class="badge badge-ghost badge-lg px-3 py-1">📝 Exam Tips</span>
-                    <span class="badge badge-ghost badge-lg px-3 py-1">📊 Progress Tracking</span>
-                </div>
-
-                <!-- Divider -->
                 <div class="divider my-1"></div>
 
-                <!-- Bottom message -->
-                <p class="text-base-content/40 text-sm italic">
-                    Stay tuned — launching soon.
+                <p class="text-base-content/50 font-semibold lang" data-lang="footer">
+                    Stay tuned — the Study section will be available as soon as possible!
                 </p>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+const translations = {
+    en: {
+        title: "🚧 Study Section Coming Soon",
+        p1: "We're working hard to bring you a complete CCNA learning experience.",
+        p2: "Soon, this section will include organized study materials, detailed explanations, practice questions, and resources to help you prepare for the CCNA certification with confidence.",
+        p3: "Thank you for your patience and support. We're committed to making this the best place to learn and succeed.",
+        footer: "Stay tuned — the Study section will be available as soon as possible!"
+    },
+    ar: {
+        title: "🚧 قسم الدراسة قريباً",
+        p1: "نحن نعمل بجد لنقدم لك تجربة تعلم CCNA كاملة.",
+        p2: "قريباً، سيتضمن هذا القسم مواد دراسية منظمة وشروحات مفصلة وأسئلة تدريبية وموارد لمساعدتك على التحضير لشهادة CCNA بثقة.",
+        p3: "شكراً لصبرك ودعمك. نحن ملتزمون بجعل هذا أفضل مكان للتعلم والنجاح.",
+        footer: "ترقبوا — قسم الدراسة سيكون متاحاً في أقرب وقت ممكن!"
+    },
+    ku: {
+        title: "🚧 بەشی خوێندن بەم زووانە",
+        p1: "ئێمە بە سەختی کار دەکەین بۆ ئەوەی ئەزموونێکی تەواوی فێربوونی CCNAت پێشکەش بکەین.",
+        p2: "بەم زووانە، ئەم بەشە پێکهاتوو دەبێت لە ماددەی خوێندنی ڕێکخراو، ڕوونکردنەوەی ورد، پرسیاری ڕاهێنان، و سەرچاوە بۆ یارمەتیدانت لە ئامادەکاری بۆ بڕوانامەی CCNA بە متمانەوە.",
+        p3: "سوپاس بۆ ئارامی و پشتگیریت. ئێمە پابەندین بەوەی ئەمە بکەینە باشترین شوێن بۆ فێربوون و سەرکەوتن.",
+        footer: "چاوەڕوان بن — بەشی خوێندن لە زووترین کاتدا بەردەست دەبێت!"
+    }
+};
+
+function switchLang(lang) {
+    // Update active button
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('btn-primary'));
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.add('btn-ghost'));
+    document.getElementById('btn-' + lang).classList.remove('btn-ghost');
+    document.getElementById('btn-' + lang).classList.add('btn-primary');
+
+    // Update text direction
+    if (lang === 'ar' || lang === 'ku') {
+        document.querySelector('.card-body').style.direction = 'rtl';
+    } else {
+        document.querySelector('.card-body').style.direction = 'ltr';
+    }
+
+    // Update all translatable elements
+    document.querySelectorAll('.lang').forEach(el => {
+        const key = el.dataset.lang;
+        if (translations[lang] && translations[lang][key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+
+    localStorage.setItem('studyLang', lang);
+}
+
+// Restore saved language on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('studyLang') || 'en';
+    switchLang(saved);
+});
+</script>
 {% endblock %}
