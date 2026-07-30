@@ -1,0 +1,166 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+<div class="min-h-[70vh] flex items-center justify-center px-4 py-12">
+    <div class="max-w-2xl w-full">
+        <!-- Language Switcher -->
+        <div class="flex justify-center gap-2 mb-8">
+            <button onclick="switchLang('en')" id="btn-en" class="btn btn-sm btn-primary lang-btn">English</button>
+            <button onclick="switchLang('ar')" id="btn-ar" class="btn btn-sm btn-ghost lang-btn">العربية</button>
+            <button onclick="switchLang('ku')" id="btn-ku" class="btn btn-sm btn-ghost lang-btn">کوردی</button>
+        </div>
+
+        <!-- Icon -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20 mb-4">
+                <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-base-content lang" data-lang="title">About Us</h1>
+        </div>
+
+        <!-- Welcome -->
+        <div class="card bg-base-100 border border-base-300 shadow-lg mb-6">
+            <div class="card-body p-6">
+                <p class="text-base-content/70 leading-relaxed lang" data-lang="welcome">Welcome to our platform!</p>
+                <p class="text-base-content/60 leading-relaxed mt-2 lang" data-lang="intro">
+                    We are dedicated to helping students and IT professionals prepare for Cisco networking certifications through organized study materials, practice questions, and educational resources in English, Kurdish, and Arabic.
+                </p>
+                <p class="text-base-content/60 leading-relaxed mt-2 lang" data-lang="mission_text">
+                    Our mission is to make networking education simple, accessible, and affordable for everyone. Whether you're preparing for CCNA or expanding your networking knowledge, our goal is to provide a user-friendly learning experience that helps you study with confidence.
+                </p>
+            </div>
+        </div>
+
+        <!-- What We Offer -->
+        <div class="card bg-base-100 border border-base-300 shadow-lg mb-6">
+            <div class="card-body p-6">
+                <h2 class="text-xl font-semibold mb-3 flex items-center gap-2">
+                    <span>✨</span>
+                    <span class="lang" data-lang="offer_title">What We Offer</span>
+                </h2>
+                <ul class="space-y-2 text-base-content/60">
+                    <li class="flex items-start gap-2"><span class="text-primary mt-1">▸</span><span class="lang" data-lang="offer1">Cisco certification study materials</span></li>
+                    <li class="flex items-start gap-2"><span class="text-primary mt-1">▸</span><span class="lang" data-lang="offer2">Practice questions for self-assessment</span></li>
+                    <li class="flex items-start gap-2"><span class="text-primary mt-1">▸</span><span class="lang" data-lang="offer3">Learning resources in English, Kurdish, and Arabic</span></li>
+                    <li class="flex items-start gap-2"><span class="text-primary mt-1">▸</span><span class="lang" data-lang="offer4">Easy-to-use website with organized content</span></li>
+                    <li class="flex items-start gap-2"><span class="text-primary mt-1">▸</span><span class="lang" data-lang="offer5">Regular updates with new educational materials</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Our Mission -->
+        <div class="card bg-base-100 border border-base-300 shadow-lg mb-6">
+            <div class="card-body p-6">
+                <h2 class="text-xl font-semibold mb-3 flex items-center gap-2">
+                    <span>🎯</span>
+                    <span class="lang" data-lang="mission_title">Our Mission</span>
+                </h2>
+                <p class="text-base-content/60 leading-relaxed lang" data-lang="mission_desc">
+                    To support students and network engineers by providing high-quality learning resources that make Cisco certification preparation easier and more effective.
+                </p>
+            </div>
+        </div>
+
+        <!-- Contact Us -->
+        <div class="card bg-base-100 border border-base-300 shadow-lg">
+            <div class="card-body p-6">
+                <h2 class="text-xl font-semibold mb-3 flex items-center gap-2">
+                    <span>📬</span>
+                    <span class="lang" data-lang="contact_title">Contact Us</span>
+                </h2>
+                <p class="text-base-content/60 leading-relaxed lang" data-lang="contact_desc">
+                    If you have any questions, suggestions, or feedback, we'd love to hear from you. We're always working to improve our platform and provide the best possible learning experience.
+                </p>
+                <div class="divider my-2"></div>
+                <p class="text-base-content/50 font-medium lang" data-lang="thanks">
+                    Thank you for choosing our website, and we wish you success in your Cisco certification journey!
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const translations = {
+    en: {
+        title: "About Us",
+        welcome: "Welcome to our platform!",
+        intro: "We are dedicated to helping students and IT professionals prepare for Cisco networking certifications through organized study materials, practice questions, and educational resources in English, Kurdish, and Arabic.",
+        mission_text: "Our mission is to make networking education simple, accessible, and affordable for everyone. Whether you're preparing for CCNA or expanding your networking knowledge, our goal is to provide a user-friendly learning experience that helps you study with confidence.",
+        offer_title: "What We Offer",
+        offer1: "Cisco certification study materials",
+        offer2: "Practice questions for self-assessment",
+        offer3: "Learning resources in English, Kurdish, and Arabic",
+        offer4: "Easy-to-use website with organized content",
+        offer5: "Regular updates with new educational materials",
+        mission_title: "Our Mission",
+        mission_desc: "To support students and network engineers by providing high-quality learning resources that make Cisco certification preparation easier and more effective.",
+        contact_title: "Contact Us",
+        contact_desc: "If you have any questions, suggestions, or feedback, we'd love to hear from you. We're always working to improve our platform and provide the best possible learning experience.",
+        thanks: "Thank you for choosing our website, and we wish you success in your Cisco certification journey!"
+    },
+    ar: {
+        title: "من نحن",
+        welcome: "!مرحباً بكم في منصتنا",
+        intro: "نحن ملتزمون بمساعدة الطلاب ومتخصصي تكنولوجيا المعلومات في التحضير لشهادات شبكات سيسكو من خلال مواد دراسية منظمة وأسئلة تدريبية وموارد تعليمية باللغات الإنجليزية والكردية والعربية.",
+        mission_text: "مهمتنا هي جعل تعليم الشبكات بسيطاً وسهل الوصول وميسور التكلفة للجميع. سواء كنت تستعد لشهادة CCNA أو توسع معرفتك بالشبكات، هدفنا هو توفير تجربة تعلم سهلة الاستخدام تساعدك على الدراسة بثقة.",
+        offer_title: "ماذا نقدم",
+        offer1: "مواد دراسية لشهادات سيسكو",
+        offer2: "أسئلة تدريبية للتقييم الذاتي",
+        offer3: "موارد تعليمية باللغات الإنجليزية والكردية والعربية",
+        offer4: "موقع إلكتروني سهل الاستخدام بمحتوى منظم",
+        offer5: "تحديثات منتظمة بمواد تعليمية جديدة",
+        mission_title: "مهمتنا",
+        mission_desc: "دعم الطلاب ومهندسي الشبكات من خلال توفير موارد تعليمية عالية الجودة تجعل التحضير لشهادة سيسكو أسهل وأكثر فعالية.",
+        contact_title: "اتصل بنا",
+        contact_desc: "إذا كان لديك أي أسئلة أو اقتراحات أو ملاحظات، يسعدنا أن نسمع منك. نحن نعمل دائماً على تحسين منصتنا وتقديم أفضل تجربة تعلم ممكنة.",
+        thanks: "!شكراً لاختيارك موقعنا، ونتمنى لك النجاح في رحلة شهادة سيسكو"
+    },
+    ku: {
+        title: "دەربارەی ئێمە",
+        welcome: "!بەخێربێن بۆ پلاتفۆرمەکەمان",
+        intro: "ئێمە پابەندین بە یارمەتیدانی خوێندکاران و پسپۆڕانی IT بۆ ئامادەکاری بۆ بڕوانامەکانی ڕایەڵەی سیسکۆ لە ڕێگەی ماددەی خوێندنی ڕێکخراو و پرسیاری ڕاهێنان و سەرچاوەی فێرکاری بە زمانی ئینگلیزی و کوردی و عەرەبی.",
+        mission_text: "ئامانجی ئێمە ئەوەیە کە فێرکاری ڕایەڵە سادە و دەستڕاگەیشتوو و هەرزان بکەین بۆ هەمووان. جا ئایا خۆت بۆ CCNA ئامادە دەکەیت یان زانیاری ڕایەڵەت فراوان دەکەیت، ئامانجی ئێمە پێشکەشکردنی ئەزموونێکی فێربوونی ئاسانە کە یارمەتیت دەدات بە متمانەوە بخوێنیت.",
+        offer_title: "چی پێشکەش دەکەین",
+        offer1: "ماددەی خوێندنی بڕوانامەی سیسکۆ",
+        offer2: "پرسیاری ڕاهێنان بۆ هەڵسەنگاندنی خودی",
+        offer3: "سەرچاوەی فێرکاری بە ئینگلیزی و کوردی و عەرەبی",
+        offer4: "ماڵپەڕێکی ئاسان بەکارهێنراو بە ناوەڕۆکی ڕێکخراو",
+        offer5: "نوێکردنەوەی بەردەوام بە ماددەی فێرکاری نوێ",
+        mission_title: "ئامانجی ئێمە",
+        mission_desc: "پشتگیریکردنی خوێندکاران و ئەندازیارانی ڕایەڵە بە پێشکەشکردنی سەرچاوەی فێرکاری کوالیتی بەرز کە ئامادەکاری بۆ بڕوانامەی سیسکۆ ئاسانتر و کاریگەرتر دەکات.",
+        contact_title: "پەیوەندیمان پێوە بکە",
+        contact_desc: "ئەگەر هەر پرسیارێک، پێشنیارێک، یان تێبینییەکت هەیە، ئێمە بە خۆشحاڵییەوە گوێت لێ دەگرین. ئێمە هەمیشە کار دەکەین بۆ باشترکردنی پلاتفۆرمەکەمان و پێشکەشکردنی باشترین ئەزموونی فێربوون.",
+        thanks: "!سوپاس بۆ هەڵبژاردنی ماڵپەڕەکەمان، و هیوای سەرکەوتنت بۆ دەکەین لە گەشتی بڕوانامەی سیسکۆتدا"
+    }
+};
+
+function switchLang(lang) {
+    document.querySelectorAll('.lang-btn').forEach(btn => { btn.classList.remove('btn-primary'); btn.classList.add('btn-ghost'); });
+    document.getElementById('btn-' + lang).classList.remove('btn-ghost');
+    document.getElementById('btn-' + lang).classList.add('btn-primary');
+
+    const cards = document.querySelectorAll('.card-body');
+    cards.forEach(card => card.style.direction = (lang === 'ar' || lang === 'ku') ? 'rtl' : 'ltr');
+
+    // Align list items for RTL
+    const lists = document.querySelectorAll('ul li');
+    lists.forEach(li => li.style.textAlign = (lang === 'ar' || lang === 'ku') ? 'right' : 'left');
+
+    document.querySelectorAll('.lang').forEach(el => {
+        const key = el.dataset.lang;
+        if (translations[lang] && translations[lang][key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+
+    localStorage.setItem('aboutLang', lang);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('aboutLang') || 'en';
+    switchLang(saved);
+});
+</script>
+{% endblock %}
