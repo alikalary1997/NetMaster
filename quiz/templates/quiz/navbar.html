@@ -9,7 +9,7 @@
         <li><a href="{% url 'landing_page' %}" class="btn btn-ghost w-full justify-start">Home</a></li>
         <li><a href="{% url 'study' %}" class="btn btn-ghost w-full justify-start">Study</a></li>
         <li><a href="{% url 'test_list' %}" class="btn btn-ghost w-full justify-start">Dumps</a></li>
-        <li><a href="#" class="btn btn-ghost w-full justify-start">About Us</a></li>
+        <li><a href="{% url 'about' %}" class="btn btn-ghost w-full justify-start">About Us</a></li>
         {% if user.is_authenticated and user.is_staff %}
         <li><span>Admin</span><ul class="p-2"><li><a href="{% url 'custom_admin_tests' %}">Manage Tests</a></li><li><a href="{% url 'custom_admin_questions' %}">Manage Questions</a></li><li><a href="{% url 'custom_admin_users' %}">Manage Users</a></li></ul></li>
         {% endif %}{% if user.is_authenticated %}<li><form action="{% url 'logout' %}" method="post" style="display:inline">{% csrf_token %}<button type="submit" class="w-full text-left btn btn-ghost normal-case p-2">Logout ({{ user.username }})</button></form></li>{% else %}<li><a href="{% url 'login' %}" class="btn btn-primary w-full justify-start">Login</a></li><li><a href="{% url 'signup' %}" class="btn btn-primary w-full justify-start">Sign Up</a></li>{% endif %}
@@ -21,7 +21,7 @@
     <ul class="menu menu-horizontal px-1 hidden md:flex text-neutral-content">
       <li><a href="{% url 'study' %}" class="btn btn-ghost">Study</a></li>
       <li><a href="{% url 'test_list' %}" class="btn btn-ghost">Dumps</a></li>
-      <li><a href="#" class="btn btn-ghost">About Us</a></li>
+      <li><a href="{% url 'about' %}" class="btn btn-ghost">About Us</a></li>
       {% if user.is_authenticated and user.is_staff %}<li class="dropdown"><div tabindex="0" role="button" class="btn btn-ghost">Admin</div><ul class="dropdown-content z-[1] menu p-2 bg-base-100 rounded-box w-52 text-base-content"><li><a href="{% url 'custom_admin_tests' %}">Manage Tests</a></li><li><a href="{% url 'custom_admin_questions' %}">Manage Questions</a></li><li><a href="{% url 'custom_admin_users' %}">Manage Users</a></li></ul></li>{% endif %}
     </ul>
     <div class="hidden md:flex">

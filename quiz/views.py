@@ -73,6 +73,10 @@ def study_view(request):
     return render(request, "quiz/study.html")
 
 
+def about_view(request):
+    return render(request, "quiz/about.html")
+
+
 @login_required
 def test_list(request):
     # --- MODIFIED: Annotate tests with question_count and order by position ---
