@@ -16,6 +16,20 @@
         </h2>
         
         <div class="flex flex-wrap gap-2">
+            {# Export / Import buttons (Admin only via @user_passes_test) #}
+            <a href="{% url 'export_questions' %}" class="btn btn-outline btn-success btn-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                Export Backup
+            </a>
+            <label for="import-file" class="btn btn-outline btn-warning btn-sm">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                Import Backup
+            </label>
+            <form id="import-form" action="{% url 'import_questions' %}" method="POST" enctype="multipart/form-data" style="display:none;">
+                {% csrf_token %}
+                <input type="file" id="import-file" name="import_file" accept=".json" onchange="document.getElementById('import-form').submit();">
+            </form>
+
             {# Button to add a new question, dynamically linking to specific test or general #}
             {% if test_obj %}
                 <a href="{% url 'custom_admin_add_question_to_test' test_obj.id %}" class="btn btn-primary">Add Question to This Test</a>

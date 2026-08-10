@@ -38,6 +38,8 @@ urlpatterns = [
 
     # Custom Admin Views (Questions)
     # Existing URL for ALL questions
+    path('admin/questions/export/', views.export_questions, name='export_questions'),
+    path('admin/questions/import/', views.import_questions, name='import_questions'),
     path('admin/questions/', custom_admin_questions, name='custom_admin_questions'),
     # NEW URL for questions specific to a Test
     path('admin/tests/<int:test_id>/questions/', custom_admin_questions, name='custom_admin_test_questions'),

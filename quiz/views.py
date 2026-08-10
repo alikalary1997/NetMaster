@@ -562,6 +562,128 @@ def custom_admin_questions(
     return render(request, "quiz/custom_admin/questions_list.html", context)
 
 
+# --- Backup / Export / Import ---
+@user_passes_test(is_staff_check)
+def export_questions(request):
+    from django.core.serializers.json import DjangoJSONEncoder
+    from datetime import datetime
+
+    questions = Question.objects.all().prefetch_related("answers", "matching_pairs__extra_rights")
+
+    data = {
+        "version": 1,
+        "exported_at": datetime.now().isoformat(),
+        "total_questions": questions.count(),
+        "questions": [],
+    }
+
+    for q in questions:
+        q_data = {
+            "text": q.text,
+            "question_type": q.question_type,
+            "test_name": q.test.name if q.test else "",
+        }
+
+        if q.is_multiple_choice:
+            q_data["answers"] = [
+                {"text": a.text, "is_correct": a.is_correct}
+                for a in q.answers.all()
+            ]
+            q_data["matching_pairs"] = []
+        else:
+            q_data["answers"] = []
+            q_data["matching_pairs"] = []
+            for pair in q.matching_pairs.all():
+                q_data["matching_pairs"].append({
+                    "left_text": pair.left_text,
+                    "right_text": pair.right_text,
+                    "extra_rights": [er.text for er in pair.extra_rights.all()],
+                })
+
+        data["questions"].append(q_data)
+
+    response = JsonResponse(data, json_dumps_params={"indent": 2, "ensure_ascii": False})
+    response["Content-Disposition"] = 'attachment; filename="questions_backup.json"'
+    return response
+
+
+@user_passes_test(is_staff_check)
+def import_questions(request):
+    if request.method == "POST":
+        import_file = request.FILES.get("import_file")
+        if not import_file:
+            messages.error(request, "Please select a backup file to import.")
+            return redirect("custom_admin_questions")
+
+        try:
+            data = json.loads(import_file.read().decode("utf-8"))
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            messages.error(request, "Invalid file. Please upload a valid JSON backup file.")
+            return redirect("custom_admin_questions")
+
+        if "questions" not in data:
+            messages.error(request, "Invalid backup format: missing 'questions' key.")
+            return redirect("custom_admin_questions")
+
+        created_count = 0
+        skipped_count = 0
+
+        for q_data in data["questions"]:
+            text = q_data.get("text", "").strip()
+            if not text:
+                skipped_count += 1
+                continue
+
+            question_type = q_data.get("question_type", "mc")
+            test_name = q_data.get("test_name", "")
+
+            # Find or create test
+            test = None
+            if test_name:
+                test, _ = Test.objects.get_or_create(
+                    name__iexact=test_name,
+                    defaults={"name": test_name, "test_type": "exam"},
+                )
+
+            with transaction.atomic():
+                question = Question.objects.create(
+                    text=text,
+                    question_type=question_type,
+                    test=test,
+                )
+
+                if question_type == "mc":
+                    for a_data in q_data.get("answers", []):
+                        Answer.objects.create(
+                            question=question,
+                            text=a_data.get("text", ""),
+                            is_correct=a_data.get("is_correct", False),
+                        )
+                else:
+                    for mp_data in q_data.get("matching_pairs", []):
+                        pair = MatchingPair.objects.create(
+                            question=question,
+                            left_text=mp_data.get("left_text", ""),
+                            right_text=mp_data.get("right_text", ""),
+                        )
+                        for er_text in mp_data.get("extra_rights", []):
+                            MatchingRight.objects.create(
+                                matching_pair=pair,
+                                text=er_text,
+                            )
+
+            created_count += 1
+
+        messages.success(
+            request,
+            f"Import complete: {created_count} questions created, {skipped_count} skipped.",
+        )
+        return redirect("custom_admin_questions")
+
+    messages.error(request, "Invalid request method.")
+    return redirect("custom_admin_questions")
+
+
 # Use inline formset to manage answers along with the question
 AnswerInlineFormSet = inlineformset_factory(
     Question, Answer, form=AnswerForm, extra=4, can_delete=True
