@@ -517,6 +517,22 @@ def test_results(request, attempt_id):
 
 QUESTION_COUNT_CHOICES = [50, 70, 90, 100]
 
+# Time limit mapping: question count -> minutes
+QUESTION_TIME_MAP = {
+    50: 60,
+    70: 90,
+    90: 120,
+    100: 120,
+}
+
+
+def _get_time_limit(num_questions):
+    """Get time limit in minutes based on number of questions."""
+    if num_questions in QUESTION_TIME_MAP:
+        return QUESTION_TIME_MAP[num_questions]
+    # Custom: 1.5 min per question, min 10, max 180
+    return max(10, min(180, int(num_questions * 1.5)))
+
 
 @login_required
 def practice_exam(request):
@@ -616,12 +632,18 @@ def practice_start(request):
     # Shuffle all selected questions
     random.shuffle(all_question_ids)
 
+    # Calculate time limit
+    time_limit_minutes = _get_time_limit(num_questions)
+    from datetime import datetime
+
     # --- Store in session ---
     practice_data = {
         "question_ids": all_question_ids,
         "answers": {},  # {str(question_id): answer_data}
         "total_questions": len(all_question_ids),
         "selected_sections": selected_names,
+        "time_limit_minutes": time_limit_minutes,
+        "started_at": datetime.now().isoformat(),
     }
     request.session["practice_exam"] = practice_data
 
@@ -656,7 +678,20 @@ def practice_take(request, question_index):
         "practice_index": question_index,
         "is_learning_mode": False,
         "user_submitted": existing_answer is not None,
+        "time_limit_minutes": practice_data.get("time_limit_minutes", 60),
+        "started_at": practice_data.get("started_at", ""),
     }
+
+    # Check if time expired
+    from datetime import datetime
+    started_at_str = practice_data.get("started_at", "")
+    time_limit = practice_data.get("time_limit_minutes", 60)
+    if started_at_str:
+        started = datetime.fromisoformat(started_at_str)
+        elapsed = (datetime.now() - started).total_seconds()
+        if elapsed >= time_limit * 60:
+            # Time's up — redirect to finish
+            return redirect("practice_finish")
 
     if existing_answer is not None:
         # Already answered - show result

@@ -2,6 +2,21 @@
 {% block title %}Question {{ question_index|add:1 }} of {{ total_questions }}{% endblock %}
 {% block content %}
 <div class="min-h-[calc(100vh-8rem)] flex flex-col items-center justify-center px-2 py-4 md:px-4 md:py-8">
+    {% if is_practice %}
+    <div class="w-full max-w-4xl mb-3" id="timer-bar">
+        <div class="flex items-center justify-between bg-base-100 rounded-xl px-4 py-2.5 shadow-sm border border-base-300">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-base-content/50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 6v6l4 2"/></svg>
+                <span class="text-xs font-medium text-base-content/50 uppercase tracking-wide">Time Left</span>
+            </div>
+            <span id="timer-display" class="text-lg font-mono font-bold text-primary tabular-nums">--:--</span>
+        </div>
+        <div class="w-full bg-base-300 rounded-full h-1 mt-1 overflow-hidden">
+            <div id="timer-progress" class="bg-primary h-full rounded-full transition-all duration-1000 ease-linear" style="width:100%"></div>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="card w-full max-w-4xl shadow-2xl bg-base-200 md:bg-base-300 text-base-content">
         <div class="card-body">
             <div class="mb-6"><p class="text-sm text-center text-base-content/70 mb-2">Question {{ question_index|add:1 }} of {{ total_questions }}</p><h2 class="card-title text-xl md:text-2xl font-semibold text-center !block break-words" style="word-break:break-word;overflow-wrap:break-word;hyphens:auto">{{ question.text|safe }}</h2></div>
@@ -37,6 +52,62 @@
 </div>
 {% endblock %}
 {% block extra_js %}
+{% if is_practice %}
+<script>
+(function(){
+    var startedAt = '{{ started_at }}';
+    var timeLimitMin = {{ time_limit_minutes }};
+    if (!startedAt || !timeLimitMin) return;
+    var start = new Date(startedAt).getTime();
+    if (isNaN(start)) return;
+    var totalMs = timeLimitMin * 60 * 1000;
+    var endTime = start + totalMs;
+    var warned = false;
+    var display = document.getElementById('timer-display');
+    var progress = document.getElementById('timer-progress');
+    var bar = document.getElementById('timer-bar');
+
+    function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+    function tick() {
+        var now = Date.now();
+        var left = endTime - now;
+        if (left <= 0) {
+            display.textContent = '00:00';
+            display.classList.add('text-error');
+            progress.style.width = '0%';
+            progress.classList.add('bg-error');
+            var form = document.getElementById('answer-form') || document.getElementById('matching-form');
+            if (form) form.submit();
+            else window.location.href = '{% url "practice_finish" %}';
+            return;
+        }
+        var mins = Math.floor(left / 60000);
+        var secs = Math.floor((left % 60000) / 1000);
+        display.textContent = pad(mins) + ':' + pad(secs);
+        var pct = (left / totalMs * 100);
+        progress.style.width = pct + '%';
+
+        // Warning at 5 min
+        if (left <= 300000 && !warned) {
+            warned = true;
+            display.classList.add('text-warning', 'animate-pulse');
+            progress.classList.remove('bg-primary');
+            progress.classList.add('bg-warning');
+        }
+        // Danger at 1 min
+        if (left <= 60000) {
+            display.classList.remove('text-warning');
+            display.classList.add('text-error');
+            progress.classList.remove('bg-warning');
+            progress.classList.add('bg-error');
+        }
+    }
+    tick();
+    setInterval(tick, 1000);
+})();
+</script>
+{% endif %}
 {% if is_matching and not user_submitted %}
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
 <script>
