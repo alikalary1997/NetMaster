@@ -668,7 +668,7 @@ def import_questions(request):
                         )
                         for er_text in mp_data.get("extra_rights", []):
                             MatchingRight.objects.create(
-                                matching_pair=pair,
+                                pair=pair,
                                 text=er_text,
                             )
 
