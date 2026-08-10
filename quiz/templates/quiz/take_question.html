@@ -12,7 +12,7 @@
             <span id="timer-display" class="text-lg font-mono font-bold text-primary tabular-nums">--:--</span>
         </div>
         <div class="w-full bg-base-300 rounded-full h-1 mt-1 overflow-hidden">
-            <div id="timer-progress" class="bg-primary h-full rounded-full transition-all duration-1000 ease-linear" style="width:100%"></div>
+            <div id="timer-progress" class="h-full rounded-full transition-all duration-1000 ease-linear" style="width:100%;background-color:oklch(var(--p))"></div>
         </div>
     </div>
     {% endif %}
@@ -92,15 +92,13 @@
         if (left <= 300000 && !warned) {
             warned = true;
             display.classList.add('text-warning', 'animate-pulse');
-            progress.classList.remove('bg-primary');
-            progress.classList.add('bg-warning');
+            progress.style.backgroundColor = '#f59e0b';
         }
         // Danger at 2 min
         if (left <= 120000) {
-            display.classList.remove('text-warning');
+            display.classList.remove('text-warning', 'animate-pulse');
             display.classList.add('text-error');
-            progress.classList.remove('bg-warning');
-            progress.classList.add('bg-error');
+            progress.style.backgroundColor = '#ef4444';
         }
     }
     tick();
