@@ -530,8 +530,8 @@ def _get_time_limit(num_questions):
     """Get time limit in minutes based on number of questions."""
     if num_questions in QUESTION_TIME_MAP:
         return QUESTION_TIME_MAP[num_questions]
-    # Custom: 1.5 min per question, min 10, max 180
-    return max(10, min(180, int(num_questions * 1.5)))
+    # Custom: 1.5 min per question, min 2, max 180
+    return max(2, min(180, num_questions * 1.5))
 
 
 @login_required

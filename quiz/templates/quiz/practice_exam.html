@@ -151,8 +151,8 @@ function updateSummary(){
         var n = parseInt(ci.value) || 0;
         qCount = n || '?';
         if (n) {
-            var t = Math.max(10, Math.min(180, Math.round(n * 1.5)));
-            cTime = t + ' min';
+            var t = n * 1.5;
+            cTime = (t % 1 === 0 ? t : t.toFixed(1)) + ' min';
         } else {
             cTime = 'Auto';
         }
