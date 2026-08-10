@@ -8,7 +8,7 @@
       <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 text-base-content">
         <li><a href="{% url 'landing_page' %}" class="btn btn-ghost w-full justify-start">Home</a></li>
         <li><a href="{% url 'study' %}" class="btn btn-ghost w-full justify-start">Study</a></li>
-        <li><a href="{% url 'test_list' %}" class="btn btn-ghost w-full justify-start">Dumps</a></li>
+                <li><a href="{% url 'test_list' %}" class="btn btn-ghost w-full justify-start">Dumps</a></li>
         <li><a href="{% url 'about' %}" class="btn btn-ghost w-full justify-start">About Us</a></li>
         {% if user.is_authenticated and user.is_staff %}
         <li><span>Admin</span><ul class="p-2"><li><a href="{% url 'custom_admin_tests' %}">Manage Tests</a></li><li><a href="{% url 'custom_admin_questions' %}">Manage Questions</a></li><li><a href="{% url 'custom_admin_users' %}">Manage Users</a></li></ul></li>
@@ -20,7 +20,7 @@
   <div class="navbar-end">
     <ul class="menu menu-horizontal px-1 hidden md:flex text-neutral-content">
       <li><a href="{% url 'study' %}" class="btn btn-ghost">Study</a></li>
-      <li><a href="{% url 'test_list' %}" class="btn btn-ghost">Dumps</a></li>
+            <li><a href="{% url 'test_list' %}" class="btn btn-ghost">Dumps</a></li>
       <li><a href="{% url 'about' %}" class="btn btn-ghost">About Us</a></li>
       {% if user.is_authenticated and user.is_staff %}<li class="dropdown"><div tabindex="0" role="button" class="btn btn-ghost">Admin</div><ul class="dropdown-content z-[1] menu p-2 bg-base-100 rounded-box w-52 text-base-content"><li><a href="{% url 'custom_admin_tests' %}">Manage Tests</a></li><li><a href="{% url 'custom_admin_questions' %}">Manage Questions</a></li><li><a href="{% url 'custom_admin_users' %}">Manage Users</a></li></ul></li>{% endif %}
     </ul>

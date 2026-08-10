@@ -1,0 +1,87 @@
+{% extends 'quiz/base.html' %}
+{% block title %}Practice Exam{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold">Practice Exam</h1>
+        <p class="text-base-content/60 mt-2">Generate a random practice exam from selected sections</p>
+    </div>
+
+    <form method="POST" action="{% url 'practice_start' %}" id="practice-form">
+        {% csrf_token %}
+
+        <!-- Section Selection -->
+        <div class="card bg-base-200 shadow-md mb-6">
+            <div class="card-body">
+                <h2 class="text-xl font-semibold mb-1">Select Sections</h2>
+                <p class="text-sm text-base-content/60 mb-4">Choose which topics to include</p>
+
+                <div class="flex gap-2 mb-3">
+                    <button type="button" onclick="selectAll()" class="btn btn-xs btn-outline">Select All</button>
+                    <button type="button" onclick="clearAll()" class="btn btn-xs btn-outline">Clear All</button>
+                </div>
+
+                <div class="space-y-2">
+                    {% for test in tests %}
+                    <label class="flex items-center gap-3 p-3 rounded-lg hover:bg-base-300/50 cursor-pointer border border-base-300">
+                        <input type="checkbox" name="sections" value="{{ test.id }}" class="checkbox checkbox-primary section-cb">
+                        <span class="flex-1 font-medium">{{ test.name }}</span>
+                        <span class="badge badge-ghost">{{ test.q_count }} Questions</span>
+                    </label>
+                    {% empty %}
+                    <p class="text-base-content/50 text-center py-4">No sections available.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Count -->
+        <div class="card bg-base-200 shadow-md mb-6">
+            <div class="card-body">
+                <h2 class="text-xl font-semibold mb-1">Number of Questions</h2>
+                <p class="text-sm text-base-content/60 mb-4">How many questions do you want?</p>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {% for count in question_counts %}
+                    <label class="flex items-center gap-2 p-3 rounded-lg border border-base-300 hover:bg-base-300/50 cursor-pointer">
+                        <input type="radio" name="question_count" value="{{ count }}" class="radio radio-primary qc-radio" onchange="toggleCustom(false)">
+                        <span class="font-medium">{{ count }} Questions</span>
+                    </label>
+                    {% endfor %}
+                    <label class="flex items-center gap-2 p-3 rounded-lg border border-base-300 hover:bg-base-300/50 cursor-pointer">
+                        <input type="radio" name="question_count" value="custom" class="radio radio-primary qc-radio" onchange="toggleCustom(true)">
+                        <span class="font-medium">Custom</span>
+                    </label>
+                </div>
+
+                <div id="custom-count-wrapper" class="mt-3 hidden">
+                    <label class="form-control w-full max-w-xs">
+                        <span class="label-text mb-1">Enter number:</span>
+                        <input type="number" name="custom_count" min="1" class="input input-bordered input-sm" placeholder="e.g. 25">
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="mb-4">
+            {% for msg in messages %}
+            <div role="alert" class="alert alert-warning shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <span>{{ msg }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary btn-lg w-full">Start Practice Exam</button>
+    </form>
+</div>
+
+<script>
+function selectAll(){document.querySelectorAll('.section-cb').forEach(cb=>cb.checked=true)}
+function clearAll(){document.querySelectorAll('.section-cb').forEach(cb=>cb.checked=false)}
+function toggleCustom(show){document.getElementById('custom-count-wrapper').classList.toggle('hidden',!show)}
+</script>
+{% endblock %}

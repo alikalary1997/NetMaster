@@ -511,6 +511,363 @@ def test_results(request, attempt_id):
     return render(request, "quiz/test_results.html", context)
 
 
+# ============================================================
+# PRACTICE EXAM VIEWS (Session-based, NOT saved to database)
+# ============================================================
+
+QUESTION_COUNT_CHOICES = [50, 70, 90, 100]
+
+
+@login_required
+def practice_exam(request):
+    """Show the practice exam generator form."""
+    tests = Test.objects.annotate(q_count=Count("questions")).filter(q_count__gt=0)
+
+    context = {
+        "tests": tests,
+        "question_counts": QUESTION_COUNT_CHOICES,
+    }
+    return render(request, "quiz/practice_exam.html", context)
+
+
+@login_required
+def practice_start(request):
+    """Generate a random practice exam and store question IDs in session."""
+    if request.method != "POST":
+        return redirect("practice_exam")
+
+    # --- Parse form inputs ---
+    selected_test_ids = request.POST.getlist("sections")
+    question_count_str = request.POST.get("question_count", "")
+    custom_count_str = request.POST.get("custom_count", "")
+
+    # Determine question count
+    if question_count_str == "custom":
+        try:
+            num_questions = int(custom_count_str)
+        except (ValueError, TypeError):
+            messages.error(request, "Please enter a valid number for custom question count.")
+            return redirect("practice_exam")
+    else:
+        try:
+            num_questions = int(question_count_str)
+        except (ValueError, TypeError):
+            messages.error(request, "Please select a question count.")
+            return redirect("practice_exam")
+
+    if num_questions < 1:
+        messages.error(request, "Number of questions must be at least 1.")
+        return redirect("practice_exam")
+
+    # Validate sections
+    if not selected_test_ids:
+        messages.error(request, "Please select at least one section.")
+        return redirect("practice_exam")
+
+    # Get selected tests
+    selected_tests = Test.objects.filter(id__in=selected_test_ids).annotate(
+        q_count=Count("questions")
+    )
+
+    if not selected_tests:
+        messages.error(request, "No valid sections selected.")
+        return redirect("practice_exam")
+
+    # Check total available questions
+    total_available = sum(t.q_count for t in selected_tests)
+    if num_questions > total_available:
+        messages.error(
+            request,
+            f"Only {total_available} questions are available in the selected sections. "
+            f"Please reduce the number of questions or choose more sections.",
+        )
+        return redirect("practice_exam")
+
+    # --- Proportional distribution ---
+    questions_by_test = {}
+    remaining = num_questions
+
+    test_list = list(selected_tests)
+    for i, test in enumerate(test_list):
+        if i == len(test_list) - 1:
+            # Last test gets all remaining
+            count = remaining
+        else:
+            # Proportional: round down
+            count = max(1, int(num_questions * test.q_count / total_available))
+            count = min(count, test.q_count, remaining)
+        questions_by_test[test.id] = count
+        remaining -= count
+
+    # --- Select random questions ---
+    all_question_ids = []
+    selected_names = []
+
+    for test in test_list:
+        count = questions_by_test[test.id]
+        qs = list(
+            Question.objects.filter(test=test)
+            .values_list("id", flat=True)
+            .order_by("?")[:count]
+        )
+        all_question_ids.extend(qs)
+        selected_names.append(test.name)
+
+    # Shuffle all selected questions
+    random.shuffle(all_question_ids)
+
+    # --- Store in session ---
+    practice_data = {
+        "question_ids": all_question_ids,
+        "answers": {},  # {str(question_id): answer_data}
+        "total_questions": len(all_question_ids),
+        "selected_sections": selected_names,
+    }
+    request.session["practice_exam"] = practice_data
+
+    return redirect(reverse("practice_take", args=[0]))
+
+
+@login_required
+def practice_take(request, question_index):
+    """Display a practice exam question (reuses take_question.html)."""
+    practice_data = request.session.get("practice_exam")
+    if not practice_data:
+        messages.error(request, "No active practice exam. Please start a new one.")
+        return redirect("practice_exam")
+
+    question_ids = practice_data["question_ids"]
+    total_questions = len(question_ids)
+
+    if question_index >= total_questions:
+        return redirect("practice_finish")
+
+    current_question = get_object_or_404(Question, id=question_ids[question_index])
+    answers_dict = practice_data.get("answers", {})
+    existing_answer = answers_dict.get(str(current_question.id))
+
+    # Context for take_question.html
+    context = {
+        "question": current_question,
+        "question_index": question_index,
+        "total_questions": total_questions,
+        "is_matching": current_question.is_matching,
+        "is_practice": True,
+        "practice_index": question_index,
+        "is_learning_mode": False,
+        "user_submitted": existing_answer is not None,
+    }
+
+    if existing_answer is not None:
+        # Already answered - show result
+        if current_question.is_multiple_choice:
+            selected_ids = existing_answer.get("selected_ids", [])
+            correct_ids = set(
+                Answer.objects.filter(
+                    question=current_question, is_correct=True
+                ).values_list("id", flat=True)
+            )
+            is_correct = set(selected_ids) == correct_ids
+            context["is_user_correct"] = is_correct
+            context["correct_answers"] = Answer.objects.filter(
+                question=current_question, is_correct=True
+            )
+        else:
+            # Matching: build pair_results
+            matching_pairs = current_question.matching_pairs.all()
+            user_mapping = existing_answer.get("mapping", {})
+            pair_results = []
+            all_correct_flag = True
+            for pair in matching_pairs:
+                cat_id = str(pair.id)
+                placed = user_mapping.get(cat_id, [])
+                # Check if all correct texts match
+                correct_texts = pair.get_all_rights()
+                placed_texts = [p.get("text", "") for p in placed]
+                is_pair_correct = sorted(placed_texts) == sorted(correct_texts)
+                if not is_pair_correct:
+                    all_correct_flag = False
+                pair_results.append({
+                    "pair": pair,
+                    "is_correct": is_pair_correct,
+                })
+            context["pair_results"] = pair_results
+            context["is_user_correct"] = all_correct_flag
+
+        return render(request, "quiz/take_question.html", context)
+
+    # --- Handle POST (submit answer) ---
+    if request.method == "POST":
+        if current_question.is_multiple_choice:
+            form = UserAnswerForm(request.POST, question=current_question)
+            if form.is_valid():
+                selected = form.cleaned_data["selected_answers"]
+                selected_ids = [a.id for a in selected]
+                answers_dict[str(current_question.id)] = {"selected_ids": selected_ids}
+                practice_data["answers"] = answers_dict
+                request.session["practice_exam"] = practice_data
+
+                # Redirect to next question or results
+                next_idx = question_index + 1
+                if next_idx < total_questions:
+                    return redirect(reverse("practice_take", args=[next_idx]))
+                else:
+                    return redirect("practice_finish")
+        else:
+            # Matching submission
+            categories_json = request.POST.get("categories_data", "{}")
+            try:
+                matching_data = json.loads(categories_json)
+            except json.JSONDecodeError:
+                matching_data = {}
+
+            answers_dict[str(current_question.id)] = {"mapping": matching_data}
+            practice_data["answers"] = answers_dict
+            request.session["practice_exam"] = practice_data
+
+            next_idx = question_index + 1
+            if next_idx < total_questions:
+                return redirect(reverse("practice_take", args=[next_idx]))
+            else:
+                return redirect("practice_finish")
+
+    # --- GET: show question form ---
+    if current_question.is_multiple_choice:
+        context["form"] = UserAnswerForm(question=current_question)
+    else:
+        # Matching: build left_items and shuffled_pool
+        matching_pairs = current_question.matching_pairs.all()
+        left_items = [{"id": p.id, "text": p.left_text} for p in matching_pairs]
+
+        pool_items = []
+        item_id = 0
+        for pair in matching_pairs:
+            for right_text in pair.get_all_rights():
+                item_id += 1
+                pool_items.append({
+                    "id": item_id,
+                    "pair_id": pair.id,
+                    "text": right_text,
+                })
+        random.shuffle(pool_items)
+
+        context["left_items"] = left_items
+        context["shuffled_pool"] = pool_items
+
+    return render(request, "quiz/take_question.html", context)
+
+
+@login_required
+def practice_finish(request):
+    """Score the practice exam and show results."""
+    practice_data = request.session.get("practice_exam")
+    if not practice_data:
+        messages.error(request, "No active practice exam.")
+        return redirect("practice_exam")
+
+    question_ids = practice_data["question_ids"]
+    answers_dict = practice_data.get("answers", {})
+
+    results_data = []
+    correct_count = 0
+
+    for qid in question_ids:
+        question = get_object_or_404(Question, id=qid)
+        answer_data = answers_dict.get(str(qid))
+
+        if question.is_multiple_choice:
+            correct_answers = Answer.objects.filter(question=question, is_correct=True)
+            correct_ids = set(correct_answers.values_list("id", flat=True))
+
+            if answer_data:
+                selected_ids = set(answer_data.get("selected_ids", []))
+                is_correct = selected_ids == correct_ids
+                selected_answers = Answer.objects.filter(id__in=selected_ids)
+            else:
+                is_correct = False
+                selected_answers = Answer.objects.none()
+
+            results_data.append({
+                "question": question,
+                "user_selected_answers": selected_answers,
+                "correct_answers": correct_answers,
+                "is_user_correct": is_correct,
+                "is_matching": False,
+            })
+
+            if is_correct:
+                correct_count += 1
+
+        else:
+            # Matching
+            matching_pairs = question.matching_pairs.all()
+            user_mapping = answer_data.get("mapping", {}) if answer_data else {}
+            cat_results = []
+            all_correct = True
+
+            for pair in matching_pairs:
+                correct_texts = pair.get_all_rights()
+                placed_items = []
+                for unique_id, placement in user_mapping.items():
+                    if isinstance(placement, dict):
+                        cat_id = placement.get("cat_id")
+                        item_pair_id = placement.get("pair_id")
+                        item_text = placement.get("text", "")
+                    else:
+                        item_pair_id = int(unique_id)
+                        cat_id = placement
+                        item_text = ""
+                    if cat_id == pair.id:
+                        belongs_to = ""
+                        if item_pair_id:
+                            src = next(
+                                (p for p in matching_pairs if p.id == item_pair_id),
+                                None,
+                            )
+                            belongs_to = src.left_text if src else ""
+                        placed_items.append({
+                            "text": item_text,
+                            "belongs_to": belongs_to,
+                            "is_correct": item_pair_id == pair.id,
+                        })
+                for ct in correct_texts:
+                    if not any(
+                        pi["text"] == ct and pi["is_correct"] for pi in placed_items
+                    ):
+                        all_correct = False
+                cat_results.append({
+                    "pair": pair,
+                    "correct_texts": correct_texts,
+                    "placed_items": placed_items,
+                    "is_fully_correct": len(placed_items) == len(correct_texts)
+                    and all(pi["is_correct"] for pi in placed_items),
+                })
+
+            if all_correct:
+                correct_count += 1
+
+            results_data.append({
+                "question": question,
+                "is_user_correct": all_correct,
+                "is_matching": True,
+                "cat_results": cat_results,
+            })
+
+    total = len(question_ids)
+    score = round((correct_count / total) * 100, 2) if total > 0 else 0.0
+
+    context = {
+        "results_data": results_data,
+        "total_questions": total,
+        "correct_count": correct_count,
+        "score": score,
+        "is_practice": True,
+        "selected_sections": practice_data.get("selected_sections", []),
+    }
+
+    return render(request, "quiz/practice_results.html", context)
+
+
 # --- Custom Admin Views ---
 
 

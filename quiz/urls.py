@@ -29,6 +29,13 @@ urlpatterns = [
     # Test Views (User Facing)
     path('study/', views.study_view, name='study'),
     path('about/', views.about_view, name='about'),
+
+    # Practice Exam
+    path('practice/', views.practice_exam, name='practice_exam'),
+    path('practice/start/', views.practice_start, name='practice_start'),
+    path('practice/take/<int:question_index>/', views.practice_take, name='practice_take'),
+    path('practice/finish/', views.practice_finish, name='practice_finish'),
+
     path('tests/', test_list, name='test_list'),
     path('tests/reorder/', reorder_tests, name='reorder_tests'),
     path('tests/start/<int:test_id>/', start_test, name='start_test'),

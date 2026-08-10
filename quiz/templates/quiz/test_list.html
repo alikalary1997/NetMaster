@@ -49,6 +49,20 @@
     {% endfor %}
 </div>
 
+<!-- Practice Exam Card -->
+<div class="mt-8">
+    <a href="{% url 'practice_exam' %}" class="card bg-gradient-to-r from-primary/20 to-secondary/20 border-2 border-primary/40 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 block">
+        <div class="card-body text-center py-8">
+            <div class="text-4xl mb-3">🎯</div>
+            <h3 class="text-2xl font-bold text-primary">Practice Exam</h3>
+            <p class="text-base-content/70 mt-1">Generate a random exam from any sections you choose</p>
+            <div class="mt-4">
+                <span class="btn btn-primary btn-wide">Start Practice</span>
+            </div>
+        </div>
+    </a>
+</div>
+
 {% if user.is_staff %}
 <div id="saveOrderContainer" class="hidden mt-6 text-center">
     <button id="saveOrder" class="btn btn-success">Save New Order</button>
