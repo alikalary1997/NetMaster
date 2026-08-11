@@ -80,21 +80,25 @@
 
     <!-- Study Recommendation -->
     {% if weakest_sections %}
-    <div class="card bg-warning/5 border border-warning/30 shadow-md mb-6">
+    <div class="card bg-gradient-to-r from-warning/10 to-error/5 border border-warning/20 shadow-md mb-6">
         <div class="card-body p-5">
-            <h2 class="text-lg font-semibold flex items-center gap-2 mb-3">
-                <span>💡</span> Study Recommendation
-            </h2>
-            <p class="text-sm text-base-content/70 mb-2">
-                Focus on improving these sections before your next practice exam:
-            </p>
+            <div class="flex items-center gap-2 mb-3">
+                <span class="text-xl">💡</span>
+                <h2 class="text-lg font-semibold">Study Recommendation</h2>
+            </div>
+            <p class="text-sm text-base-content/60 mb-4">Focus on improving these sections before your next practice exam:</p>
+            <div class="space-y-2">
             {% for sec in weakest_sections %}
-            <div class="flex items-center gap-3 bg-base-200 rounded-lg p-3 mb-2 last:mb-0">
-                <span class="badge badge-error badge-sm">{{ sec.accuracy }}%</span>
-                <span class="font-medium text-sm">{{ sec.name }}</span>
-                <span class="text-xs text-base-content/50 ml-auto">{{ sec.correct }}/{{ sec.total }} correct</span>
+            <div class="flex items-center gap-4 bg-base-100 rounded-xl p-4 border border-base-300">
+                <div class="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold {% if sec.accuracy < 40 %}bg-error/20 text-error{% else %}bg-warning/20 text-warning{% endif %}">{{ sec.accuracy }}%</div>
+                <div class="flex-1">
+                    <p class="font-semibold text-sm">{{ sec.name }}</p>
+                    <p class="text-xs text-base-content/50">{{ sec.correct }} correct out of {{ sec.total }} questions</p>
+                </div>
+                <a href="#" class="btn btn-ghost btn-xs">📖 Review</a>
             </div>
             {% endfor %}
+            </div>
         </div>
     </div>
     {% endif %}
