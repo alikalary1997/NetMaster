@@ -890,14 +890,96 @@ def practice_finish(request):
 
     total = len(question_ids)
     score = round((correct_count / total) * 100, 2) if total > 0 else 0.0
+    wrong_count = total - correct_count
+
+    # --- Per-section stats ---
+    from datetime import datetime
+    from collections import OrderedDict
+
+    section_data = OrderedDict()
+    for qid in question_ids:
+        question = Question.objects.select_related("test").get(id=qid)
+        section_name = question.test.name if question.test else "Unknown"
+        if section_name not in section_data:
+            section_data[section_name] = {"total": 0, "correct": 0, "wrong": 0}
+        section_data[section_name]["total"] += 1
+        answer_data = answers_dict.get(str(qid))
+        if question.is_multiple_choice:
+            if answer_data:
+                correct_ids = set(
+                    Answer.objects.filter(question=question, is_correct=True).values_list("id", flat=True)
+                )
+                selected_ids = set(answer_data.get("selected_ids", []))
+                if selected_ids == correct_ids:
+                    section_data[section_name]["correct"] += 1
+                else:
+                    section_data[section_name]["wrong"] += 1
+            else:
+                section_data[section_name]["wrong"] += 1
+        else:
+            if answer_data:
+                user_mapping = answer_data.get("mapping", {})
+                matching_pairs = question.matching_pairs.all()
+                is_correct = True
+                for pair in matching_pairs:
+                    correct_texts = set(pair.get_all_rights())
+                    cat_id = str(pair.id)
+                    placed = user_mapping.get(cat_id, [])
+                    placed_texts = set(p.get("text", "") for p in placed)
+                    if placed_texts != correct_texts:
+                        is_correct = False
+                        break
+                if is_correct:
+                    section_data[section_name]["correct"] += 1
+                else:
+                    section_data[section_name]["wrong"] += 1
+            else:
+                section_data[section_name]["wrong"] += 1
+
+    def get_rating(acc):
+        if acc >= 90: return ("Excellent", "success")
+        if acc >= 80: return ("Very Good", "info")
+        if acc >= 70: return ("Good", "primary")
+        if acc >= 60: return ("Fair", "warning")
+        return ("Needs Improvement", "error")
+
+    section_stats = []
+    for name, stats in section_data.items():
+        acc = round((stats["correct"] / stats["total"]) * 100, 1) if stats["total"] > 0 else 0
+        rating, rating_color = get_rating(acc)
+        section_stats.append({
+            "name": name,
+            "total": stats["total"],
+            "correct": stats["correct"],
+            "wrong": stats["wrong"],
+            "accuracy": acc,
+            "rating": rating,
+            "rating_color": rating_color,
+        })
+
+    # --- Time used ---
+    started_at_str = practice_data.get("started_at", "")
+    time_used_minutes = 0
+    if started_at_str:
+        started = datetime.fromisoformat(started_at_str)
+        elapsed = (datetime.now() - started).total_seconds()
+        time_used_minutes = round(elapsed / 60, 1)
+
+    # --- Weakest sections ---
+    sorted_sections = sorted(section_stats, key=lambda s: s["accuracy"])
+    weakest_sections = sorted_sections[:2] if len(sorted_sections) >= 2 else sorted_sections
 
     context = {
         "results_data": results_data,
         "total_questions": total,
         "correct_count": correct_count,
+        "wrong_count": wrong_count,
         "score": score,
         "is_practice": True,
         "selected_sections": practice_data.get("selected_sections", []),
+        "section_stats": section_stats,
+        "time_used_minutes": time_used_minutes,
+        "weakest_sections": weakest_sections,
     }
 
     return render(request, "quiz/practice_results.html", context)

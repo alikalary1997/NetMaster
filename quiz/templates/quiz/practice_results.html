@@ -2,84 +2,107 @@
 {% block title %}Practice Exam Results{% endblock %}
 {% block content %}
 <div class="max-w-4xl mx-auto">
+
+    <!-- Header -->
     <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/20 mb-4">
+            <span class="text-3xl">📊</span>
+        </div>
         <h1 class="text-3xl font-bold">Practice Exam Results</h1>
-        <p class="text-base-content/60 mt-2">{{ correct_count }} / {{ total_questions }} correct</p>
-        <div class="radial-progress text-primary mt-4" style="--value:{{ score }};--size:6rem;--thickness:0.5rem;" role="progressbar">{{ score }}%</div>
-        <p class="text-sm text-base-content/50 mt-2">Sections: {{ selected_sections|join:", " }}</p>
+        <p class="text-base-content/50 mt-1">Here's how you performed</p>
     </div>
 
-    <!-- Results Breakdown -->
-    {% for result in results_data %}
-    <div class="card bg-base-200 shadow-md mb-4 border-l-4 {% if result.is_user_correct %}border-success{% else %}border-error{% endif %}">
-        <div class="card-body p-5">
-            <div class="flex items-start gap-3 mb-3">
-                <span class="badge badge-lg mt-1 {% if result.is_user_correct %}badge-success{% else %}badge-error{% endif %}">
-                    {% if result.is_user_correct %}&#10003;{% else %}&#10007;{% endif %}
-                </span>
-                <h3 class="text-lg font-semibold flex-1">{{ result.question.text }}</h3>
-            </div>
-
-            {% if result.is_matching %}
-                <div class="space-y-3 mt-3">
-                    {% for cat in result.cat_results %}
-                    <div class="p-3 rounded-lg {% if cat.is_fully_correct %}bg-success/10 border border-success/20{% else %}bg-error/10 border border-error/20{% endif %}">
-                        <div class="flex items-center gap-3 mb-2">
-                            <span class="font-bold text-sm uppercase tracking-wide" style="color:oklch(var(--p))">{{ cat.pair.left_text }}</span>
-                            <span class="text-lg text-base-content/30">&#8594;</span>
-                            <div class="flex flex-wrap gap-1">
-                                {% for t in cat.correct_texts %}
-                                <span class="badge badge-sm" style="background:oklch(var(--p)/.15);color:oklch(var(--p))">&#10003; {{ t }}</span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% if cat.placed_items %}
-                        <div class="text-sm text-base-content/60 ml-2">
-                            <span class="font-medium">Your Answers:</span>
-                            <div class="flex flex-wrap gap-1 mt-1">
-                                {% for pi in cat.placed_items %}
-                                <span class="badge badge-sm {% if pi.is_correct %}badge-success{% else %}badge-error{% endif %}">
-                                    {{ pi.text }}{% if not pi.is_correct and pi.belongs_to %} (belongs to: {{ pi.belongs_to }}){% endif %}
-                                </span>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
-                    <div class="p-3 bg-success/10 rounded-lg border border-success/20">
-                        <p class="text-sm font-semibold text-success mb-1">Correct Answers</p>
-                        {% for a in result.correct_answers %}
-                        <p class="text-sm text-base-content/70">&#10003; {{ a.text }}</p>
-                        {% endfor %}
-                    </div>
-                    <div class="p-3 bg-warning/10 rounded-lg border border-warning/20">
-                        <p class="text-sm font-semibold text-warning mb-1">Your Answers</p>
-                        {% for a in result.user_selected_answers %}
-                        <p class="text-sm text-base-content/70">{% if a.is_correct %}&#10003;{% else %}&#10007;{% endif %} {{ a.text }}</p>
-                        {% empty %}
-                        <p class="text-sm text-base-content/50 italic">Not answered</p>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-
-            {% if result.question.explanation %}
-            <details class="mt-3">
-                <summary class="text-sm text-accent cursor-pointer hover:underline">Show Explanation</summary>
-                <p class="text-sm text-base-content/60 mt-1">{{ result.question.explanation|linebreaks }}</p>
-            </details>
-            {% endif %}
+    <!-- Score Ring -->
+    <div class="flex justify-center mb-8">
+        <div class="radial-progress text-primary" style="--value:{{ score }};--size:7rem;--thickness:0.5rem;" role="progressbar">
+            <span class="text-2xl font-bold">{{ score|floatformat:0 }}%</span>
         </div>
     </div>
-    {% endfor %}
 
+    <!-- Overall Summary -->
+    <div class="card bg-base-100 border border-base-300 shadow-md mb-6">
+        <div class="card-body p-5">
+            <h2 class="text-lg font-semibold flex items-center gap-2 mb-4">
+                <span>📋</span> Overall Summary
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-base-200 rounded-xl p-3 text-center">
+                    <p class="text-2xl font-bold text-primary">{{ total_questions }}</p>
+                    <p class="text-xs text-base-content/50">Total Questions</p>
+                </div>
+                <div class="bg-success/10 rounded-xl p-3 text-center">
+                    <p class="text-2xl font-bold text-success">{{ correct_count }}</p>
+                    <p class="text-xs text-base-content/50">Correct</p>
+                </div>
+                <div class="bg-error/10 rounded-xl p-3 text-center">
+                    <p class="text-2xl font-bold text-error">{{ wrong_count }}</p>
+                    <p class="text-xs text-base-content/50">Wrong</p>
+                </div>
+                <div class="bg-base-200 rounded-xl p-3 text-center">
+                    <p class="text-2xl font-bold text-base-content">{{ time_used_minutes }}m</p>
+                    <p class="text-xs text-base-content/50">Time Used</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance by Section -->
+    <div class="card bg-base-100 border border-base-300 shadow-md mb-6">
+        <div class="card-body p-5">
+            <h2 class="text-lg font-semibold flex items-center gap-2 mb-4">
+                <span>📈</span> Performance by Section
+            </h2>
+            <div class="space-y-3">
+                {% for sec in section_stats %}
+                <div class="bg-base-200 rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-semibold text-sm">{{ sec.name }}</span>
+                        <span class="badge badge-sm badge-{{ sec.rating_color }}">{{ sec.rating }}</span>
+                    </div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="flex-1 bg-base-300 rounded-full h-2.5 overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-700" style="width:{{ sec.accuracy }}%;background-color:{% if sec.accuracy >= 80 %}#22c55e{% elif sec.accuracy >= 60 %}#f59e0b{% else %}#ef4444{% endif %}"></div>
+                        </div>
+                        <span class="text-sm font-bold tabular-nums w-12 text-right">{{ sec.accuracy }}%</span>
+                    </div>
+                    <div class="flex gap-4 text-xs text-base-content/50">
+                        <span>{{ sec.total }} questions</span>
+                        <span class="text-success">{{ sec.correct }} correct</span>
+                        <span class="text-error">{{ sec.wrong }} wrong</span>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-base-content/50 py-4">No section data available.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Study Recommendation -->
+    {% if weakest_sections %}
+    <div class="card bg-warning/5 border border-warning/30 shadow-md mb-6">
+        <div class="card-body p-5">
+            <h2 class="text-lg font-semibold flex items-center gap-2 mb-3">
+                <span>💡</span> Study Recommendation
+            </h2>
+            <p class="text-sm text-base-content/70 mb-2">
+                Focus on improving these sections before your next practice exam:
+            </p>
+            {% for sec in weakest_sections %}
+            <div class="flex items-center gap-3 bg-base-200 rounded-lg p-3 mb-2 last:mb-0">
+                <span class="badge badge-error badge-sm">{{ sec.accuracy }}%</span>
+                <span class="font-medium text-sm">{{ sec.name }}</span>
+                <span class="text-xs text-base-content/50 ml-auto">{{ sec.correct }}/{{ sec.total }} correct</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Actions -->
     <div class="text-center mt-8 space-x-3">
-        <a href="{% url 'practice_exam' %}" class="btn btn-primary">New Practice Exam</a>
-        <a href="{% url 'test_list' %}" class="btn btn-outline">Back to Tests</a>
+        <a href="{% url 'practice_exam' %}" class="btn btn-primary">🔄 New Practice Exam</a>
+        <a href="{% url 'test_list' %}" class="btn btn-outline">Back to Dumps</a>
     </div>
 </div>
 {% endblock %}
