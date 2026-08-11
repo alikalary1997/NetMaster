@@ -1,0 +1,72 @@
+/* ====== Homepage Styles ====== */
+
+/* Hero */
+.hero-gradient {
+    min-height: 700px;
+    background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 80% 50%, rgba(6,182,212,0.05) 0%, transparent 70%),
+        linear-gradient(170deg, #0b1120 0%, #111c33 40%, #0f172a 100%);
+}
+
+/* Hero image */
+.hero-img {
+    max-width: 420px;
+    width: 100%;
+    box-shadow:
+        0 0 120px -30px rgba(59,130,246,0.25),
+        0 0 60px -15px rgba(59,130,246,0.15),
+        0 30px 60px -20px rgba(0,0,0,0.5);
+    border-radius: 2rem;
+}
+@media (min-width: 1024px) {
+    .hero-img { max-width: 500px; }
+}
+
+/* Use DaisyUI native shadow + smooth hover for feature cards */
+.feat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.feat-card:hover {
+    transform: translateY(-6px);
+}
+
+/* Category rows */
+.cat-row {
+    transition: all 0.25s ease;
+}
+.cat-row:hover {
+    border-color: rgba(59,130,246,0.35);
+    background: rgba(59,130,246,0.06);
+    transform: translateX(4px);
+}
+
+/* Stats */
+.stat-num { font-variant-numeric: tabular-nums; }
+
+/* Pulse dot */
+.pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+}
+
+/* Scroll reveal */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* Section glow accents */
+.glow-top {
+    position: relative;
+}
+.glow-top::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20%; right: 20%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(59,130,246,0.25), transparent);
+}

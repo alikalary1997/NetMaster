@@ -1,46 +1,241 @@
 {% extends 'quiz/base.html' %}
+{% load static %}
 
-{% block title %}Welcome{% endblock %}
+{% block title %}CCNA Prep — Master Networking{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'quiz/css/hero.css' %}">
+<link rel="stylesheet" href="{% static 'quiz/css/content.css' %}">
+{% endblock %}
 
 {% block content %}
-    <div id="vanta-bg" class="min-h-[calc(100vh-200px)] w-full relative flex flex-col justify-center items-center">
-        <div class="hero-content text-center relative z-10">
-            <div class="max-w-md">
-              <h1 class="text-5xl font-bold">Welcome to the CCNA Quiz!</h1>
-              <p class="py-6">Test your knowledge with our exciting quizzes. Choose between learning mode for instant feedback or exam mode for a final score.</p>
-              {% if user.is_authenticated %}
-                {# Replace classes here #}
-                <a href="{% url 'test_list' %}" class="btn-hover color-1">Start a Quiz!</a>
-              {% else %}
-                 {# Replace classes here, keep margin for spacing #}
-                 <a href="{% url 'signup' %}" class="btn-hover color-1 mr-4">Get Started - Sign Up</a>
-                 {# Replace classes here #}
-                 <a href="{% url 'login' %}" class="btn-hover color-1">Login</a>
-              {% endif %}
+
+{# ===== HERO ===== #}
+<section class="hero-section">
+    <div class="hero-container">
+        <div class="hero-left">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                <span>CCNA Exam Preparation</span>
+            </div>
+            <h1 class="hero-title">Master <span>CCNA 200-301</span><br>with Confidence</h1>
+            <p class="hero-desc">Learn, practice, and test your networking knowledge with organized lessons, realistic practice exams, and detailed explanations.</p>
+            <div class="hero-buttons">
+                {% if user.is_authenticated %}
+                <a href="{% url 'test_list' %}" class="btn-hero-primary">Start Learning</a>
+                <a href="{% url 'practice_exam' %}" class="btn-hero-secondary">Practice Exams</a>
+                {% else %}
+                <a href="{% url 'signup' %}" class="btn-hero-primary">Start Learning</a>
+                <a href="{% url 'practice_exam' %}" class="btn-hero-secondary">Practice Exams</a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="hero-right">
+            <img src="{% static 'images/hero.png' %}" alt="CCNA Hero">
+        </div>
+    </div>
+    <div class="hero-stats">
+        <div class="hero-stats-inner">
+            <div class="hero-stat"><div class="num">{{ total_questions }}+</div><div class="lbl">Questions</div></div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat"><div class="num">{{ total_categories }}</div><div class="lbl">Topics</div></div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat"><div class="num">2</div><div class="lbl">Exam Modes</div></div>
+            <div class="hero-stat-divider"></div>
+            <div class="hero-stat"><div class="num">3</div><div class="lbl">Languages</div></div>
+        </div>
+    </div>
+</section>
+
+{# ===== CONTENT ===== #}
+<div class="content-section">
+
+    {# FEATURE CARDS #}
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-label">Why Choose Us</div>
+            <h2 class="section-title">Built for CCNA Success</h2>
+            <p class="section-desc">Every feature designed to help you pass on your first attempt</p>
+        </div>
+        <div class="features-grid">
+            <div class="feat-card">
+                <div class="feat-icon" style="background:#eff6ff;color:#3b82f6">📘</div>
+                <h3>Structured Learning</h3>
+                <p>Follow CCNA topics in order with clear, easy-to-understand explanations.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon" style="background:#f0fdf4;color:#22c55e">📋</div>
+                <h3>Practice Exams</h3>
+                <p>Test your knowledge with realistic exam-style questions and timed simulations.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon" style="background:#fefce8;color:#eab308">📊</div>
+                <h3>Track Your Progress</h3>
+                <p>Monitor completed topics, quiz scores, and identify weak areas instantly.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon" style="background:#f5f3ff;color:#8b5cf6">🌍</div>
+                <h3>Arabic, Kurdish &amp; English</h3>
+                <p>Study in your preferred language with fully translated content.</p>
             </div>
         </div>
     </div>
-{% endblock %}
 
-{% block extra_js %}
-    {# ... VANTA.js Scripts ... #}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script src="https://www.vantajs.com/dist/vanta.net.min.js"></script>
-    <script>
-        VANTA.NET({
-            el: "#vanta-bg", // Target the div we created
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.00,
-            minWidth: 200.00,
-            scale: 1.00,
-            scaleMobile: 1.00,
-            color: 0xcaff00,
-            backgroundColor: 0x2161f,
-            points: 7.00,
-            maxDistance: 25.00,
-            spacing: 20.00
-        });
-    </script>
+    {# DASHBOARD #}
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-label">Dashboard</div>
+            <h2 class="section-title">Track &amp; Improve</h2>
+            <p class="section-desc">Everything you need to monitor your CCNA preparation</p>
+        </div>
+        <div class="dashboard-grid">
+            <div class="dash-card">
+                <div class="dash-card-header"><h3>CCNA Categories</h3><a href="{% url 'test_list' %}">View All</a></div>
+                <ul class="dash-list">
+                    {% for cat in categories %}
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#eff6ff;color:#3b82f6">📘</span>{{ cat.name }}</span><span class="dash-count">{{ cat.q_count }} Q</span></li>
+                    {% empty %}
+                    <li style="color:#94a3b8;text-align:center;padding:20px 0">No categories yet</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="dash-card">
+                <div class="dash-card-header"><h3>Practice Exams</h3><a href="{% url 'practice_exam' %}">View All</a></div>
+                <ul class="dash-list">
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#eff6ff;color:#3b82f6">📝</span> Chapter Exams</span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#f0fdf4;color:#22c55e">🎯</span> Full CCNA Mock Exam</span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#fefce8;color:#eab308">⏱</span> Timed Mode</span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#fef2f2;color:#ef4444">🔄</span> Review Incorrect Answers</span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#f5f3ff;color:#8b5cf6">📊</span> Score Report</span></li>
+                </ul>
+            </div>
+            <div class="dash-card">
+                <div class="dash-card-header"><h3>Study Progress</h3></div>
+                <div class="progress-center">
+                    <div class="progress-ring">
+                        <svg width="120" height="120" viewBox="0 0 120 120">
+                            <defs><linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
+                            <circle class="bg-circle" cx="60" cy="60" r="52"></circle>
+                            <circle class="fg-circle" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="114.3"></circle>
+                        </svg>
+                        <div class="progress-text">65%</div>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="progress-stat"><div class="val">{{ total_categories }}</div><div class="lbl">Topics</div></div>
+                        <div class="progress-stat"><div class="val">78%</div><div class="lbl">Avg Score</div></div>
+                        <div class="progress-stat"><div class="val">4/6</div><div class="lbl">Chapters</div></div>
+                    </div>
+                    <a href="{% url 'test_list' %}" class="dash-btn">Continue Learning</a>
+                </div>
+            </div>
+            <div class="dash-card">
+                <div class="dash-card-header"><h3>Latest Questions</h3><a href="{% url 'test_list' %}">View All</a></div>
+                <ul class="dash-list">
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#eff6ff;color:#3b82f6">🔌</span> VLAN Configuration</span><span class="dash-count">Net. Access</span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#f0fdf4;color:#22c55e">🔗</span> OSPF Routing</span><span class="dash-count">IP Connect</span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#fefce8;color:#eab308">🛡</span> ACL Rules</span><span class="dash-count">Security</span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#fef2f2;color:#ef4444">📡</span> NAT &amp; PAT</span><span class="dash-count">IP Services</span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#f5f3ff;color:#8b5cf6">⚙</span> STP Protocol</span><span class="dash-count">Net. Access</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {# COMMUNITY & TESTIMONIALS #}
+    <div class="section-container">
+        <div class="bottom-grid">
+            <div class="community-card">
+                <h3>Join Our Community</h3>
+                <p>Connect with fellow CCNA candidates, ask questions, share knowledge, and grow together.</p>
+                <a href="#" class="btn-community">Join Now</a>
+            </div>
+            <div class="dash-card">
+                <div class="dash-card-header"><h3>What Our Students Say</h3></div>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p class="review">"Passed my CCNA on the first attempt. The practice exams are incredibly realistic."</p>
+                        <div class="author"><div class="avatar">A</div><span class="name">Ahmed K.</span></div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p class="review">"Studying in Kurdish made a huge difference. Best CCNA prep resource I've found."</p>
+                        <div class="author"><div class="avatar">S</div><span class="name">Sara M.</span></div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p class="review">"The timed practice mode perfectly simulates the real exam environment."</p>
+                        <div class="author"><div class="avatar">O</div><span class="name">Omar R.</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{# ===== CTA ===== #}
+<section class="cta-section">
+    <h2 class="cta-title">Ready to Ace Your CCNA?</h2>
+    <p class="cta-desc">Start practicing today and build the confidence you need to pass.</p>
+    {% if user.is_authenticated %}
+    <a href="{% url 'test_list' %}" class="cta-btn">Start Now</a>
+    {% else %}
+    <a href="{% url 'signup' %}" class="cta-btn">Get Started Free</a>
+    {% endif %}
+</section>
+
+{# ===== FOOTER ===== #}
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>CCNA Study &amp; Dumps</h4>
+                <p style="font-size:13px;color:#64748b;line-height:1.7;margin-top:4px">Your complete CCNA certification preparation platform with practice exams, structured learning, and progress tracking.</p>
+                <div class="footer-social" style="margin-top:14px">
+                    <a href="#" title="Twitter">𝕏</a>
+                    <a href="#" title="Facebook">f</a>
+                    <a href="#" title="YouTube">▶</a>
+                    <a href="#" title="Discord">💬</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="{% url 'landing_page' %}">Home</a></li>
+                    <li><a href="{% url 'study' %}">Study</a></li>
+                    <li><a href="{% url 'test_list' %}">Dumps</a></li>
+                    <li><a href="{% url 'practice_exam' %}">Practice Exam</a></li>
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="{% url 'study' %}">Study Materials</a></li>
+                    <li><a href="{% url 'test_list' %}">Chapter Tests</a></li>
+                    <li><a href="{% url 'practice_exam' %}">Mock Exams</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="{% url 'about' %}">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Languages</h4>
+                <ul>
+                    <li><a href="#">English</a></li>
+                    <li><a href="#">العربية</a></li>
+                    <li><a href="#">کوردی</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 CCNA Study &amp; Dumps. All rights reserved.</span>
+            <div style="display:flex;gap:20px">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
 {% endblock %}

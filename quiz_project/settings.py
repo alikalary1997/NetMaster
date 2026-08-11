@@ -117,6 +117,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Project-root static folder (e.g. static/ali.png, static/css/home.css,
+# static/js/home.js). Registered as an extra static directory so those
+# assets resolve via {% load static %}/{% static %}. This is purely
+# additive and does not affect any existing app-static resolution.
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

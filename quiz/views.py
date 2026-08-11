@@ -65,8 +65,19 @@ def signup_view(request):
 
 
 def landing_page(request):
-    # Simple landing page view
-    return render(request, "quiz/landing_page.html")
+    from django.db.models import Count
+    from quiz.models import Test, Question
+
+    categories = Test.objects.annotate(q_count=Count("questions")).order_by("position", "name")
+    total_questions = Question.objects.count()
+    total_categories = Test.objects.count()
+
+    context = {
+        "categories": categories,
+        "total_questions": total_questions,
+        "total_categories": total_categories,
+    }
+    return render(request, "quiz/landing_page.html", context)
 
 
 def study_view(request):
