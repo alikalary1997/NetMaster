@@ -72,59 +72,65 @@
 
     {# DASHBOARD #}
     <div class="section-container">
-        <div class="section-header">
-            <div class="section-label">Dashboard</div>
-            <h2 class="section-title">Track &amp; Improve</h2>
-            <p class="section-desc">Everything you need to monitor your CCNA preparation</p>
-        </div>
         <div class="dashboard-grid">
+            {# Card 1: Categories #}
             <div class="dash-card">
                 <div class="dash-card-header"><h3>CCNA Categories</h3><a href="{% url 'test_list' %}">View All</a></div>
                 <ul class="dash-list">
                     {% for cat in categories %}
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#eff6ff;color:#3b82f6">📘</span>{{ cat.name }}</span><span class="dash-count">{{ cat.q_count }} Q</span></li>
-                    {% empty %}
-                    <li style="color:#94a3b8;text-align:center;padding:20px 0">No categories yet</li>
+                    <li>
+                        <span class="dash-label"><span class="dash-icon" style="background:{% cycle '#7c3aed' '#06b6d4' '#2563eb' '#0891b2' '#0d9488' '#4f46e5' %}">📘</span>{{ cat.name }}</span>
+                        <span class="dash-count">{{ cat.q_count }}</span>
+                    </li>
                     {% endfor %}
                 </ul>
+                <div class="dash-footer">
+                    <span>Total Questions</span>
+                    <span class="badge-count">{{ total_questions }}</span>
+                </div>
             </div>
+
+            {# Card 2: Practice Exams #}
             <div class="dash-card">
                 <div class="dash-card-header"><h3>Practice Exams</h3><a href="{% url 'practice_exam' %}">View All</a></div>
                 <ul class="dash-list">
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#eff6ff;color:#3b82f6">📝</span> Chapter Exams</span></li>
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#f0fdf4;color:#22c55e">🎯</span> Full CCNA Mock Exam</span></li>
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#fefce8;color:#eab308">⏱</span> Timed Mode</span></li>
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#fef2f2;color:#ef4444">🔄</span> Review Incorrect Answers</span></li>
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#f5f3ff;color:#8b5cf6">📊</span> Score Report</span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#10b981">📝</span><span class="dash-label-text">Chapter Exams<span class="sub">Practice each chapter</span></span></span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#2563eb">🎯</span><span class="dash-label-text">Full CCNA Mock Exam<span class="sub">Real exam simulation</span></span></span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#f59e0b">⏱</span><span class="dash-label-text">Timed Mode<span class="sub">Improve your speed</span></span></span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#ef4444">🔄</span><span class="dash-label-text">Review Incorrect Answers<span class="sub">Learn from your mistakes</span></span></span></li>
+                    <li><span class="dash-label"><span class="dash-icon" style="background:#06b6d4">📊</span><span class="dash-label-text">Score Report<span class="sub">Detailed performance analysis</span></span></span></li>
                 </ul>
             </div>
+
+            {# Card 3: Study Progress #}
             <div class="dash-card">
                 <div class="dash-card-header"><h3>Study Progress</h3></div>
                 <div class="progress-center">
                     <div class="progress-ring">
-                        <svg width="120" height="120" viewBox="0 0 120 120">
-                            <defs><linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
-                            <circle class="bg-circle" cx="60" cy="60" r="52"></circle>
-                            <circle class="fg-circle" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="114.3"></circle>
+                        <svg width="130" height="130" viewBox="0 0 130 130">
+                            <circle class="bg-circle" cx="65" cy="65" r="56"></circle>
+                            <circle class="fg-circle" cx="65" cy="65" r="56" stroke-dasharray="351.9" stroke-dashoffset="123.2"></circle>
                         </svg>
-                        <div class="progress-text">65%</div>
+                        <div class="progress-text"><span class="pct">65%</span><span class="lbl">Completed</span></div>
                     </div>
-                    <div class="progress-stats">
-                        <div class="progress-stat"><div class="val">{{ total_categories }}</div><div class="lbl">Topics</div></div>
-                        <div class="progress-stat"><div class="val">78%</div><div class="lbl">Avg Score</div></div>
-                        <div class="progress-stat"><div class="val">4/6</div><div class="lbl">Chapters</div></div>
+                    <div class="progress-metrics">
+                        <div class="progress-metric"><span class="key">Topics Completed</span><span class="val">26 / 40</span></div>
+                        <div class="progress-metric"><span class="key">Quiz Average</span><span class="val">78%</span></div>
+                        <div class="progress-metric"><span class="key">Current Chapter</span><span class="val highlight">IP Connectivity</span></div>
                     </div>
                     <a href="{% url 'test_list' %}" class="dash-btn">Continue Learning</a>
                 </div>
             </div>
+
+            {# Card 4: Latest Questions #}
             <div class="dash-card">
                 <div class="dash-card-header"><h3>Latest Questions</h3><a href="{% url 'test_list' %}">View All</a></div>
                 <ul class="dash-list">
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#eff6ff;color:#3b82f6">🔌</span> VLAN Configuration</span><span class="dash-count">Net. Access</span></li>
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#f0fdf4;color:#22c55e">🔗</span> OSPF Routing</span><span class="dash-count">IP Connect</span></li>
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#fefce8;color:#eab308">🛡</span> ACL Rules</span><span class="dash-count">Security</span></li>
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#fef2f2;color:#ef4444">📡</span> NAT &amp; PAT</span><span class="dash-count">IP Services</span></li>
-                    <li><span class="dash-label"><span class="dash-icon" style="background:#f5f3ff;color:#8b5cf6">⚙</span> STP Protocol</span><span class="dash-count">Net. Access</span></li>
+                    <li><span class="dash-label"><span style="color:#10b981;font-size:15px;margin-right:10px">📄</span><span class="dash-label-text">VLAN Question<span class="sub">Network Access</span></span></span></li>
+                    <li><span class="dash-label"><span style="color:#10b981;font-size:15px;margin-right:10px">📄</span><span class="dash-label-text">OSPF Question<span class="sub">IP Connectivity</span></span></span></li>
+                    <li><span class="dash-label"><span style="color:#10b981;font-size:15px;margin-right:10px">📄</span><span class="dash-label-text">ACL Question<span class="sub">Security Fundamentals</span></span></span></li>
+                    <li><span class="dash-label"><span style="color:#10b981;font-size:15px;margin-right:10px">📄</span><span class="dash-label-text">NAT Question<span class="sub">IP Services</span></span></span></li>
+                    <li><span class="dash-label"><span style="color:#10b981;font-size:15px;margin-right:10px">📄</span><span class="dash-label-text">STP Question<span class="sub">Network Access</span></span></span></li>
                 </ul>
             </div>
         </div>
