@@ -1,7 +1,7 @@
 /* ====== Content Sections ====== */
 
 .content-section {
-    padding: 64px 0 80px;
+    padding: 24px 0 80px;
     background: #f8fafc;
 }
 @media (max-width: 640px) { .content-section { padding: 48px 0 60px; } }

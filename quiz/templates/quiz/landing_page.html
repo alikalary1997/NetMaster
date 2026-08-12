@@ -11,7 +11,7 @@
 {% block content %}
 
 {# ===== HERO ===== #}
-<section class="hero-section">
+<section class="hero-section" style="background-image: url({% static 'images/hero.png' %});">
     <div class="hero-container">
         <div class="hero-left">
             <div class="hero-badge">
@@ -29,20 +29,6 @@
                 <a href="{% url 'practice_exam' %}" class="btn-hero-secondary">Practice Exams</a>
                 {% endif %}
             </div>
-        </div>
-        <div class="hero-right">
-            <img src="{% static 'images/hero.png' %}" alt="CCNA Hero">
-        </div>
-    </div>
-    <div class="hero-stats">
-        <div class="hero-stats-inner">
-            <div class="hero-stat"><div class="num">{{ total_questions }}+</div><div class="lbl">Questions</div></div>
-            <div class="hero-stat-divider"></div>
-            <div class="hero-stat"><div class="num">{{ total_categories }}</div><div class="lbl">Topics</div></div>
-            <div class="hero-stat-divider"></div>
-            <div class="hero-stat"><div class="num">2</div><div class="lbl">Exam Modes</div></div>
-            <div class="hero-stat-divider"></div>
-            <div class="hero-stat"><div class="num">3</div><div class="lbl">Languages</div></div>
         </div>
     </div>
 </section>
