@@ -175,66 +175,65 @@
 
 </div>
 
-{# ===== CTA ===== #}
-<section class="cta-section">
-    <h2 class="cta-title">Ready to Ace Your CCNA?</h2>
-    <p class="cta-desc">Start practicing today and build the confidence you need to pass.</p>
-    {% if user.is_authenticated %}
-    <a href="{% url 'test_list' %}" class="cta-btn">Start Now</a>
-    {% else %}
-    <a href="{% url 'signup' %}" class="cta-btn">Get Started Free</a>
-    {% endif %}
-</section>
+
 
 {# ===== FOOTER ===== #}
 <footer class="site-footer">
     <div class="footer-inner">
         <div class="footer-grid">
             <div class="footer-col">
-                <h4>CCNA Study &amp; Dumps</h4>
-                <p style="font-size:13px;color:#64748b;line-height:1.7;margin-top:4px">Your complete CCNA certification preparation platform with practice exams, structured learning, and progress tracking.</p>
-                <div class="footer-social" style="margin-top:14px">
-                    <a href="#" title="Twitter">𝕏</a>
-                    <a href="#" title="Facebook">f</a>
-                    <a href="#" title="YouTube">▶</a>
-                    <a href="#" title="Discord">💬</a>
+                <div class="footer-brand">
+                    <span style="color:#3b82f6">⬡</span> CCNA
                 </div>
+                <span class="sub">Study &amp; Dumps</span>
+                <p class="footer-tagline" style="margin-top:8px">Your best companion to learn, practice and pass the CCNA exam.</p>
             </div>
             <div class="footer-col">
                 <h4>Quick Links</h4>
                 <ul>
                     <li><a href="{% url 'landing_page' %}">Home</a></li>
                     <li><a href="{% url 'study' %}">Study</a></li>
-                    <li><a href="{% url 'test_list' %}">Dumps</a></li>
-                    <li><a href="{% url 'practice_exam' %}">Practice Exam</a></li>
-                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="{% url 'practice_exam' %}">Practice Exams</a></li>
+                    <li><a href="{% url 'test_list' %}">Categories</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>Resources</h4>
                 <ul>
-                    <li><a href="{% url 'study' %}">Study Materials</a></li>
-                    <li><a href="{% url 'test_list' %}">Chapter Tests</a></li>
-                    <li><a href="{% url 'practice_exam' %}">Mock Exams</a></li>
                     <li><a href="#">Blog</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="{% url 'about' %}">About Us</a></li>
                     <li><a href="{% url 'about' %}">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h4>Languages</h4>
+                <h4>Legal</h4>
                 <ul>
-                    <li><a href="#">English</a></li>
-                    <li><a href="#">العربية</a></li>
-                    <li><a href="#">کوردی</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Disclaimer</a></li>
                 </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Stay Connected</h4>
+                <div class="footer-social">
+                    <a href="#" style="background:#2563eb">f</a>
+                    <a href="#" style="background:#0ea5e9">✈</a>
+                    <a href="#" style="background:#dc2626">▶</a>
+                    <a href="#" style="background:#db2777">📷</a>
+                    <a href="#" style="background:#4f46e5">💬</a>
+                </div>
+                <div class="footer-lang">
+                    <select>
+                        <option>English</option>
+                        <option>العربية</option>
+                        <option>کوردی</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <span>&copy; 2026 CCNA Study &amp; Dumps. All rights reserved.</span>
-            <div style="display:flex;gap:20px">
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-            </div>
+            &copy; 2024 CCNA Study &amp; Dumps. All Rights Reserved.
         </div>
     </div>
 </footer>
