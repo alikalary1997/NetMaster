@@ -75,7 +75,7 @@
         <div class="dashboard-grid">
             {# Card 1: Categories #}
             <div class="dash-card">
-                <div class="dash-card-header"><h3>CCNA Categories</h3><a href="{% url 'test_list' %}">View All</a></div>
+                <div class="dash-card-header"><h3>CCNA Dumps</h3><a href="{% url 'test_list' %}">View All</a></div>
                 <ul class="dash-list">
                     {% for cat in categories %}
                     <li>
@@ -194,7 +194,7 @@
                     <li><a href="{% url 'landing_page' %}">Home</a></li>
                     <li><a href="{% url 'study' %}">Study</a></li>
                     <li><a href="{% url 'practice_exam' %}">Practice Exams</a></li>
-                    <li><a href="{% url 'test_list' %}">Categories</a></li>
+                    <li><a href="{% url 'test_list' %}">Dumps</a></li>
                 </ul>
             </div>
             <div class="footer-col">

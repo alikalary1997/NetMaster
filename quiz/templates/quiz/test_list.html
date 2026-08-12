@@ -1,7 +1,7 @@
 {% extends 'quiz/base.html' %}
 {% load static %}
 
-{% block title %}Categories{% endblock %}
+{% block title %}Dumps{% endblock %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'quiz/css/categories.css' %}">
@@ -15,7 +15,7 @@
 {# Header #}
 <div class="cat-header" style="flex-wrap:wrap">
     <div style="display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:4px">
-        <h1 style="margin:0">CCNA Categories</h1>
+        <h1 style="margin:0">CCNA Dumps</h1>
         <a href="{% url 'practice_exam' %}" style="display:inline-flex;align-items:center;gap:6px;padding:12px 28px;font-size:15px;font-weight:700;color:#fff;background:#4f46e5;border-radius:12px;text-decoration:none;box-shadow:0 2px 8px rgba(79,70,229,.2)">🎯 Practice Exam</a>
         {% if user.is_staff %}
         <button id="toggleReorder" class="btn-reorder">
@@ -53,7 +53,7 @@
     </div>
     {% empty %}
     <div style="grid-column:1/-1;text-align:center;padding:80px 0">
-        <p style="font-size:18px;color:#94a3b8">No categories yet. Check back soon.</p>
+        <p style="font-size:18px;color:#94a3b8">No dumps yet. Check back soon.</p>
     </div>
     {% endfor %}
 </div>
@@ -82,7 +82,7 @@ function en(){
     document.querySelectorAll('.start-test-btn').forEach(b=>{b.style.pointerEvents='none';b.style.opacity='.5'});
     so.style.display='flex';so.style.justifyContent='center';
     var d=document.createElement('div');d.id='ri';d.style.cssText='background:#fdf2f8;color:#be185d;font-size:14px;padding:12px 16px;border-radius:10px;margin-bottom:12px;text-align:center';
-    d.textContent='💡 Use ▲ ▼ arrows to reorder categories';
+    d.textContent='💡 Use ▲ ▼ arrows to reorder dumps';
     tc.parentNode.insertBefore(d,tc);al();
 }
 function ds(){
