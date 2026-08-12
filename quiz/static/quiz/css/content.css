@@ -1,5 +1,7 @@
 /* ====== Content Sections ====== */
 
+html, body { margin: 0; overflow-x: hidden; }
+
 .content-section {
     padding: 24px 0 80px;
     background: #f8fafc;
@@ -227,6 +229,9 @@
     background: #070e20; border-top: 1px solid rgba(255,255,255,0.05);
     padding: 40px 0 0;
     color: #9ca3af;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
 }
 .footer-inner { max-width: 1400px; margin: 0 auto; padding: 0 48px; }
 .footer-grid {
