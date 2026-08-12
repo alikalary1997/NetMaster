@@ -94,7 +94,6 @@ def test_list(request):
         "position", "name"
     )
 
-    # Category descriptions
     descriptions = {
         "IP Connectivity": "How routers forward traffic between different networks and determine the best path for data to travel.",
         "Automation and Programmability": "Using software, scripts, and APIs to automate network configuration, management, and monitoring.",
