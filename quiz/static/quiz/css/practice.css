@@ -1,0 +1,92 @@
+/* ====== Practice Exam Page ====== */
+
+.practice-page { background: #f8fafc; min-height: 100vh; }
+.practice-container { max-width: 900px; margin: 0 auto; padding: 32px 40px; }
+
+.practice-header { text-align: center; margin-bottom: 32px; }
+.practice-header h1 { font-size: 28px; font-weight: 800; color: #0f172a; }
+.practice-header .sub { font-size: 14px; color: #64748b; margin-top: 4px; }
+
+/* Section card */
+.section-card {
+    background: #fff; border-radius: 16px; border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04); padding: 28px 28px 20px;
+    margin-bottom: 20px;
+}
+.section-card h2 {
+    font-size: 18px; font-weight: 700; color: #0f172a;
+    display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+}
+.section-card .hint { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+.section-card .row { display: flex; gap: 8px; margin-bottom: 16px; }
+.section-card .row button {
+    padding: 6px 16px; font-size: 12px; font-weight: 600; border-radius: 8px;
+    border: 1px solid #e2e8f0; background: #fff; color: #64748b; cursor: pointer; transition: all .15s;
+}
+.section-card .row button:hover { background: #f1f5f9; border-color: #cbd5e1; }
+
+/* Section items */
+.section-items { display: flex; flex-direction: column; gap: 6px; }
+.section-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; border-radius: 12px; border: 1px solid #e2e8f0;
+    cursor: pointer; transition: all .15s; background: #fff;
+}
+.section-item:hover { border-color: #cbd5e1; background: #f8fafc; }
+.section-item.selected { border-color: #3b82f6; background: #eff6ff; }
+.section-item input[type="checkbox"] { accent-color: #3b82f6; width: 16px; height: 16px; cursor: pointer; }
+.section-item .name { flex: 1; font-size: 14px; font-weight: 500; color: #0f172a; }
+.section-item .count {
+    font-size: 12px; font-weight: 600; color: #64748b;
+    background: #f1f5f9; padding: 3px 10px; border-radius: 99px;
+}
+
+/* Question count card */
+.qcard {
+    background: #fff; border-radius: 16px; border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04); padding: 28px; margin-bottom: 20px;
+}
+.qcard h2 { font-size: 18px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.qcard .hint { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+.q-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.q-option {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding: 16px 12px; border-radius: 12px; border: 2px solid #e2e8f0;
+    cursor: pointer; transition: all .15s; background: #fff; text-align: center;
+}
+.q-option:hover { border-color: #cbd5e1; }
+.q-option.selected { border-color: #4f46e5; background: #eef2ff; }
+.q-option input { display: none; }
+.q-option .num { font-size: 20px; font-weight: 800; color: #0f172a; }
+.q-option .lbl { font-size: 11px; color: #64748b; }
+.q-option .time { font-size: 11px; font-weight: 600; color: #4f46e5; margin-top: 2px; }
+
+.custom-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding: 10px 14px; background: #f8fafc; border-radius: 10px; }
+.custom-row input { width: 80px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; }
+.custom-row input:focus { border-color: #4f46e5; }
+.custom-row span { font-size: 12px; color: #94a3b8; }
+
+/* Summary */
+.summary-box {
+    background: #eef2ff; border-radius: 12px; padding: 16px 20px;
+    margin-top: 16px; display: none;
+}
+.summary-box.show { display: block; }
+.summary-box h3 { font-size: 12px; font-weight: 700; color: #4f46e5; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+.summary-row { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+.summary-row .key { color: #64748b; }
+.summary-row .val { font-weight: 600; color: #0f172a; }
+
+.btn-submit {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 14px; font-size: 16px; font-weight: 700;
+    color: #fff; background: #4f46e5; border: none; border-radius: 12px;
+    cursor: pointer; transition: background .2s; margin-top: 8px;
+    box-shadow: 0 4px 14px rgba(79,70,229,.25);
+}
+.btn-submit:hover { background: #4338ca; }
+
+@media (max-width: 640px) {
+    .practice-container { padding: 20px 16px; }
+    .q-options { grid-template-columns: repeat(2, 1fr); }
+}

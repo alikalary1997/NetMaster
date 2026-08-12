@@ -1,186 +1,131 @@
 {% extends 'quiz/base.html' %}
+{% load static %}
+
 {% block title %}Practice Exam{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'quiz/css/practice.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="max-w-2xl mx-auto">
-    <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/20 mb-4">
-            <span class="text-3xl">🎯</span>
+<div class="practice-page">
+<div class="practice-container">
+
+<div class="practice-header">
+    <h1>Practice Exam</h1>
+    <p class="sub">Choose your sections &amp; question count — we handle the rest</p>
+</div>
+
+<form method="POST" action="{% url 'practice_start' %}" id="practice-form">
+    {% csrf_token %}
+
+    {# Section Selection #}
+    <div class="section-card">
+        <h2>📚 Select Sections</h2>
+        <p class="hint">Choose which topics to include in your exam</p>
+        <div class="row">
+            <button type="button" onclick="selectAll()">Select All</button>
+            <button type="button" onclick="clearAll()">Clear All</button>
         </div>
-        <h1 class="text-3xl font-bold">Practice Exam</h1>
-        <p class="text-base-content/50 mt-1">Choose your sections &amp; question count — we handle the rest</p>
-    </div>
-
-    <form method="POST" action="{% url 'practice_start' %}" id="practice-form">
-        {% csrf_token %}
-
-        <!-- Section Selection -->
-        <div class="card bg-base-100 border border-base-300 shadow-md mb-5">
-            <div class="card-body p-5">
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="text-lg">📚</span>
-                    <h2 class="text-lg font-semibold">Select Sections</h2>
-                </div>
-                <p class="text-sm text-base-content/50 mb-3">Choose which topics to include in your exam</p>
-
-                <div class="flex gap-2 mb-3">
-                    <button type="button" onclick="selectAll()" class="btn btn-xs btn-ghost">Select All</button>
-                    <button type="button" onclick="clearAll()" class="btn btn-xs btn-ghost">Clear All</button>
-                </div>
-
-                <div class="space-y-1.5">
-                    {% for test in tests %}
-                    <label class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-base-200 cursor-pointer transition-colors section-row">
-                        <input type="checkbox" name="sections" value="{{ test.id }}" class="checkbox checkbox-primary checkbox-sm section-cb">
-                        <span class="flex-1 font-medium text-sm">{{ test.name }}</span>
-                        <span class="badge badge-ghost badge-sm">{{ test.q_count }} Q</span>
-                    </label>
-                    {% empty %}
-                    <p class="text-base-content/50 text-center py-4">No sections available yet.</p>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <!-- Question Count -->
-        <div class="card bg-base-100 border border-base-300 shadow-md mb-5">
-            <div class="card-body p-5">
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="text-lg">📝</span>
-                    <h2 class="text-lg font-semibold">Number of Questions</h2>
-                </div>
-                <p class="text-sm text-base-content/50 mb-3">Time is assigned automatically based on your selection</p>
-
-                <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5">
-                    <label class="time-option flex flex-col items-center p-3 rounded-xl border-2 border-base-300 hover:border-primary/50 cursor-pointer transition-all" data-time="60">
-                        <input type="radio" name="question_count" value="50" class="radio radio-primary radio-sm qc-radio hidden" onchange="toggleCustom(false);updateSummary()">
-                        <span class="font-bold text-xl text-base-content">50</span>
-                        <span class="text-xs text-base-content/40">questions</span>
-                        <span class="badge badge-sm badge-ghost mt-1.5">⏱ 60 min</span>
-                    </label>
-                    <label class="time-option flex flex-col items-center p-3 rounded-xl border-2 border-base-300 hover:border-primary/50 cursor-pointer transition-all" data-time="90">
-                        <input type="radio" name="question_count" value="70" class="radio radio-primary radio-sm qc-radio hidden" onchange="toggleCustom(false);updateSummary()">
-                        <span class="font-bold text-xl text-base-content">70</span>
-                        <span class="text-xs text-base-content/40">questions</span>
-                        <span class="badge badge-sm badge-ghost mt-1.5">⏱ 90 min</span>
-                    </label>
-                    <label class="time-option flex flex-col items-center p-3 rounded-xl border-2 border-base-300 hover:border-primary/50 cursor-pointer transition-all" data-time="120">
-                        <input type="radio" name="question_count" value="90" class="radio radio-primary radio-sm qc-radio hidden" onchange="toggleCustom(false);updateSummary()">
-                        <span class="font-bold text-xl text-base-content">90</span>
-                        <span class="text-xs text-base-content/40">questions</span>
-                        <span class="badge badge-sm badge-ghost mt-1.5">⏱ 120 min</span>
-                    </label>
-                    <label class="time-option flex flex-col items-center p-3 rounded-xl border-2 border-base-300 hover:border-primary/50 cursor-pointer transition-all" data-time="120">
-                        <input type="radio" name="question_count" value="100" class="radio radio-primary radio-sm qc-radio hidden" onchange="toggleCustom(false);updateSummary()">
-                        <span class="font-bold text-xl text-base-content">100</span>
-                        <span class="text-xs text-base-content/40">questions</span>
-                        <span class="badge badge-sm badge-ghost mt-1.5">⏱ 120 min</span>
-                    </label>
-                    <label class="time-option flex flex-col items-center p-3 rounded-xl border-2 border-base-300 hover:border-primary/50 cursor-pointer transition-all col-span-2 md:col-span-1" data-time="custom">
-                        <input type="radio" name="question_count" value="custom" class="radio radio-primary radio-sm qc-radio hidden" onchange="toggleCustom(true);updateSummary()">
-                        <span class="font-bold text-xl text-base-content">Custom</span>
-                        <span class="text-xs text-base-content/40">your choice</span>
-                        <span class="badge badge-sm badge-ghost mt-1.5">⏱ ~1.5m/Q</span>
-                    </label>
-                </div>
-
-                <div id="custom-count-wrapper" class="mt-3 hidden">
-                    <div class="flex items-center gap-3 bg-base-200 rounded-lg p-3">
-                        <span class="text-sm text-base-content/60">Enter number:</span>
-                        <input type="number" id="custom-count-input" name="custom_count" min="1" max="200" class="input input-bordered input-sm w-24" placeholder="e.g. 15" oninput="updateSummary()">
-                        <span class="text-xs text-base-content/40">1 question = 1.5 minutes</span>
-                    </div>
-                </div>
-
-                <!-- Summary -->
-                <div id="exam-summary" class="hidden mt-4 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl border border-primary/20 p-4">
-                    <h3 class="font-semibold text-sm uppercase tracking-wide text-primary mb-3">Exam Summary</h3>
-                    <div class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
-                        <span class="text-base-content/50">Sections</span>
-                        <span class="font-medium" id="summary-sections">-</span>
-                        <span class="text-base-content/50">Questions</span>
-                        <span class="font-medium" id="summary-questions">-</span>
-                        <span class="text-base-content/50">Time Limit</span>
-                        <span class="font-medium" id="summary-time">-</span>
-                        <span class="text-base-content/50">Order</span>
-                        <span class="font-medium">🔀 Random</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Messages -->
-        {% if messages %}
-        <div class="mb-4">
-            {% for msg in messages %}
-            <div role="alert" class="alert alert-warning shadow-md">
-                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-5 w-5" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                <span>{{ msg }}</span>
-            </div>
+        <div class="section-items">
+            {% for test in tests %}
+            <label class="section-item">
+                <input type="checkbox" name="sections" value="{{ test.id }}" class="section-cb" onchange="this.parentElement.classList.toggle('selected',this.checked);updateSummary()">
+                <span class="name">{{ test.name }}</span>
+                <span class="count">{{ test.q_count }} Q</span>
+            </label>
+            {% empty %}
+            <p style="color:#94a3b8;text-align:center;padding:16px">No sections available yet.</p>
             {% endfor %}
         </div>
-        {% endif %}
+    </div>
 
-        <button type="submit" class="btn btn-primary btn-lg w-full">
-            🚀 Start Practice Exam
-        </button>
-    </form>
+    {# Question Count #}
+    <div class="qcard">
+        <h2>📝 Number of Questions</h2>
+        <p class="hint">Time is assigned automatically based on your selection</p>
+        <div class="q-options">
+            <label class="q-option time-option">
+                <input type="radio" name="question_count" value="50" class="qc-radio" onchange="setCount(this)">
+                <span class="num">50</span><span class="lbl">questions</span><span class="time">⏱ 60 min</span>
+            </label>
+            <label class="q-option time-option">
+                <input type="radio" name="question_count" value="70" class="qc-radio" onchange="setCount(this)">
+                <span class="num">70</span><span class="lbl">questions</span><span class="time">⏱ 90 min</span>
+            </label>
+            <label class="q-option time-option">
+                <input type="radio" name="question_count" value="90" class="qc-radio" onchange="setCount(this)">
+                <span class="num">90</span><span class="lbl">questions</span><span class="time">⏱ 120 min</span>
+            </label>
+            <label class="q-option time-option">
+                <input type="radio" name="question_count" value="100" class="qc-radio" onchange="setCount(this)">
+                <span class="num">100</span><span class="lbl">questions</span><span class="time">⏱ 120 min</span>
+            </label>
+            <label class="q-option time-option">
+                <input type="radio" name="question_count" value="custom" class="qc-radio" onchange="setCustom(this)">
+                <span class="num">Custom</span><span class="lbl">your choice</span><span class="time">⏱ 1.5m/Q</span>
+            </label>
+        </div>
+        <div id="custom-count-wrapper" class="custom-row" style="display:none">
+            <span>Enter number:</span>
+            <input type="number" id="custom-count-input" name="custom_count" min="1" max="200" placeholder="e.g. 15" oninput="updateSummary()">
+            <span>1 question = 1.5 minutes</span>
+        </div>
+        <div id="exam-summary" class="summary-box">
+            <h3>Exam Summary</h3>
+            <div class="summary-row"><span class="key">Sections</span><span class="val" id="summary-sections">-</span></div>
+            <div class="summary-row"><span class="key">Questions</span><span class="val" id="summary-questions">-</span></div>
+            <div class="summary-row"><span class="key">Time Limit</span><span class="val" id="summary-time">-</span></div>
+            <div class="summary-row"><span class="key">Order</span><span class="val">🔀 Random</span></div>
+        </div>
+    </div>
+
+    {% if messages %}
+    <div style="margin-bottom:16px">
+        {% for msg in messages %}
+        <div style="background:#fef3c7;color:#92400e;padding:12px 16px;border-radius:10px;font-size:14px">{{ msg }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <button type="submit" class="btn-submit">🚀 Start Practice Exam</button>
+</form>
+
+</div>
 </div>
 
 <script>
 var timeMap = {50:60, 70:90, 90:120, 100:120};
 
-function selectAll(){document.querySelectorAll('.section-cb').forEach(function(cb){cb.checked=true});updateSummary()}
-function clearAll(){document.querySelectorAll('.section-cb').forEach(function(cb){cb.checked=false});updateSummary()}
-function toggleCustom(show){document.getElementById('custom-count-wrapper').classList.toggle('hidden',!show)}
+function selectAll(){document.querySelectorAll('.section-cb').forEach(function(cb){cb.checked=true;cb.parentElement.classList.add('selected')});updateSummary()}
+function clearAll(){document.querySelectorAll('.section-cb').forEach(function(cb){cb.checked=false;cb.parentElement.classList.remove('selected')});updateSummary()}
+
+function setCount(r){
+    document.querySelectorAll('.q-option').forEach(function(o){o.classList.remove('selected')});
+    r.parentElement.classList.add('selected');
+    document.getElementById('custom-count-wrapper').style.display='none';
+    updateSummary();
+}
+function setCustom(r){
+    document.querySelectorAll('.q-option').forEach(function(o){o.classList.remove('selected')});
+    r.parentElement.classList.add('selected');
+    document.getElementById('custom-count-wrapper').style.display='flex';
+    updateSummary();
+}
 
 function updateSummary(){
     var checked = document.querySelectorAll('.section-cb:checked');
-    var sectionNames = [];
-    checked.forEach(function(cb){
-        var span = cb.parentElement.querySelector('.font-medium');
-        if(span) sectionNames.push(span.textContent);
-    });
-    var selected = document.querySelector('input[name="question_count"]:checked');
-    var summary = document.getElementById('exam-summary');
-    if (!selected) { summary.classList.add('hidden'); return; }
-
-    var val = selected.value;
-    var qCount, cTime;
-    if (val === 'custom') {
-        var ci = document.getElementById('custom-count-input');
-        var n = parseInt(ci.value) || 0;
-        qCount = n || '?';
-        if (n) {
-            var t = n * 1.5;
-            cTime = (t % 1 === 0 ? t : t.toFixed(1)) + ' min';
-        } else {
-            cTime = 'Auto';
-        }
-    } else {
-        qCount = parseInt(val);
-        cTime = timeMap[qCount] + ' min';
-    }
-    document.getElementById('summary-questions').textContent = qCount;
-    document.getElementById('summary-time').textContent = cTime;
-    document.getElementById('summary-sections').textContent = sectionNames.length ? sectionNames.join(', ') : 'None selected';
-    summary.classList.remove('hidden');
+    var names = []; checked.forEach(function(cb){var n=cb.parentElement.querySelector('.name');if(n)names.push(n.textContent)});
+    var sel = document.querySelector('.qc-radio:checked');
+    var s = document.getElementById('exam-summary');
+    if(!sel){s.classList.remove('show');return}
+    var val = sel.value, q, t;
+    if(val==='custom'){var ci=document.getElementById('custom-count-input');var n=parseInt(ci.value)||0;q=n||'?';t=n?(n*1.5):0;t=t?(t%1===0?t:t.toFixed(1))+' min':'Auto'}
+    else {q=parseInt(val);t=timeMap[q]+' min'}
+    document.getElementById('summary-questions').textContent=q;
+    document.getElementById('summary-time').textContent=t;
+    document.getElementById('summary-sections').textContent=names.length?names.join(', '):'None selected';
+    s.classList.add('show');
 }
-
-document.querySelectorAll('.section-cb').forEach(function(cb){
-    cb.addEventListener('change', updateSummary);
-});
-document.querySelectorAll('.time-option').forEach(function(label){
-    label.addEventListener('click', function(e){
-        var radio = this.querySelector('input[type="radio"]');
-        radio.checked = true;
-        if (radio.value === 'custom') toggleCustom(true);
-        else toggleCustom(false);
-        updateSummary();
-        document.querySelectorAll('.time-option').forEach(function(l){
-            l.classList.remove('border-primary', 'bg-primary/5', 'shadow-md');
-        });
-        this.classList.add('border-primary', 'bg-primary/5', 'shadow-md');
-    });
-});
 </script>
 {% endblock %}
