@@ -72,4 +72,5 @@ urlpatterns = [
     path('admin/users/unblock/<int:user_id>/', custom_admin_unblock_user, name='custom_admin_unblock_user'),
     path('admin/users/toggle-staff/<int:user_id>/', custom_admin_toggle_staff, name='custom_admin_toggle_staff'),
     path('admin/users/toggle-superuser/<int:user_id>/', custom_admin_toggle_superuser, name='custom_admin_toggle_superuser'),
+    path('admin/users/change-password/<int:user_id>/', views.custom_admin_change_password, name='custom_admin_change_password'),
 ]

@@ -103,6 +103,9 @@
                                 <a href="{% url 'custom_admin_block_user' user.id %}" class="btn btn-warning btn-xs">Block</a>
                             {% endif %}
                             
+                            {# Change Password #}
+                            <a href="{% url 'custom_admin_change_password' user.id %}" class="btn btn-accent btn-xs">Change Password</a>
+                            
                             {# Delete User #}
                             {% if user != request.user %} {# Prevent deleting self #}
                                 <a href="{% url 'custom_admin_delete_user' user.id %}" class="btn btn-error btn-xs">Delete</a>

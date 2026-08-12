@@ -1715,3 +1715,25 @@ def custom_admin_toggle_superuser(request, user_id):
     # Fallback for GET request
     messages.info(request, "User superuser status can only be toggled via POST.")
     return redirect("custom_admin_users")
+
+
+@user_passes_test(is_staff_check)
+def custom_admin_change_password(request, user_id):
+    target_user = get_object_or_404(User, id=user_id)
+    if request.method == "POST":
+        new_pass = request.POST.get("new_password", "").strip()
+        confirm_pass = request.POST.get("confirm_password", "").strip()
+        if not new_pass:
+            messages.error(request, "Password cannot be empty.")
+            return render(request, "quiz/custom_admin/change_password.html", {"target_user": target_user})
+        if new_pass != confirm_pass:
+            messages.error(request, "Passwords do not match.")
+            return render(request, "quiz/custom_admin/change_password.html", {"target_user": target_user})
+        if len(new_pass) < 6:
+            messages.error(request, "Password must be at least 6 characters.")
+            return render(request, "quiz/custom_admin/change_password.html", {"target_user": target_user})
+        target_user.set_password(new_pass)
+        target_user.save()
+        messages.success(request, f"Password for '{target_user.username}' has been changed.")
+        return redirect("custom_admin_users")
+    return render(request, "quiz/custom_admin/change_password.html", {"target_user": target_user})
