@@ -90,11 +90,23 @@ def about_view(request):
 
 @login_required
 def test_list(request):
-    # --- MODIFIED: Annotate tests with question_count and order by position ---
     tests = Test.objects.annotate(question_count=Count("questions")).order_by(
         "position", "name"
     )
-    # --- END MODIFIED ---
+
+    # Category descriptions
+    descriptions = {
+        "IP Connectivity": "How routers forward traffic between different networks and determine the best path for data to travel.",
+        "Automation and Programmability": "Using software, scripts, and APIs to automate network configuration, management, and monitoring.",
+        "IP Services": "Network services that support communication and help devices operate efficiently, securely, and reliably across the network.",
+        "Network Access": "How devices connect to the network and how switches manage and control communication between them.",
+        "Network Fundamentals": "The basic concepts of networking—how devices connect, communicate, and exchange data over a network.",
+        "Security Fundamentals": "The basic principles and technologies used to protect networks, devices, and data from unauthorized access and attacks.",
+    }
+
+    for test in tests:
+        test.desc = descriptions.get(test.name, test.description or "Practice questions covering this CCNA exam topic.")
+
     return render(request, "quiz/test_list.html", {"tests": tests})
 
 

@@ -1,290 +1,119 @@
 {% extends 'quiz/base.html' %}
+{% load static %}
 
-{% block title %}Available Tests{% endblock %}
+{% block title %}Categories{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'quiz/css/categories.css' %}">
+{% endblock %}
 
 {% block content %}
 {% csrf_token %}
-<div class="flex justify-between items-center mb-6">
-    <h2 class="text-3xl font-bold">Available Tests</h2>
+<div class="cat-page">
+<div class="cat-container">
+
+{# Header #}
+<div class="cat-header">
+    <div>
+        <h1>CCNA Categories</h1>
+        <p class="sub">Choose a topic and start practicing</p>
+    </div>
     {% if user.is_staff %}
-        <button id="toggleReorder" class="btn btn-secondary btn-sm">
-            <span id="reorderText">Enable Reorder</span>
-        </button>
+    <button id="toggleReorder" class="btn-reorder">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+        <span id="reorderText">Enable Reorder</span>
+    </button>
     {% endif %}
 </div>
 
-<div id="testsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+{# Grid #}
+<div id="testsContainer" class="cat-grid">
     {% for test in tests %}
-    <div class="test-card card bg-neutral shadow-xl transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-1 relative" data-test-id="{{ test.id }}">
-        <div class="card-body flex flex-row items-center justify-between"> {# Added flex and items-center for horizontal alignment #}
-            <div> {# Wrap existing card-body content in a div #}
-                <h3 class="card-title">{{ test.name }}</h3>
-                <p>{{ test.description }}</p>
-                <div class="flex justify-between items-center mt-2 mb-4">
-                    <div class="badge badge-outline">{{ test.get_test_type_display }}</div>
-                    {% if test.question_count is not None %}
-                        <div class="badge badge-secondary">{{ test.question_count }} Questions</div>
-                    {% else %}
-                        <div class="badge badge-secondary">0 Questions</div>
-                    {% endif %}
-                </div>
-                <div class="card-actions justify-end">
-                    <a href="{% url 'start_test' test.id %}" class="btn btn-primary start-test-btn">Start Test</a>
-                </div>
+    <div class="cat-card" data-test-id="{{ test.id }}">
+        <div class="cat-card-body">
+            <div class="cat-card-icon" style="background:{% cycle '#eff6ff' '#ecfdf5' '#fff7ed' '#f5f3ff' '#ecfeff' '#fef2f2' %};color:{% cycle '#3b82f6' '#10b981' '#f97316' '#8b5cf6' '#06b6d4' '#ef4444' %}">
+                {% cycle '🌐' '💻' '🖥' '📡' '🔗' '🛡' %}
             </div>
+            <h3 class="cat-card-title">{{ test.name }}</h3>
+            <p class="cat-card-desc">{{ test.desc }}</p>
+        </div>
+        <div class="cat-card-footer">
+            <div class="cat-pills">
+                <span class="cat-pill-mode">{{ test.get_test_type_display }}</span>
+                <span class="cat-pill-count">{{ test.question_count|default:0 }} Questions</span>
+            </div>
+            <a href="{% url 'start_test' test.id %}" class="btn-start start-test-btn">Start Test →</a>
             {% if user.is_staff %}
-            <div class="reorder-controls hidden flex-col gap-2 ml-4"> {# Removed absolute positioning, added ml-4 for spacing #}
-                <button class="move-up-btn btn btn-sm btn-success" data-test-id="{{ test.id }}" title="Move Up">
-                    <span class="text-sm font-bold">▲</span>
-                </button>
-                <button class="move-down-btn btn btn-sm btn-error" data-test-id="{{ test.id }}" title="Move Down">
-                    <span class="text-sm font-bold">▼</span>
-                </button>
+            <div class="reorder-controls" style="display:none;gap:4px">
+                <button class="move-up-btn" data-test-id="{{ test.id }}" style="width:24px;height:24px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-size:10px">▲</button>
+                <button class="move-down-btn" data-test-id="{{ test.id }}" style="width:24px;height:24px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-size:10px">▼</button>
             </div>
             {% endif %}
         </div>
     </div>
     {% empty %}
-    <p>No tests available yet.</p>
+    <div class="col-span-full text-center py-20" style="grid-column:1/-1">
+        <p style="font-size:18px;color:#94a3b8">No categories yet. Check back soon.</p>
+    </div>
     {% endfor %}
 </div>
 
-<!-- Practice Exam Card -->
-<div class="mt-8">
-    <a href="{% url 'practice_exam' %}" class="card bg-gradient-to-r from-primary/20 to-secondary/20 border-2 border-primary/40 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 block">
-        <div class="card-body text-center py-8">
-            <div class="text-4xl mb-3">🎯</div>
-            <h3 class="text-2xl font-bold text-primary">Practice Exam</h3>
-            <p class="text-base-content/70 mt-1">Generate a random exam from any sections you choose</p>
-            <div class="mt-4">
-                <span class="btn btn-primary btn-wide">Start Practice</span>
-            </div>
-        </div>
-    </a>
+{# Practice Exam #}
+<div class="practice-banner">
+    <div class="practice-icon">🎯</div>
+    <h2 class="practice-title">Practice Exam</h2>
+    <p class="practice-sub">Generate a random exam from any sections you choose</p>
+    <a href="{% url 'practice_exam' %}" class="btn-practice">Start Practice →</a>
 </div>
 
 {% if user.is_staff %}
-<div id="saveOrderContainer" class="hidden mt-6 text-center">
-    <button id="saveOrder" class="btn btn-success">Save New Order</button>
-    <button id="cancelReorder" class="btn btn-ghost">Cancel</button>
+<div id="saveOrderContainer" style="display:none;margin-top:20px;text-align:center;gap:12px">
+    <button id="saveOrder" style="padding:10px 28px;background:#4f46e5;color:#fff;font-weight:600;font-size:14px;border-radius:10px;border:none;cursor:pointer">Save New Order</button>
+    <button id="cancelReorder" style="padding:10px 28px;border:1px solid #e2e8f0;color:#64748b;font-weight:600;font-size:14px;border-radius:10px;background:#fff;cursor:pointer">Cancel</button>
 </div>
 {% endif %}
+
+</div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 {% if user.is_staff %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const toggleBtn = document.getElementById('toggleReorder');
-    const reorderText = document.getElementById('reorderText');
-    const testsContainer = document.getElementById('testsContainer');
-    const saveOrderContainer = document.getElementById('saveOrderContainer');
-    const saveOrderBtn = document.getElementById('saveOrder');
-    const cancelBtn = document.getElementById('cancelReorder');
-    
-    let isReorderMode = false;
-    let originalOrder = [];
-    let hasChanges = false;
-    
-    function enableReorderMode() {
-        isReorderMode = true;
-        hasChanges = false;
-        reorderText.textContent = 'Disable Reorder';
-        toggleBtn.classList.remove('btn-secondary');
-        toggleBtn.classList.add('btn-warning');
-        
-        // Store original order
-        originalOrder = Array.from(testsContainer.children).map(card => card.dataset.testId);
-        
-        // Change to single column layout for easier reordering
-        testsContainer.classList.remove('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3');
-        testsContainer.classList.add('flex', 'flex-col', 'space-y-4');
-        
-        // Show reorder controls
-        const reorderControls = document.querySelectorAll('.reorder-controls');
-        reorderControls.forEach(control => control.classList.remove('hidden'));
-        
-        // Disable start test buttons
-        const startTestBtns = document.querySelectorAll('.start-test-btn');
-        startTestBtns.forEach(btn => {
-            btn.classList.add('btn-disabled');
-            btn.style.pointerEvents = 'none';
-        });
-        
-        // Show save/cancel buttons
-        saveOrderContainer.classList.remove('hidden');
-        
-        // Add instruction message
-        const instructionDiv = document.createElement('div');
-        instructionDiv.id = 'reorderInstructions';
-        instructionDiv.className = 'alert alert-info mb-4';
-        instructionDiv.innerHTML = '<span>💡 Use the up ↑ and down ↓ arrow buttons to reorder the tests.</span>';
-        testsContainer.parentNode.insertBefore(instructionDiv, testsContainer);
-        
-        // Add event listeners for move buttons
-        addMoveButtonListeners();
-    }
-    
-    function disableReorderMode() {
-        isReorderMode = false;
-        reorderText.textContent = 'Enable Reorder';
-        toggleBtn.classList.remove('btn-warning');
-        toggleBtn.classList.add('btn-secondary');
-        
-        // Restore grid layout
-        testsContainer.classList.remove('flex', 'flex-col', 'space-y-4');
-        testsContainer.classList.add('grid', 'grid-cols-1', 'md:grid-cols-2', 'lg:grid-cols-3');
-        
-        // Hide reorder controls
-        const reorderControls = document.querySelectorAll('.reorder-controls');
-        reorderControls.forEach(control => control.classList.add('hidden'));
-        
-        // Enable start test buttons
-        const startTestBtns = document.querySelectorAll('.start-test-btn');
-        startTestBtns.forEach(btn => {
-            btn.classList.remove('btn-disabled');
-            btn.style.pointerEvents = 'auto';
-        });
-        
-        // Hide save/cancel buttons
-        saveOrderContainer.classList.add('hidden');
-        
-        // Remove instruction message
-        const instructionDiv = document.getElementById('reorderInstructions');
-        if (instructionDiv) {
-            instructionDiv.remove();
-        }
-        
-        // Remove event listeners
-        removeMoveButtonListeners();
-    }
-    
-    function addMoveButtonListeners() {
-        const moveUpBtns = document.querySelectorAll('.move-up-btn');
-        const moveDownBtns = document.querySelectorAll('.move-down-btn');
-        
-        moveUpBtns.forEach(btn => {
-            btn.addEventListener('click', handleMoveUp);
-        });
-        
-        moveDownBtns.forEach(btn => {
-            btn.addEventListener('click', handleMoveDown);
-        });
-    }
-    
-    function removeMoveButtonListeners() {
-        const moveUpBtns = document.querySelectorAll('.move-up-btn');
-        const moveDownBtns = document.querySelectorAll('.move-down-btn');
-        
-        moveUpBtns.forEach(btn => {
-            btn.removeEventListener('click', handleMoveUp);
-        });
-        
-        moveDownBtns.forEach(btn => {
-            btn.removeEventListener('click', handleMoveDown);
-        });
-    }
-    
-    function handleMoveUp(event) {
-        event.preventDefault();
-        const testId = event.currentTarget.dataset.testId;
-        const card = testsContainer.querySelector(`[data-test-id="${testId}"]`);
-        const previousCard = card.previousElementSibling;
-        
-        if (previousCard) {
-            testsContainer.insertBefore(card, previousCard);
-            hasChanges = true;
-            animateMove(card, 'up');
-        }
-    }
-    
-    function handleMoveDown(event) {
-        event.preventDefault();
-        const testId = event.currentTarget.dataset.testId;
-        const card = testsContainer.querySelector(`[data-test-id="${testId}"]`);
-        const nextCard = card.nextElementSibling;
-        
-        if (nextCard) {
-            testsContainer.insertBefore(nextCard, card);
-            hasChanges = true;
-            animateMove(card, 'down');
-        }
-    }
-    
-    function animateMove(card, direction) {
-        // Add a brief highlight animation
-        card.classList.add('ring-2', 'ring-primary');
-        setTimeout(() => {
-            card.classList.remove('ring-2', 'ring-primary');
-        }, 300);
-    }
-    
-    function saveOrder() {
-        if (!hasChanges) {
-            disableReorderMode();
-            return;
-        }
-        
-        const newOrder = Array.from(testsContainer.children).map(card => card.dataset.testId);
-        
-        // Show loading state
-        saveOrderBtn.disabled = true;
-        saveOrderBtn.textContent = 'Saving...';
-        
-        fetch('{% url "reorder_tests" %}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
-            },
-            body: JSON.stringify({
-                test_ids: newOrder
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                disableReorderMode();
-                // Show success message
-                const successDiv = document.createElement('div');
-                successDiv.className = 'alert alert-success mb-4';
-                successDiv.innerHTML = '<span>✅ Test order saved successfully!</span>';
-                testsContainer.parentNode.insertBefore(successDiv, testsContainer);
-                setTimeout(() => successDiv.remove(), 3000);
-            } else {
-                alert('Error saving order: ' + data.error);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error saving order');
-        })
-        .finally(() => {
-            saveOrderBtn.disabled = false;
-            saveOrderBtn.textContent = 'Save New Order';
-        });
-    }
-    
-    function cancelReorder() {
-        // Restore original order
-        originalOrder.forEach((testId) => {
-            const card = testsContainer.querySelector(`[data-test-id="${testId}"]`);
-            testsContainer.appendChild(card);
-        });
-        disableReorderMode();
-    }
-    
-    toggleBtn.addEventListener('click', function() {
-        if (isReorderMode) {
-            disableReorderMode();
-        } else {
-            enableReorderMode();
-        }
-    });
-    
-    saveOrderBtn.addEventListener('click', saveOrder);
-    cancelBtn.addEventListener('click', cancelReorder);
-});
+(function(){
+var tb=document.getElementById('toggleReorder'),rt=document.getElementById('reorderText'),tc=document.getElementById('testsContainer'),so=document.getElementById('saveOrderContainer'),sb=document.getElementById('saveOrder'),cb=document.getElementById('cancelReorder'),im=false,oo=[],hc=false;
+function en(){
+    im=true;hc=false;rt.textContent='Disable Reorder';tb.classList.add('active');
+    oo=Array.from(tc.children).map(c=>c.dataset.testId);
+    tc.style.display='flex';tc.style.flexDirection='column';tc.style.gap='12px';
+    document.querySelectorAll('.reorder-controls').forEach(c=>c.style.display='flex');
+    document.querySelectorAll('.start-test-btn').forEach(b=>{b.style.pointerEvents='none';b.style.opacity='.5'});
+    so.style.display='flex';so.style.justifyContent='center';
+    var d=document.createElement('div');d.id='ri';d.style.cssText='background:#fdf2f8;color:#be185d;font-size:14px;padding:12px 16px;border-radius:10px;margin-bottom:12px;text-align:center';
+    d.textContent='💡 Use ▲ ▼ arrows to reorder categories';
+    tc.parentNode.insertBefore(d,tc);al();
+}
+function ds(){
+    im=false;rt.textContent='Enable Reorder';tb.classList.remove('active');
+    tc.style.display='';tc.style.flexDirection='';tc.style.gap='';
+    document.querySelectorAll('.reorder-controls').forEach(c=>c.style.display='none');
+    document.querySelectorAll('.start-test-btn').forEach(b=>{b.style.pointerEvents='';b.style.opacity=''});
+    so.style.display='none';var d=document.getElementById('ri');if(d)d.remove();rl();
+}
+function al(){document.querySelectorAll('.move-up-btn').forEach(b=>b.addEventListener('click',up));document.querySelectorAll('.move-down-btn').forEach(b=>b.addEventListener('click',dn))}
+function rl(){document.querySelectorAll('.move-up-btn').forEach(b=>b.removeEventListener('click',up));document.querySelectorAll('.move-down-btn').forEach(b=>b.removeEventListener('click',dn))}
+function up(e){e.preventDefault();var c=tc.querySelector('[data-test-id="'+e.currentTarget.dataset.testId+'"]'),p=c.previousElementSibling;if(p){tc.insertBefore(c,p);hc=true;c.style.boxShadow='0 0 0 2px #4f46e5';setTimeout(()=>c.style.boxShadow='',300)}}
+function dn(e){e.preventDefault();var c=tc.querySelector('[data-test-id="'+e.currentTarget.dataset.testId+'"]'),n=c.nextElementSibling;if(n){tc.insertBefore(n,c);hc=true;c.style.boxShadow='0 0 0 2px #4f46e5';setTimeout(()=>c.style.boxShadow='',300)}}
+function sv(){
+    if(!hc){ds();return}var o=Array.from(tc.children).filter(c=>c.dataset.testId).map(c=>c.dataset.testId);
+    sb.disabled=true;sb.textContent='Saving...';
+    fetch('{% url "reorder_tests" %}',{method:'POST',headers:{'Content-Type':'application/json','X-CSRFToken':document.querySelector('[name=csrfmiddlewaretoken]').value},body:JSON.stringify({test_ids:o})})
+    .then(r=>r.json()).then(d=>{if(d.success){ds();var s=document.createElement('div');s.style.cssText='background:#ecfdf5;color:#059669;font-size:14px;padding:12px 16px;border-radius:10px;margin-bottom:12px;text-align:center';s.textContent='✅ Order saved!';tc.parentNode.insertBefore(s,tc);setTimeout(()=>s.remove(),3000)}else alert('Error: '+d.error)})
+    .catch(()=>alert('Error')).finally(()=>{sb.disabled=false;sb.textContent='Save New Order'});
+}
+function cn(){oo.forEach(id=>{var c=tc.querySelector('[data-test-id="'+id+'"]');if(c)tc.appendChild(c)});ds()}
+tb.addEventListener('click',()=>im?ds():en());sb.addEventListener('click',sv);cb.addEventListener('click',cn);
+})();
 </script>
 {% endif %}
 {% endblock %}
