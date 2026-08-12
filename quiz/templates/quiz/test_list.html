@@ -12,21 +12,19 @@
 <div class="cat-page">
 <div class="cat-container">
 
-<div class="cat-header">
-    <div>
-        <h1>CCNA Categories</h1>
-        <p class="sub">Choose a topic and start practicing</p>
+{# Header #}
+<div class="cat-header" style="flex-wrap:wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:4px">
+        <h1 style="margin:0">CCNA Categories</h1>
+        <a href="{% url 'practice_exam' %}" style="display:inline-flex;align-items:center;gap:6px;padding:12px 28px;font-size:15px;font-weight:700;color:#fff;background:#4f46e5;border-radius:12px;text-decoration:none;box-shadow:0 2px 8px rgba(79,70,229,.2)">🎯 Practice Exam</a>
+        {% if user.is_staff %}
+        <button id="toggleReorder" class="btn-reorder">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+            <span id="reorderText">Enable Reorder</span>
+        </button>
+        {% endif %}
     </div>
-    {% if user.is_staff %}
-    <button id="toggleReorder" class="btn-reorder">
-        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-        <span id="reorderText">Enable Reorder</span>
-    </button>
-    {% endif %}
-</div>
-
-<div style="text-align:center;margin-bottom:20px">
-    <a href="{% url 'practice_exam' %}" style="display:inline-flex;align-items:center;gap:6px;padding:12px 28px;font-size:15px;font-weight:700;color:#fff;background:#4f46e5;border-radius:12px;text-decoration:none;box-shadow:0 2px 8px rgba(79,70,229,.2)">🎯 Practice Exam</a>
+    <p class="sub">Choose a topic and start practicing</p>
 </div>
 
 <div id="testsContainer" class="cat-grid">
