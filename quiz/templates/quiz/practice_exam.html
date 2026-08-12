@@ -19,8 +19,11 @@
 <form method="POST" action="{% url 'practice_start' %}" id="practice-form">
     {% csrf_token %}
 
+    {# Section Selection + Question Count side by side #}
+    <div class="practice-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:16px">
+    
     {# Section Selection #}
-    <div class="section-card">
+    <div class="section-card" style="margin-bottom:0">
         <h2>📚 Select Sections</h2>
         <p class="hint">Choose which topics to include in your exam</p>
         <div class="row">
@@ -41,7 +44,7 @@
     </div>
 
     {# Question Count #}
-    <div class="qcard">
+    <div class="qcard" style="margin-bottom:0">
         <h2>📝 Number of Questions</h2>
         <p class="hint">Time is assigned automatically based on your selection</p>
         <div class="q-options">
@@ -78,6 +81,7 @@
             <div class="summary-row"><span class="key">Time Limit</span><span class="val" id="summary-time">-</span></div>
             <div class="summary-row"><span class="key">Order</span><span class="val">🔀 Random</span></div>
         </div>
+    </div>
     </div>
 
     {% if messages %}

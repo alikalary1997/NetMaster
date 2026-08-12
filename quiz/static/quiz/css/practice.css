@@ -89,4 +89,5 @@
 @media (max-width: 640px) {
     .practice-container { padding: 20px 16px; }
     .q-options { grid-template-columns: repeat(2, 1fr); }
+    .practice-grid { grid-template-columns: 1fr !important; }
 }
