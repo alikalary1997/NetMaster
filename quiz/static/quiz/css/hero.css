@@ -44,26 +44,32 @@
     animation: hpulse 2s infinite;
 }
 @keyframes hpulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
-.hero-badge span { color: #93c5fd; font-size: 10px; font-weight: 500; }
+.hero-badge span { color: #93c5fd; font-size: 10px; font-weight: 500; letter-spacing: .5px; }
 
 /* Title */
 .hero-title {
     font-size: 26px;
     font-weight: 800;
-    line-height: 1.12;
+    line-height: 1.15;
     color: #fff;
-    margin: 0 0 6px;
+    margin: 0 0 8px;
     letter-spacing: -.01em;
 }
-.hero-title span { color: #fff; }
+.hero-title span {
+    background: linear-gradient(135deg, #60a5fa, #38bdf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
 
 /* Desc */
 .hero-desc {
     font-size: 12px;
-    line-height: 1.4;
+    line-height: 1.55;
     color: #94a3b8;
     margin: 0 0 14px;
     max-width: 360px;
+    font-weight: 400;
 }
 
 /* Buttons */
@@ -75,7 +81,8 @@
     height: 34px; padding: 0 18px;
     font-size: 12px; font-weight: 600;
     border-radius: 6px; text-decoration: none;
-    transition: all .2s;
+    transition: all .25s;
+    letter-spacing: .3px;
 }
 .btn-hero-primary {
     color: #fff;
