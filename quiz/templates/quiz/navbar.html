@@ -14,25 +14,34 @@
         <li><a href="{% url 'test_list' %}" style="color:#fff;font-weight:600;font-size:16px;text-decoration:none">Dumps</a></li>
         <li><a href="#" style="color:#fff;font-weight:600;font-size:16px;text-decoration:none">Blog</a></li>
         <li><a href="{% url 'about' %}" style="color:#fff;font-weight:600;font-size:16px;text-decoration:none">Contact</a></li>
-        {% if user.is_authenticated and user.is_staff %}
-        <li style="position:relative">
-            <a href="#" style="color:#60a5fa;font-weight:600;font-size:16px;text-decoration:none" onclick="document.getElementById('admin-dd').classList.toggle('hidden');return false">Admin ▾</a>
-            <div id="admin-dd" class="hidden" style="position:absolute;top:100%;left:0;background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.15);min-width:180px;z-index:60;padding:8px 0;margin-top:4px">
-                <a href="{% url 'custom_admin_tests' %}" style="display:block;padding:8px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Tests</a>
-                <a href="{% url 'custom_admin_questions' %}" style="display:block;padding:8px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Questions</a>
-                <a href="{% url 'custom_admin_users' %}" style="display:block;padding:8px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Users</a>
-            </div>
-        </li>
-        {% endif %}
     </ul>
 
     {# RIGHT: Buttons #}
     <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
         {% if user.is_authenticated %}
-            <a href="{% url 'test_list' %}" style="color:#fff;font-weight:600;font-size:14px;text-decoration:none">Dashboard</a>
-            <form action="{% url 'logout' %}" method="post" style="margin:0">{% csrf_token %}
-                <button type="submit" style="color:#94a3b8;font-size:14px;background:none;border:none;cursor:pointer;font-weight:600">Logout</button>
-            </form>
+            <div style="position:relative">
+                <button onclick="var d=document.getElementById('user-dd');d.classList.toggle('hidden')" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:none;color:#fff;padding:6px 14px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500">
+                    <span style="width:28px;height:28px;border-radius:50%;background:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">{{ user.username|slice:":1"|upper }}</span>
+                    {{ user.username }}
+                </button>
+                <div id="user-dd" class="hidden" style="position:absolute;top:100%;right:0;background:#fff;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.15);min-width:200px;z-index:60;padding:8px 0;margin-top:6px">
+                    <div style="padding:10px 16px;border-bottom:1px solid #f1f5f9">
+                        <div style="font-size:14px;font-weight:700;color:#0f172a">{{ user.username }}</div>
+                        <div style="font-size:11px;color:#94a3b8">{{ user.email|default:"" }}</div>
+                    </div>
+                    <a href="{% url 'test_list' %}" style="display:block;padding:9px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">📋 Dashboard</a>
+                    {% if user.is_staff %}
+                    <div style="padding:4px 16px;font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;font-weight:700">Admin</div>
+                    <a href="{% url 'custom_admin_tests' %}" style="display:block;padding:9px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Tests</a>
+                    <a href="{% url 'custom_admin_questions' %}" style="display:block;padding:9px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Questions</a>
+                    <a href="{% url 'custom_admin_users' %}" style="display:block;padding:9px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Users</a>
+                    <div style="border-top:1px solid #f1f5f9;margin:4px 0"></div>
+                    {% endif %}
+                    <form action="{% url 'logout' %}" method="post" style="margin:0">{% csrf_token %}
+                        <button type="submit" style="display:block;width:100%;text-align:left;padding:9px 16px;font-size:13px;color:#ef4444;background:none;border:none;cursor:pointer;font-weight:500">🚪 Logout</button>
+                    </form>
+                </div>
+            </div>
         {% else %}
             <a href="{% url 'login' %}" style="color:#fff;font-weight:600;font-size:14px;text-decoration:none;border:2px solid rgba(255,255,255,0.3);border-radius:10px;padding:9px 24px;transition:all 0.2s">Login</a>
             <a href="{% url 'signup' %}" style="color:#fff;font-weight:600;font-size:14px;text-decoration:none;background:linear-gradient(135deg,#3b82f6,#2563eb);border-radius:10px;padding:9px 24px;transition:all 0.2s">Sign Up</a>
