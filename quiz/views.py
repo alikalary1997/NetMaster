@@ -1051,9 +1051,21 @@ def custom_admin_questions(
             test=test_obj
         )  # Filter by the specific test
 
+    # Search
+    search = request.GET.get("q", "").strip()
+    if search:
+        from django.db.models import Q
+        if search.isdigit():
+            questions_queryset = questions_queryset.filter(
+                Q(id=int(search)) | Q(text__icontains=search)
+            )
+        else:
+            questions_queryset = questions_queryset.filter(text__icontains=search)
+
     context = {
         "questions": questions_queryset,
-        "test_obj": test_obj,  # Pass the Test object to the template
+        "test_obj": test_obj,
+        "search": search,
     }
     return render(request, "quiz/custom_admin/questions_list.html", context)
 

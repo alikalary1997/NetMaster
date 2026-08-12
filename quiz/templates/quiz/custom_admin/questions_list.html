@@ -6,7 +6,6 @@
 {# Change bg-white to bg-base-100 for consistency with Abyss theme #}
 <div class="max-w-4xl mx-auto bg-base-100 p-8 rounded-xl shadow-md">
     <div class="flex justify-between items-center mb-6">
-        {# Dynamic Heading based on whether a specific test is being managed #}
         <h2 class="text-3xl font-bold">
             {% if test_obj %}
                 Manage Questions for "{{ test_obj.name }}"
@@ -40,6 +39,16 @@
             {% endif %}
         </div>
     </div>
+
+    <form method="GET" class="mb-6">
+        <div class="flex gap-2">
+            <input type="text" name="q" value="{{ search }}" placeholder="Search by Question Text or ID..." class="input input-bordered w-full max-w-md" style="border-radius:8px;padding:8px 14px;font-size:14px">
+            <button type="submit" class="btn btn-primary btn-sm">Search</button>
+            {% if search %}
+            <a href="?" class="btn btn-ghost btn-sm">Clear</a>
+            {% endif %}
+        </div>
+    </form>
 
     {% if questions %}
         <div class="overflow-x-auto">
