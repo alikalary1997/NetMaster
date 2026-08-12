@@ -152,46 +152,57 @@
 .dash-btn:hover { background: #1d4ed8; }
 
 /* ===== BOTTOM ===== */
-.bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.bottom-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
 @media (max-width: 900px) { .bottom-grid { grid-template-columns: 1fr; } }
 
 .community-card {
-    background: linear-gradient(150deg, #071426, #102b5c);
-    border-radius: 16px; padding: 40px 36px; color: #fff;
-    display: flex; flex-direction: column; justify-content: center;
+    background: #fff; border-radius: 16px; padding: 28px 24px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.03);
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
 }
-.community-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 10px; }
-.community-card p { font-size: 15px; color: #94a3b8; line-height: 1.7; margin-bottom: 24px; }
+.community-card h3 { font-size: 18px; font-weight: 700; color: #0f172a; margin: 0 0 6px; }
+.community-card p { font-size: 12px; color: #64748b; line-height: 1.55; max-width: 200px; margin: 0 0 16px; }
+.community-illustration {
+    position: absolute; right: -10px; bottom: -10px;
+    font-size: 100px; color: #eff6ff; line-height: 1; pointer-events: none;
+}
 
 .btn-community {
     display: inline-flex; align-items: center; justify-content: center;
-    height: 46px; padding: 0 28px;
-    background: linear-gradient(135deg, #3b82f6, #06b6d4);
-    color: #fff; font-size: 15px; font-weight: 600;
-    border-radius: 10px; text-decoration: none; align-self: flex-start;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 6px 20px rgba(6,182,212,0.3);
+    height: 36px; padding: 0 20px;
+    background: #2563eb; color: #fff; font-size: 12px; font-weight: 600;
+    border-radius: 8px; text-decoration: none;
+    transition: background 0.2s; width: fit-content;
 }
-.btn-community:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(6,182,212,0.4); }
+.btn-community:hover { background: #1d4ed8; }
 
-.testimonial-grid { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+/* Testimonials */
+.testimonial-header { font-size: 18px; font-weight: 700; color: #0f172a; margin-bottom: 16px; }
+.testimonial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (max-width: 640px) { .testimonial-grid { grid-template-columns: 1fr; } }
 
 .testimonial-card {
-    background: #fff; border-radius: 12px; padding: 16px 18px;
-    border: 1px solid #f1f5f9;
-    transition: box-shadow 0.2s;
+    background: #f8fafc; border-radius: 12px; padding: 16px;
+    border: 1px solid #f1f5f9; position: relative;
+    display: flex; flex-direction: column;
 }
-.testimonial-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
-
-.testimonial-card .stars { color: #f59e0b; font-size: 12px; margin-bottom: 4px; }
-.testimonial-card .review { font-size: 13px; color: #475569; line-height: 1.6; margin-bottom: 8px; font-style: italic; }
+.testimonial-card .quote {
+    position: absolute; top: 8px; left: 12px;
+    font-size: 28px; color: #93c5fd; opacity: .4; font-family: serif; line-height: 1;
+    pointer-events: none;
+}
+.testimonial-card .stars { color: #f59e0b; font-size: 11px; margin: 14px 0 6px; }
+.testimonial-card .review { font-size: 12px; color: #475569; line-height: 1.55; margin-bottom: 12px; flex: 1; }
 .testimonial-card .author { display: flex; align-items: center; gap: 8px; }
 .testimonial-card .avatar {
     width: 28px; height: 28px; border-radius: 50%;
-    background: #eff6ff; display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 12px; color: #3b82f6;
+    background: #e2e8f0; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 11px; color: #64748b;
 }
-.testimonial-card .name { font-size: 12px; font-weight: 600; color: #0f172a; }
+.testimonial-card .name { font-size: 12px; font-weight: 700; color: #0f172a; }
+
 
 /* ===== CTA ===== */
 .cta-section {
