@@ -61,10 +61,10 @@
 .q-option .lbl { font-size: 11px; color: #64748b; }
 .q-option .time { font-size: 11px; font-weight: 600; color: #4f46e5; margin-top: 2px; }
 
-.custom-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding: 10px 14px; background: #f8fafc; border-radius: 10px; }
-.custom-row input { width: 80px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; }
-.custom-row input:focus { border-color: #4f46e5; }
-.custom-row span { font-size: 12px; color: #94a3b8; }
+.custom-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding: 12px 14px; background: #eef2ff; border-radius: 10px; border: 1px solid #c7d2fe; }
+.custom-row input { width: 80px; padding: 8px 10px; border: 1px solid #c7d2fe; border-radius: 8px; font-size: 14px; outline: none; background: #fff; }
+.custom-row input:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,.1); }
+.custom-row span { font-size: 12px; color: #4338ca; font-weight: 500; }
 
 /* Summary */
 .summary-box {

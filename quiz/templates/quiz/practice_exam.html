@@ -76,21 +76,13 @@
         </div>
         <div id="exam-summary" class="summary-box">
             <h3>Exam Summary</h3>
-            <div class="summary-row"><span class="key">Sections</span><span class="val" id="summary-sections">-</span></div>
+            <div class="summary-row"><span class="key">Sections</span><span class="val" id="summary-sections" style="flex:1;text-align:right">-</span></div>
             <div class="summary-row"><span class="key">Questions</span><span class="val" id="summary-questions">-</span></div>
             <div class="summary-row"><span class="key">Time Limit</span><span class="val" id="summary-time">-</span></div>
             <div class="summary-row"><span class="key">Order</span><span class="val">🔀 Random</span></div>
         </div>
     </div>
     </div>
-
-    {% if messages %}
-    <div style="margin-bottom:16px">
-        {% for msg in messages %}
-        <div style="background:#fef3c7;color:#92400e;padding:12px 16px;border-radius:10px;font-size:14px">{{ msg }}</div>
-        {% endfor %}
-    </div>
-    {% endif %}
 
     <button type="submit" class="btn-submit">🚀 Start Practice Exam</button>
 </form>
@@ -128,7 +120,8 @@ function updateSummary(){
     else {q=parseInt(val);t=timeMap[q]+' min'}
     document.getElementById('summary-questions').textContent=q;
     document.getElementById('summary-time').textContent=t;
-    document.getElementById('summary-sections').textContent=names.length?names.join(', '):'None selected';
+    var sc=document.getElementById('summary-sections');
+    sc.innerHTML=names.length?names.map(function(n){return '<span style="display:inline-block;background:#eef2ff;color:#4f46e5;font-size:11px;font-weight:600;padding:3px 10px;border-radius:99px;margin:2px 3px">'+n+'</span>'}).join(''):'<span style="color:#94a3b8">None selected</span>';
     s.classList.add('show');
 }
 </script>

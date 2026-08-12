@@ -1,112 +1,91 @@
 {% extends 'quiz/base.html' %}
+{% load static %}
+
 {% block title %}Practice Exam Results{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'quiz/css/results.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="max-w-4xl mx-auto">
+<div class="results-page">
+<div class="results-container">
 
-    <!-- Header -->
-    <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/20 mb-4">
-            <span class="text-3xl">📊</span>
-        </div>
-        <h1 class="text-3xl font-bold">Practice Exam Results</h1>
-        <p class="text-base-content/50 mt-1">Here's how you performed</p>
-    </div>
+<div class="results-header">
+    <div class="icon-circle">📊</div>
+    <h1>Practice Exam Results</h1>
+    <p class="sub">Here's how you performed</p>
+</div>
 
-    <!-- Score Ring -->
-    <div class="flex justify-center mb-8">
-        <div class="radial-progress text-primary" style="--value:{{ score }};--size:7rem;--thickness:0.5rem;" role="progressbar">
-            <span class="text-2xl font-bold">{{ score|floatformat:0 }}%</span>
-        </div>
-    </div>
+<div style="display:flex;justify-content:center;gap:12px;margin-bottom:20px">
+    <a href="{% url 'practice_exam' %}" class="btn-primary-fill">🔄 New Practice Exam</a>
+    <a href="{% url 'test_list' %}" class="btn-outline">Back to Dumps</a>
+</div>
 
-    <!-- Overall Summary -->
-    <div class="card bg-base-100 border border-base-300 shadow-md mb-6">
-        <div class="card-body p-5">
-            <h2 class="text-lg font-semibold flex items-center gap-2 mb-4">
-                <span>📋</span> Overall Summary
-            </h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-base-200 rounded-xl p-3 text-center">
-                    <p class="text-2xl font-bold text-primary">{{ total_questions }}</p>
-                    <p class="text-xs text-base-content/50">Total Questions</p>
-                </div>
-                <div class="bg-success/10 rounded-xl p-3 text-center">
-                    <p class="text-2xl font-bold text-success">{{ correct_count }}</p>
-                    <p class="text-xs text-base-content/50">Correct</p>
-                </div>
-                <div class="bg-error/10 rounded-xl p-3 text-center">
-                    <p class="text-2xl font-bold text-error">{{ wrong_count }}</p>
-                    <p class="text-xs text-base-content/50">Wrong</p>
-                </div>
-                <div class="bg-base-200 rounded-xl p-3 text-center">
-                    <p class="text-2xl font-bold text-base-content">{{ time_used_minutes }}m</p>
-                    <p class="text-xs text-base-content/50">Time Used</p>
-                </div>
+<h2 style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">📋 Overall Summary</h2>
+
+<div class="summary-card" style="display:flex;align-items:center;gap:20px;padding:18px 24px">
+    <div class="score-ring-wrap" style="margin-bottom:0;flex-shrink:0">
+        <div class="score-ring" style="width:100px;height:100px">
+            <svg width="100" height="100" viewBox="0 0 140 140">
+                <circle class="bg" cx="70" cy="70" r="60"></circle>
+                <circle class="fg" id="score-circle" cx="70" cy="70" r="60" stroke-dasharray="377" stroke-dashoffset="377"></circle>
+            </svg>
+            <div class="text">
+                <span class="pct" style="font-size:26px">{{ score|floatformat:0 }}%</span>
             </div>
         </div>
     </div>
-
-    <!-- Performance by Section -->
-    <div class="card bg-base-100 border border-base-300 shadow-md mb-6">
-        <div class="card-body p-5">
-            <h2 class="text-lg font-semibold flex items-center gap-2 mb-4">
-                <span>📈</span> Performance by Section
-            </h2>
-            <div class="space-y-3">
-                {% for sec in section_stats %}
-                <div class="bg-base-200 rounded-xl p-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="font-semibold text-sm">{{ sec.name }}</span>
-                        <span class="badge badge-sm badge-{{ sec.rating_color }}">{{ sec.rating }}</span>
-                    </div>
-                    <div class="flex items-center gap-3 mb-2">
-                        <div class="flex-1 bg-base-300 rounded-full h-2.5 overflow-hidden">
-                            <div class="h-full rounded-full transition-all duration-700" style="width:{{ sec.accuracy }}%;background-color:{% if sec.accuracy >= 80 %}#22c55e{% elif sec.accuracy >= 60 %}#f59e0b{% else %}#ef4444{% endif %}"></div>
-                        </div>
-                        <span class="text-sm font-bold tabular-nums w-12 text-right">{{ sec.accuracy }}%</span>
-                    </div>
-                    <div class="flex gap-4 text-xs text-base-content/50">
-                        <span>{{ sec.total }} questions</span>
-                        <span class="text-success">{{ sec.correct }} correct</span>
-                        <span class="text-error">{{ sec.wrong }} wrong</span>
-                    </div>
-                </div>
-                {% empty %}
-                <p class="text-center text-base-content/50 py-4">No section data available.</p>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-
-    <!-- Study Recommendation -->
-    {% if weakest_sections %}
-    <div class="card bg-gradient-to-r from-warning/10 to-error/5 border border-warning/20 shadow-md mb-6">
-        <div class="card-body p-5">
-            <div class="flex items-center gap-2 mb-3">
-                <span class="text-xl">💡</span>
-                <h2 class="text-lg font-semibold">Study Recommendation</h2>
-            </div>
-            <p class="text-sm text-base-content/60 mb-4">Focus on improving these sections before your next practice exam:</p>
-            <div class="space-y-2">
-            {% for sec in weakest_sections %}
-            <div class="flex items-center gap-4 bg-base-100 rounded-xl p-4 border border-base-300">
-                <div class="w-12 h-12 rounded-full flex items-center justify-center text-sm font-bold {% if sec.accuracy < 40 %}bg-error/20 text-error{% else %}bg-warning/20 text-warning{% endif %}">{{ sec.accuracy }}%</div>
-                <div class="flex-1">
-                    <p class="font-semibold text-sm">{{ sec.name }}</p>
-                    <p class="text-xs text-base-content/50">{{ sec.correct }} correct out of {{ sec.total }} questions</p>
-                </div>
-                <a href="#" class="btn btn-ghost btn-xs">📖 Review</a>
-            </div>
-            {% endfor %}
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
-    <!-- Actions -->
-    <div class="text-center mt-8 space-x-3">
-        <a href="{% url 'practice_exam' %}" class="btn btn-primary">🔄 New Practice Exam</a>
-        <a href="{% url 'test_list' %}" class="btn btn-outline">Back to Dumps</a>
+    <div style="display:flex;flex-direction:column;gap:10px;flex:1">
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:#64748b">Total Questions</span><span style="font-size:16px;font-weight:700;color:#0f172a">{{ total_questions }}</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:#64748b">Correct</span><span style="font-size:16px;font-weight:700;color:#059669">{{ correct_count }}</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:#64748b">Wrong</span><span style="font-size:16px;font-weight:700;color:#dc2626">{{ wrong_count }}</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;color:#64748b">Time Used</span><span style="font-size:16px;font-weight:700;color:#0f172a">{{ time_used_minutes }}m</span></div>
     </div>
 </div>
+
+<div style="margin-top:28px"></div>
+
+{% if section_stats %}
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+
+<div class="summary-card" style="margin-bottom:0">
+<h2 style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">📈 Performance by Section</h2>
+    {% for sec in section_stats %}
+    <div class="section-card-result">
+        <div class="top">
+            <span class="name">{{ sec.name }}</span>
+            <span class="badge {{ sec.rating_color|default:'good' }}">{{ sec.rating }}</span>
+        </div>
+        <div class="bar-wrap">
+            <div class="bar-fill" style="width:{{ sec.accuracy }}%;background:{% if sec.accuracy >= 80 %}#059669{% elif sec.accuracy >= 60 %}#f59e0b{% else %}#dc2626{% endif %}"></div>
+        </div>
+        <div class="meta">{{ sec.total }} questions · {{ sec.correct }} correct · {{ sec.wrong }} wrong</div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if weakest_sections %}
+<div class="rec-card" style="margin-bottom:0">
+    <h2 style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">💡 Study Recommendation</h2>
+    <p class="hint">Focus on improving these sections before your next practice exam:</p>
+    {% for sec in weakest_sections %}
+    <div class="rec-item">
+        <span class="pct">{{ sec.accuracy }}%</span>
+        <span class="name">{{ sec.name }}</span>
+        <span class="score">{{ sec.correct }}/{{ sec.total }} correct</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+</div>
+
+{% endif %}
+
+</div>
+</div>
+<script>
+(function(){var c=document.getElementById('score-circle');if(c){var pct={{ score|floatformat:0 }};var o=377*(100-pct)/100;setTimeout(function(){c.style.strokeDashoffset=o},200)}})();
+</script>
 {% endblock %}
