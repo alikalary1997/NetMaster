@@ -14,6 +14,16 @@
         <li><a href="{% url 'test_list' %}" style="color:#fff;font-weight:600;font-size:16px;text-decoration:none">Dumps</a></li>
         <li><a href="#" style="color:#fff;font-weight:600;font-size:16px;text-decoration:none">Blog</a></li>
         <li><a href="{% url 'about' %}" style="color:#fff;font-weight:600;font-size:16px;text-decoration:none">Contact</a></li>
+        {% if user.is_authenticated and user.is_staff %}
+        <li style="position:relative">
+            <a href="#" style="color:#60a5fa;font-weight:600;font-size:16px;text-decoration:none" onclick="document.getElementById('admin-dd').classList.toggle('hidden');return false">Admin ▾</a>
+            <div id="admin-dd" class="hidden" style="position:absolute;top:100%;left:0;background:#fff;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,.15);min-width:180px;z-index:60;padding:8px 0;margin-top:4px">
+                <a href="{% url 'custom_admin_tests' %}" style="display:block;padding:8px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Tests</a>
+                <a href="{% url 'custom_admin_questions' %}" style="display:block;padding:8px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Questions</a>
+                <a href="{% url 'custom_admin_users' %}" style="display:block;padding:8px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Users</a>
+            </div>
+        </li>
+        {% endif %}
     </ul>
 
     {# RIGHT: Buttons #}
