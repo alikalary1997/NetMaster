@@ -42,6 +42,14 @@ class UserProfile(models.Model):
         from django.utils import timezone
         return bool(self.premium_expires_at and self.premium_expires_at > timezone.now())
 
+    def premium_days_left(self):
+        """Return number of full days remaining in premium, or 0."""
+        if not self.is_premium():
+            return 0
+        from django.utils import timezone
+        delta = self.premium_expires_at - timezone.now()
+        return max(0, delta.days + (1 if delta.seconds > 0 else 0))
+
     def __str__(self):
         return self.user.username + " Profile"
 
