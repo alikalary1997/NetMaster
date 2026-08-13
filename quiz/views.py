@@ -110,7 +110,7 @@ def test_list(request):
 
     user_has_full = request.user.is_authenticated and (
         request.user.is_staff
-        or getattr(request.user.userprofile, "has_full_access", False)
+        or getattr(request.user.userprofile, "is_premium", lambda: False)()
     )
 
     for test in tests:
@@ -142,8 +142,8 @@ def start_test(request, test_id):
     # Check access for non-staff users without full access
     FREE_CATEGORIES = ["Network Fundamentals", "IP Connectivity", "IP Services"]
     user_has_full = request.user.is_staff or getattr(
-        request.user.userprofile, "has_full_access", False
-    )
+        request.user.userprofile, "is_premium", lambda: False
+    )()
     if not user_has_full and test.name not in FREE_CATEGORIES:
         messages.error(
             request,
@@ -1745,9 +1745,19 @@ def custom_admin_toggle_full_access(request, user_id):
     target_user = get_object_or_404(User, id=user_id)
     if request.method == "POST":
         profile = target_user.userprofile
-        profile.has_full_access = not profile.has_full_access
+        from datetime import timedelta
+        from django.utils import timezone
+        if profile.is_premium():
+            # Downgrade to Free
+            profile.has_full_access = False
+            profile.premium_expires_at = None
+            status = "Free"
+        else:
+            # Upgrade to Premium for 30 days
+            profile.has_full_access = True
+            profile.premium_expires_at = timezone.now() + timedelta(days=30)
+            status = "Premium"
         profile.save()
-        status = "Premium" if profile.has_full_access else "Free"
         messages.success(request, f"'{target_user.username}' plan changed to {status}.")
     return redirect("custom_admin_users")
 

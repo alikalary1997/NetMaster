@@ -60,6 +60,9 @@
                             {% else %}
                                 <div class="badge badge-success mr-1">Normal</div>
                             {% endif %}
+                            {% if user.userprofile.is_premium %}
+                                <div class="badge badge-warning mr-1">Premium</div>
+                            {% endif %}
                         </td>
                         <td>
                             {# Access blocked_until via user.userprofile #}
@@ -109,7 +112,7 @@
                             {# Full Access toggle #}
                             <form action="{% url 'custom_admin_toggle_full_access' user.id %}" method="post">
                                 {% csrf_token %}
-                                {% if user.userprofile.has_full_access %}
+                                {% if user.userprofile.is_premium %}
                                     <button type="submit" class="btn btn-warning btn-xs">Set Free</button>
                                 {% else %}
                                     <button type="submit" class="btn btn-success btn-xs">Make Premium</button>

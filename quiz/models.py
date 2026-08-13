@@ -30,9 +30,17 @@ class UserProfile(models.Model):
     has_full_access = models.BooleanField(
         default=False
     )  # True when user has paid/granted full access
+    premium_expires_at = models.DateTimeField(
+        null=True, blank=True
+    )  # Premium expiry (30 days after grant)
     phone = models.CharField(
         max_length=15, blank=True, default=""
     )  # Phone number in format +964771XXXXXXX
+
+    def is_premium(self):
+        """Return True if premium is active (not expired)."""
+        from django.utils import timezone
+        return bool(self.premium_expires_at and self.premium_expires_at > timezone.now())
 
     def __str__(self):
         return self.user.username + " Profile"
