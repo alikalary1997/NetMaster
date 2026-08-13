@@ -110,9 +110,9 @@
                             <form action="{% url 'custom_admin_toggle_full_access' user.id %}" method="post">
                                 {% csrf_token %}
                                 {% if user.userprofile.has_full_access %}
-                                    <button type="submit" class="btn btn-warning btn-xs">Revoke Full Access</button>
+                                    <button type="submit" class="btn btn-warning btn-xs">Set Free</button>
                                 {% else %}
-                                    <button type="submit" class="btn btn-success btn-xs">Grant Full Access</button>
+                                    <button type="submit" class="btn btn-success btn-xs">Make Premium</button>
                                 {% endif %}
                             </form>
 

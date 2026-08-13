@@ -43,7 +43,7 @@
                 <span class="cat-pill-count">{{ test.question_count|default:0 }} Questions</span>
             </div>
             <a href="{% url 'start_test' test.id %}" class="btn-start start-test-btn {% if test.is_locked %}locked{% endif %}" {% if test.is_locked %}style="pointer-events:none;background:#cbd5e1"{% endif %}>
-                {% if test.is_locked %}🔒 Locked{% else %}Start Test →{% endif %}
+                {% if test.is_locked %}🔒 Premium{% else %}Start Test →{% endif %}
             </a>
             {% if user.is_staff %}
             <div class="reorder-controls" style="display:none;gap:4px">

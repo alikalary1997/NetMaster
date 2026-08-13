@@ -145,7 +145,7 @@ def start_test(request, test_id):
     if not user_has_full and test.name not in FREE_CATEGORIES:
         messages.error(
             request,
-            "This category is locked. Contact the administrator to unlock full access.",
+            "This category requires Premium access. Upgrade your plan to unlock all categories.",
         )
         return redirect("test_list")
 
@@ -1745,8 +1745,8 @@ def custom_admin_toggle_full_access(request, user_id):
         profile = target_user.userprofile
         profile.has_full_access = not profile.has_full_access
         profile.save()
-        status = "granted" if profile.has_full_access else "revoked"
-        messages.success(request, f"Full access {status} for '{target_user.username}'.")
+        status = "Premium" if profile.has_full_access else "Free"
+        messages.success(request, f"'{target_user.username}' plan changed to {status}.")
     return redirect("custom_admin_users")
 
 
