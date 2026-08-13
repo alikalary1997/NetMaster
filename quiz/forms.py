@@ -190,30 +190,37 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 # --- NEW: Custom User Creation Form for Signup Page ---
 class CustomUserCreationForm(UserCreationForm):
+    phone = forms.CharField(
+        max_length=10,
+        required=True,
+        label="Phone Number",
+        widget=forms.TextInput(
+            attrs={"placeholder": "7717000284", "inputmode": "numeric"}
+        ),
+    )
+
     class Meta(UserCreationForm.Meta):
-        model = User  # Use Django's default User model
-        fields = (
-            UserCreationForm.Meta.fields
-        )  # Inherit default fields (username, password, password2)
-        # If you wanted to add email, it would be fields = UserCreationForm.Meta.fields + ('email',)
-        # But we are using username as the primary field for UserCreationForm's built-in behavior.
-        # If you wanted email to be the primary field, you would have to define a full CustomUser model with USERNAME_FIELD = 'email'
-        # which we are not doing at this stage.
+        model = User
+        fields = UserCreationForm.Meta.fields + ("phone",)
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get("phone", "").strip()
+        if not phone.isdigit() or len(phone) != 10:
+            raise forms.ValidationError("Phone number must be exactly 10 digits.")
+        return phone
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Apply DaisyUI input classes to all fields
         for field_name, field in self.fields.items():
-            # For password fields, Django's UserCreationForm uses help_text as labels, so adjust placeholders
             placeholder_text = field.label or ""
             if field_name == "password2":
                 placeholder_text = "Confirm Password"
-            elif (
-                field_name == "password1"
-            ):  # Using password1 directly might clash with help_text or label, usually default is fine
+            elif field_name == "password1":
                 placeholder_text = "Password"
             elif field_name == "username":
                 placeholder_text = "Choose a Username"
+            elif field_name == "phone":
+                placeholder_text = "7717000284"
 
             field.widget.attrs.update(
                 {

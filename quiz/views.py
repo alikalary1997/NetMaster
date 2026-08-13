@@ -46,7 +46,9 @@ def signup_view(request):
         form = CustomUserCreationForm(request.POST)  # <--- USE CustomUserCreationForm
         if form.is_valid():
             user = form.save()
-            # Log the user in after successful signup
+            phone = form.cleaned_data.get("phone", "")
+            user.userprofile.phone = f"+964{phone}"
+            user.userprofile.save()
             login(request, user)
             messages.success(
                 request, f"Welcome, {user.username}! Your account has been created."

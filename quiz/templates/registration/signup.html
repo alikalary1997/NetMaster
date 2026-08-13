@@ -32,8 +32,14 @@
                 <label class="label" for="{{ field.id_for_label }}">
                     <span class="label-text text-base-content">{{ field.label }}</span>
                 </label>
-                {# 'field' will now render with classes and placeholder defined in forms.py (CustomUserCreationForm) #}
+                {% if field.name == 'phone' %}
+                <div class="flex items-center">
+                    <span class="input input-bordered rounded-r-none border-r-0 bg-base-200 flex items-center px-3 text-base-content">+964</span>
+                    {{ field }}
+                </div>
+                {% else %}
                 {{ field }}
+                {% endif %}
                 {% if field.help_text %}
                     <label class="label pt-1">
                         <span class="label-text-alt text-xs">{{ field.help_text|safe }}</span>

@@ -30,6 +30,9 @@ class UserProfile(models.Model):
     has_full_access = models.BooleanField(
         default=False
     )  # True when user has paid/granted full access
+    phone = models.CharField(
+        max_length=15, blank=True, default=""
+    )  # Phone number in format +964771XXXXXXX
 
     def __str__(self):
         return self.user.username + " Profile"
