@@ -27,6 +27,9 @@ class UserProfile(models.Model):
     blocked_until = models.DateTimeField(
         null=True, blank=True
     )  # Field for temporary blocking
+    has_full_access = models.BooleanField(
+        default=False
+    )  # True when user has paid/granted full access
 
     def __str__(self):
         return self.user.username + " Profile"

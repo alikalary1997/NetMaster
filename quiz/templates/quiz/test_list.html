@@ -42,7 +42,9 @@
                 <span class="cat-pill-mode">{{ test.get_test_type_display }}</span>
                 <span class="cat-pill-count">{{ test.question_count|default:0 }} Questions</span>
             </div>
-            <a href="{% url 'start_test' test.id %}" class="btn-start start-test-btn">Start Test →</a>
+            <a href="{% url 'start_test' test.id %}" class="btn-start start-test-btn {% if test.is_locked %}locked{% endif %}" {% if test.is_locked %}style="pointer-events:none;background:#cbd5e1"{% endif %}>
+                {% if test.is_locked %}🔒 Locked{% else %}Start Test →{% endif %}
+            </a>
             {% if user.is_staff %}
             <div class="reorder-controls" style="display:none;gap:4px">
                 <button class="move-up-btn" data-test-id="{{ test.id }}" style="width:24px;height:24px;border-radius:6px;border:1px solid #e2e8f0;background:#fff;cursor:pointer;font-size:10px">▲</button>

@@ -74,9 +74,9 @@
         var left = endTime - now;
         if (left <= 0) {
             display.textContent = '00:00';
-            display.classList.add('text-error');
+            display.classList.add('text-warning');
             progress.style.width = '0%';
-            progress.classList.add('bg-error');
+            progress.style.backgroundColor = '#f59e0b';
             var form = document.getElementById('answer-form') || document.getElementById('matching-form');
             if (form) form.submit();
             else window.location.href = '{% url "practice_finish" %}';
@@ -88,17 +88,14 @@
         var pct = (left / totalMs * 100);
         progress.style.width = pct + '%';
 
-        // Warning at 5 min
-        if (left <= 300000 && !warned) {
-            warned = true;
+        // Warning at 5 min or less
+        if (left <= 300000) {
             display.classList.add('text-warning', 'animate-pulse');
             progress.style.backgroundColor = '#f59e0b';
-        }
-        // Danger at 2 min
-        if (left <= 120000) {
+        } else {
             display.classList.remove('text-warning', 'animate-pulse');
-            display.classList.add('text-error');
-            progress.style.backgroundColor = '#ef4444';
+            display.classList.add('text-primary');
+            progress.style.backgroundColor = 'oklch(var(--p))';
         }
     }
     tick();

@@ -105,7 +105,17 @@
                             
                             {# Change Password #}
                             <a href="{% url 'custom_admin_change_password' user.id %}" class="btn btn-accent btn-xs">Change Password</a>
-                            
+
+                            {# Full Access toggle #}
+                            <form action="{% url 'custom_admin_toggle_full_access' user.id %}" method="post">
+                                {% csrf_token %}
+                                {% if user.userprofile.has_full_access %}
+                                    <button type="submit" class="btn btn-warning btn-xs">Revoke Full Access</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-success btn-xs">Grant Full Access</button>
+                                {% endif %}
+                            </form>
+
                             {# Delete User #}
                             {% if user != request.user %} {# Prevent deleting self #}
                                 <a href="{% url 'custom_admin_delete_user' user.id %}" class="btn btn-error btn-xs">Delete</a>

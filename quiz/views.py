@@ -103,8 +103,17 @@ def test_list(request):
         "Security Fundamentals": "The basic principles and technologies used to protect networks, devices, and data from unauthorized access and attacks.",
     }
 
+    # Free categories for normal users (no full access)
+    FREE_CATEGORIES = ["Network Fundamentals", "IP Connectivity", "IP Services"]
+
+    user_has_full = request.user.is_authenticated and (
+        request.user.is_staff
+        or getattr(request.user.userprofile, "has_full_access", False)
+    )
+
     for test in tests:
         test.desc = descriptions.get(test.name, test.description or "Practice questions covering this CCNA exam topic.")
+        test.is_locked = (not user_has_full) and (test.name not in FREE_CATEGORIES)
 
     return render(request, "quiz/test_list.html", {"tests": tests})
 
@@ -127,6 +136,18 @@ def start_test(request, test_id):
         return redirect("test_list")  # Redirect back to test list or home
 
     test = get_object_or_404(Test, id=test_id)
+
+    # Check access for non-staff users without full access
+    FREE_CATEGORIES = ["Network Fundamentals", "IP Connectivity", "IP Services"]
+    user_has_full = request.user.is_staff or getattr(
+        request.user.userprofile, "has_full_access", False
+    )
+    if not user_has_full and test.name not in FREE_CATEGORIES:
+        messages.error(
+            request,
+            "This category is locked. Contact the administrator to unlock full access.",
+        )
+        return redirect("test_list")
 
     # Create a new test attempt
     attempt = TestAttempt.objects.create(user=request.user, test=test)
@@ -1714,6 +1735,18 @@ def custom_admin_toggle_superuser(request, user_id):
         return redirect("custom_admin_users")
     # Fallback for GET request
     messages.info(request, "User superuser status can only be toggled via POST.")
+    return redirect("custom_admin_users")
+
+
+@user_passes_test(is_staff_check)
+def custom_admin_toggle_full_access(request, user_id):
+    target_user = get_object_or_404(User, id=user_id)
+    if request.method == "POST":
+        profile = target_user.userprofile
+        profile.has_full_access = not profile.has_full_access
+        profile.save()
+        status = "granted" if profile.has_full_access else "revoked"
+        messages.success(request, f"Full access {status} for '{target_user.username}'.")
     return redirect("custom_admin_users")
 
 
