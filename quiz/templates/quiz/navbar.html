@@ -30,6 +30,7 @@
                         <div style="font-size:11px;color:#94a3b8">{{ user.email|default:"" }}</div>
                     </div>
                     <a href="{% url 'test_list' %}" style="display:block;padding:9px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">📋 Dashboard</a>
+                    <a href="{% url 'change_password' %}" style="display:block;padding:9px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">🔑 Change Password</a>
                     {% if user.is_staff %}
                     <div style="padding:4px 16px;font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;font-weight:700">Admin</div>
                     <a href="{% url 'custom_admin_tests' %}" style="display:block;padding:9px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Tests</a>

@@ -1770,3 +1770,24 @@ def custom_admin_change_password(request, user_id):
         messages.success(request, f"Password for '{target_user.username}' has been changed.")
         return redirect("custom_admin_users")
     return render(request, "quiz/custom_admin/change_password.html", {"target_user": target_user})
+
+
+@login_required
+def change_own_password(request):
+    if request.method == "POST":
+        new_pass = request.POST.get("new_password", "").strip()
+        confirm_pass = request.POST.get("confirm_password", "").strip()
+        if not new_pass:
+            messages.error(request, "Password cannot be empty.")
+        elif new_pass != confirm_pass:
+            messages.error(request, "Passwords do not match.")
+        elif len(new_pass) < 6:
+            messages.error(request, "Password must be at least 6 characters.")
+        else:
+            request.user.set_password(new_pass)
+            request.user.save()
+            from django.contrib.auth import update_session_auth_hash
+            update_session_auth_hash(request, request.user)
+            messages.success(request, "Your password has been changed.")
+            return redirect("landing_page")
+    return render(request, "quiz/change_password.html")

@@ -23,6 +23,7 @@ from .views import (
 urlpatterns = [
     # Authentication URL (only our custom signup view here)
     path('signup/', signup_view, name='signup'),
+    path('change-password/', views.change_own_password, name='change_password'),
     # Django's default login/logout/password reset URLs are handled by
     # 'path('accounts/', include('django.contrib.auth.urls'))' in quiz_project/urls.py
 
