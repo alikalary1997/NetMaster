@@ -84,11 +84,11 @@
                                 <span class="mu-badge staff">Staff</span>
                                 {% else %}
                                 <span class="mu-badge normal">Normal</span>
-                                {% endif %}
                                 {% if user.userprofile.is_premium %}
                                 <span class="mu-badge premium">Premium</span>
                                 {% else %}
                                 <span class="mu-badge free">Free</span>
+                                {% endif %}
                                 {% endif %}
                             </div>
                         </td>
@@ -146,6 +146,7 @@
                                 </a>
 
                                 {# Premium #}
+                                {% if not user.is_staff and not user.is_superuser %}
                                 <form action="{% url 'custom_admin_toggle_full_access' user.id %}" method="post">
                                     {% csrf_token %}
                                     {% if user.userprofile.is_premium %}
@@ -161,6 +162,7 @@
                                     <input type="number" name="days" min="1" placeholder="Days">
                                     <button type="submit">Gift</button>
                                 </form>
+                                {% endif %}
 
                                 {# Delete #}
                                 {% if user != request.user %}
