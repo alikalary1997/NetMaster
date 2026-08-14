@@ -19,8 +19,8 @@
     {# RIGHT: Buttons #}
     <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
         {% if user.is_authenticated %}
-            <div style="position:relative">
-                <button onclick="var d=document.getElementById('user-dd');d.classList.toggle('hidden')" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:none;color:#fff;padding:6px 14px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500">
+            <div style="position:relative" id="user-menu-wrap">
+                <button id="user-menu-btn" style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:none;color:#fff;padding:6px 14px;border-radius:10px;cursor:pointer;font-size:14px;font-weight:500">
                     <span style="width:28px;height:28px;border-radius:50%;background:#4f46e5;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">{{ user.username|slice:":1"|upper }}</span>
                     {{ user.username }}
                 </button>
@@ -61,3 +61,21 @@
 
 {# Push content below fixed navbar #}
 <div style="height:70px"></div>
+
+<script>
+(function(){
+    var btn = document.getElementById('user-menu-btn');
+    var dd = document.getElementById('user-dd');
+    var wrap = document.getElementById('user-menu-wrap');
+    if (!btn || !dd || !wrap) return;
+    btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        dd.classList.toggle('hidden');
+    });
+    document.addEventListener('click', function(e){
+        if (!wrap.contains(e.target)) {
+            dd.classList.add('hidden');
+        }
+    });
+})();
+</script>
