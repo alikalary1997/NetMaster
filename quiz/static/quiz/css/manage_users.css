@@ -1,0 +1,132 @@
+/* Manage Users */
+.mu-page { background: #f8fafc; min-height: 100vh; }
+.mu-container { max-width: 1200px; margin: 0 auto; padding: 32px 40px; }
+
+.mu-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+.mu-header-left { display: flex; align-items: center; gap: 14px; }
+.mu-header-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: #eef2ff; color: #4f46e5;
+    display: flex; align-items: center; justify-content: center;
+}
+.mu-header-icon svg { width: 22px; height: 22px; }
+.mu-title { font-size: 24px; font-weight: 800; color: #0f172a; margin: 0; }
+.mu-subtitle { font-size: 13px; color: #64748b; margin: 2px 0 0; }
+
+.mu-add-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 20px; font-size: 14px; font-weight: 600;
+    background: #7c3aed; color: #fff; border-radius: 10px; text-decoration: none;
+    transition: background .15s;
+}
+.mu-add-btn:hover { background: #6d28d9; }
+
+/* Toolbar */
+.mu-toolbar {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.mu-search { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 240px; }
+.mu-search-box {
+    display: flex; align-items: center; gap: 8px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+    padding: 0 14px; flex: 1; height: 40px;
+}
+.mu-search-box svg { width: 16px; height: 16px; color: #94a3b8; flex-shrink: 0; }
+.mu-search-box input { border: none; outline: none; flex: 1; font-size: 14px; color: #0f172a; background: transparent; }
+.mu-search-btn {
+    height: 40px; padding: 0 18px; font-size: 13px; font-weight: 600;
+    background: #7c3aed; color: #fff; border: none; border-radius: 10px; cursor: pointer;
+    transition: background .15s;
+}
+.mu-search-btn:hover { background: #6d28d9; }
+
+.mu-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.mu-filter {
+    padding: 7px 14px; font-size: 12px; font-weight: 600;
+    border-radius: 99px; border: 1px solid #e2e8f0; background: #fff;
+    color: #64748b; text-decoration: none; transition: all .15s; white-space: nowrap;
+}
+.mu-filter:hover { border-color: #cbd5e1; }
+.mu-filter.active { background: #eef2ff; border-color: #c7d2fe; color: #4f46e5; }
+
+/* Table card */
+.mu-card {
+    background: #fff; border-radius: 16px; border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,.04); overflow: hidden;
+}
+.mu-table { width: 100%; border-collapse: collapse; }
+.mu-table thead th {
+    text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .08em; color: #94a3b8; padding: 14px 16px;
+    border-bottom: 1px solid #e2e8f0; background: #f8fafc;
+}
+.mu-table tbody td {
+    padding: 14px 16px; border-bottom: 1px solid #f1f5f9;
+    font-size: 13px; color: #334155; vertical-align: middle;
+}
+.mu-table tbody tr:last-child td { border-bottom: none; }
+.mu-table tbody tr:hover { background: #f8fafc; }
+
+.mu-user { display: flex; align-items: center; gap: 10px; }
+.mu-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: #e2e8f0; color: #475569; font-weight: 700; font-size: 13px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.mu-username { font-weight: 600; color: #0f172a; }
+.mu-email { font-size: 12px; color: #94a3b8; }
+
+/* Badges */
+.mu-badge {
+    display: inline-flex; align-items: center; font-size: 11px; font-weight: 600;
+    padding: 3px 10px; border-radius: 99px; white-space: nowrap;
+}
+.mu-badge.superuser { background: #fef2f2; color: #dc2626; }
+.mu-badge.staff { background: #eff6ff; color: #2563eb; }
+.mu-badge.normal { background: #f0fdf4; color: #16a34a; }
+.mu-badge.premium { background: #fef3c7; color: #d97706; }
+.mu-badge.free { background: #f1f5f9; color: #64748b; }
+.mu-badge.blocked { background: #fef2f2; color: #dc2626; }
+.mu-badge.notblocked { background: #f0fdf4; color: #16a34a; }
+
+/* Actions */
+.mu-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.mu-action-btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 5px 11px; font-size: 11px; font-weight: 600; border-radius: 7px;
+    cursor: pointer; border: 1px solid; background: #fff; text-decoration: none;
+    transition: all .15s; white-space: nowrap;
+}
+.mu-action-btn:hover { opacity: .85; }
+.mu-action-btn svg { width: 12px; height: 12px; }
+
+.mu-action-btn.staff { border-color: #bfdbfe; color: #2563eb; background: #eff6ff; }
+.mu-action-btn.unstaff { border-color: #fde68a; color: #d97706; background: #fffbeb; }
+.mu-action-btn.super { border-color: #c7d2fe; color: #4f46e5; background: #eef2ff; }
+.mu-action-btn.unsuper { border-color: #fbcfe8; color: #db2777; background: #fdf2f8; }
+.mu-action-btn.block { border-color: #fed7aa; color: #ea580c; background: #fff7ed; }
+.mu-action-btn.unblock { border-color: #bbf7d0; color: #16a34a; background: #f0fdf4; }
+.mu-action-btn.pass { border-color: #99f6e4; color: #0d9488; background: #f0fdfa; }
+.mu-action-btn.premium { border-color: #bbf7d0; color: #16a34a; background: #f0fdf4; }
+.mu-action-btn.free { border-color: #fde68a; color: #d97706; background: #fffbeb; }
+.mu-action-btn.delete { border-color: #fecaca; color: #dc2626; background: #fef2f2; }
+
+.mu-gift-group { display: inline-flex; align-items: center; gap: 0; }
+.mu-gift-group input {
+    width: 52px; height: 26px; border: 1px solid #e2e8f0; border-right: none;
+    border-radius: 7px 0 0 7px; font-size: 12px; padding: 0 8px; outline: none;
+}
+.mu-gift-group button {
+    height: 26px; padding: 0 12px; font-size: 11px; font-weight: 600;
+    border: 1px solid #bfdbfe; border-radius: 0 7px 7px 0;
+    background: #eff6ff; color: #2563eb; cursor: pointer;
+}
+
+.mu-empty { text-align: center; padding: 60px 20px; color: #94a3b8; }
+
+@media (max-width: 768px) {
+    .mu-container { padding: 20px 16px; }
+    .mu-header { flex-direction: column; align-items: flex-start; }
+    .mu-toolbar { flex-direction: column; align-items: stretch; }
+}
