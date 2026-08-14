@@ -1748,17 +1748,37 @@ def custom_admin_toggle_full_access(request, user_id):
         from datetime import timedelta
         from django.utils import timezone
         if profile.is_premium():
-            # Downgrade to Free
             profile.has_full_access = False
             profile.premium_expires_at = None
             status = "Free"
         else:
-            # Upgrade to Premium for 30 days
             profile.has_full_access = True
             profile.premium_expires_at = timezone.now() + timedelta(days=30)
             status = "Premium"
         profile.save()
         messages.success(request, f"'{target_user.username}' plan changed to {status}.")
+    return redirect("custom_admin_users")
+
+
+@user_passes_test(is_staff_check)
+def custom_admin_gift_days(request, user_id):
+    target_user = get_object_or_404(User, id=user_id)
+    if request.method == "POST":
+        from datetime import timedelta
+        from django.utils import timezone
+        try:
+            days = int(request.POST.get("days", "0"))
+        except (ValueError, TypeError):
+            days = 0
+        if days <= 0:
+            messages.error(request, "Please enter a valid number of days.")
+            return redirect("custom_admin_users")
+        profile = target_user.userprofile
+        profile.has_full_access = True
+        base = profile.premium_expires_at if profile.premium_expires_at and profile.premium_expires_at > timezone.now() else timezone.now()
+        profile.premium_expires_at = base + timedelta(days=days)
+        profile.save()
+        messages.success(request, f"Gifted {days} day(s) of Premium to '{target_user.username}'.")
     return redirect("custom_admin_users")
 
 

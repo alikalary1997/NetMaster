@@ -75,4 +75,5 @@ urlpatterns = [
     path('admin/users/toggle-superuser/<int:user_id>/', custom_admin_toggle_superuser, name='custom_admin_toggle_superuser'),
     path('admin/users/change-password/<int:user_id>/', views.custom_admin_change_password, name='custom_admin_change_password'),
     path('admin/users/toggle-full-access/<int:user_id>/', views.custom_admin_toggle_full_access, name='custom_admin_toggle_full_access'),
+    path('admin/users/gift-days/<int:user_id>/', views.custom_admin_gift_days, name='custom_admin_gift_days'),
 ]
