@@ -125,15 +125,12 @@ def test_list(request):
 
 @login_required
 def start_test(request, test_id):
-    # Check if user is blocked via their UserProfile
-    if (
-        request.user.userprofile.blocked_until
-        and request.user.userprofile.blocked_until > timezone.now()
-    ):
+    if request.user.userprofile.is_currently_blocked():
         messages.error(
             request,
             "You are temporarily blocked from taking tests until "
-            + request.user.userprofile.blocked_until.strftime("%Y-%m-%d %H:%M"),
+            + (request.user.userprofile.blocked_until.strftime("%Y-%m-%d %H:%M")
+               if request.user.userprofile.blocked_until else "further notice"),
         )
         return redirect("test_list")  # Redirect back to test list or home
 
@@ -166,15 +163,12 @@ def start_test(request, test_id):
 
 @login_required
 def take_question(request, attempt_id, question_index):
-    # Check if user is blocked via their UserProfile
-    if (
-        request.user.userprofile.blocked_until
-        and request.user.userprofile.blocked_until > timezone.now()
-    ):
+    if request.user.userprofile.is_currently_blocked():
         messages.error(
             request,
             "You are temporarily blocked from taking tests until "
-            + request.user.userprofile.blocked_until.strftime("%Y-%m-%d %H:%M"),
+            + (request.user.userprofile.blocked_until.strftime("%Y-%m-%d %H:%M")
+               if request.user.userprofile.blocked_until else "further notice"),
         )
         return redirect("test_list")
 
@@ -1513,16 +1507,22 @@ def custom_admin_users(request):
     elif filter_status == "normal":
         users_queryset = users_queryset.filter(is_staff=False)
     elif filter_status == "blocked":
+        from django.db.models import Q
         users_queryset = users_queryset.filter(
-            userprofile__blocked_until__isnull=False,
-            userprofile__blocked_until__gt=timezone.now(),
+            Q(userprofile__is_blocked=True)
+            | Q(
+                userprofile__blocked_until__isnull=False,
+                userprofile__blocked_until__gt=timezone.now(),
+            )
         )
     elif filter_status == "active":
+        from django.db.models import Q
         users_queryset = users_queryset.filter(
-            userprofile__blocked_until__isnull=True
-        ) | users_queryset.filter(
-            userprofile__blocked_until__lt=timezone.now()
-        )  # not blocked or block expired
+            userprofile__is_blocked=False
+        ).filter(
+            Q(userprofile__blocked_until__isnull=True)
+            | Q(userprofile__blocked_until__lt=timezone.now())
+        )
 
     context = {
         "users": users_queryset,
@@ -1646,17 +1646,22 @@ def custom_admin_block_user(request, user_id):
     if request.method == "POST":
         form = UserBlockForm(
             request.POST, instance=user_profile
-        )  # Target UserProfile instance
+        )
         if form.is_valid():
-            form.save()
-            messages.success(
-                request,
-                f"User '{user_to_block.username}' blocked until {user_profile.blocked_until}.",
-            )
+            blocked_until = form.cleaned_data.get("blocked_until")
+            if blocked_until:
+                # Temporary block with expiry
+                user_profile.is_blocked = False
+                user_profile.blocked_until = blocked_until
+                msg = f"User '{user_to_block.username}' blocked until {blocked_until}."
+            else:
+                # Permanent block (no expiry)
+                user_profile.is_blocked = True
+                user_profile.blocked_until = None
+                msg = f"User '{user_to_block.username}' blocked permanently."
+            user_profile.save()
+            messages.success(request, msg)
             return redirect("custom_admin_users")
-        else:
-            # If form is invalid, re-render with errors
-            messages.error(request, "Please correct the form errors.")
     else:
         form = UserBlockForm(instance=user_profile)  # Pre-fill if already blocked
 
@@ -1673,7 +1678,8 @@ def custom_admin_unblock_user(request, user_id):
     user_to_unblock = get_object_or_404(User, id=user_id)
     user_profile = user_to_unblock.userprofile
     if request.method == "POST":
-        user_profile.blocked_until = None  # Set to None to unblock
+        user_profile.blocked_until = None
+        user_profile.is_blocked = False
         user_profile.save()
         messages.success(request, f"User '{user_to_unblock.username}' unblocked.")
         return redirect("custom_admin_users")

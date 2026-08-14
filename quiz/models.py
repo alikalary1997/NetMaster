@@ -27,6 +27,9 @@ class UserProfile(models.Model):
     blocked_until = models.DateTimeField(
         null=True, blank=True
     )  # Field for temporary blocking
+    is_blocked = models.BooleanField(
+        default=False
+    )  # True when permanently blocked (no expiry)
     has_full_access = models.BooleanField(
         default=False
     )  # True when user has paid/granted full access
@@ -41,6 +44,13 @@ class UserProfile(models.Model):
         """Return True if premium is active (not expired)."""
         from django.utils import timezone
         return bool(self.premium_expires_at and self.premium_expires_at > timezone.now())
+
+    def is_currently_blocked(self):
+        """Return True if the user is blocked (permanently or temporarily)."""
+        from django.utils import timezone
+        if self.is_blocked:
+            return True
+        return bool(self.blocked_until and self.blocked_until > timezone.now())
 
     def premium_days_left(self):
         """Return number of full days remaining in premium, or 0."""

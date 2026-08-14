@@ -4,11 +4,12 @@
 
 {% block content %}
 <div class="max-w-md mx-auto bg-base-100 p-8 rounded-xl shadow-md">
-    <h2 class="text-2xl font-bold mb-6">Block User: {{ user_to_block.username }}</h2>
-    <p class="mb-4">Current Status:
-        {# Access blocked_until via user_to_block.userprofile #}
-        {% if user_to_block.userprofile.blocked_until and user_to_block.userprofile.blocked_until > now %}
-            <span class="badge badge-warning">Blocked Until: {{ user_to_block.userprofile.blocked_until|date:"Y-m-d H:i" }}</span>
+    <h2 class="text-2xl font-bold mb-2">Block User</h2>
+    <p class="text-sm text-base-content/60 mb-6">Blocking user: <strong>{{ user_to_block.username }}</strong></p>
+
+    <p class="mb-4">
+        {% if user_to_block.userprofile.is_currently_blocked %}
+            <span class="badge badge-warning">Currently Blocked</span>
         {% else %}
             <span class="badge badge-success">Not Currently Blocked</span>
         {% endif %}
@@ -16,10 +17,12 @@
 
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }} {# Renders the form fields #}
-        <p class="text-sm text-base-content mt-2">To unblock, clear the date field and save.</p>
-        <button type="submit" class="btn btn-primary mt-6">Update Block Status</button>
-        <a href="{% url 'custom_admin_users' %}" class="btn btn-ghost mt-6 ml-4">Cancel</a>
+        {{ form.as_p }}
+        <p class="text-sm text-base-content/70 mt-2">Leave the date blank to block permanently (until you unblock).</p>
+        <div class="flex gap-2 mt-6">
+            <button type="submit" class="btn btn-warning">Block User</button>
+            <a href="{% url 'custom_admin_users' %}" class="btn btn-ghost">Cancel</a>
+        </div>
     </form>
 </div>
 {% endblock %}

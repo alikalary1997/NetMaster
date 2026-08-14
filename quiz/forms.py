@@ -155,11 +155,11 @@ class UserBlockForm(forms.ModelForm):
         widget=forms.DateTimeInput(
             attrs={"type": "datetime-local", "class": "input input-bordered w-full"}
         ),
-        label="Block Until (Leave blank to unblock)",
+        label="Block Until (Leave blank to block permanently)",
     )
 
     class Meta:
-        model = UserProfile  # Correctly targets UserProfile
+        model = UserProfile
         fields = ["blocked_until"]
 
     def clean_blocked_until(self):

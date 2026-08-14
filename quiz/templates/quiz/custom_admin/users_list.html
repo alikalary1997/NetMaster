@@ -93,8 +93,12 @@
                             </div>
                         </td>
                         <td>
-                            {% if user.userprofile.blocked_until and user.userprofile.blocked_until > now %}
+                            {% if user.userprofile.is_currently_blocked %}
+                                {% if user.userprofile.is_blocked %}
+                                <span class="mu-badge blocked">Blocked (permanent)</span>
+                                {% else %}
                                 <span class="mu-badge blocked">Blocked: {{ user.userprofile.blocked_until|date:"Y-m-d H:i" }}</span>
+                                {% endif %}
                             {% else %}
                                 <span class="mu-badge notblocked">Not Blocked</span>
                             {% endif %}
@@ -130,7 +134,7 @@
                                 {% endif %}
 
                                 {# Block/Unblock #}
-                                {% if user.userprofile.blocked_until and user.userprofile.blocked_until > now %}
+                                {% if user.userprofile.is_currently_blocked %}
                                 <form action="{% url 'custom_admin_unblock_user' user.id %}" method="post">
                                     {% csrf_token %}
                                     <button type="submit" class="mu-action-btn unblock">Unblock</button>
