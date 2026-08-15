@@ -21,7 +21,10 @@
                     <span class="arrow">▶</span>
                 </button>
                 <div class="study-lessons">
-                    <button class="study-lesson active" data-lesson="lesson-1" onclick="showLesson(this)">VLAN</button>
+                    <button class="study-lesson active" data-lesson="lesson-what-is-network" onclick="showLesson(this)">What Is a Network?</button>
+                    <button class="study-lesson" data-lesson="lesson-interfaces" onclick="showLesson(this)">Interfaces and Cables</button>
+                    <button class="study-lesson" data-lesson="lesson-tcpip" onclick="showLesson(this)">TCP/IP Model</button>
+                    <button class="study-lesson" data-lesson="lesson-1" onclick="showLesson(this)">VLAN</button>
                     <button class="study-lesson" data-lesson="lesson-2" onclick="showLesson(this)">Subnetting</button>
                     <button class="study-lesson" data-lesson="lesson-3" onclick="showLesson(this)">OSI Model</button>
                 </div>
@@ -54,7 +57,339 @@
     <main class="study-content">
         <div class="study-content-inner">
 
-            <section class="lesson-section active" id="lesson-1">
+            <section class="lesson-section active" id="lesson-what-is-network">
+                <div class="breadcrumb">Network Fundamentals › What Is a Network?</div>
+                <h1>What Is a Network?</h1>
+                <p>A computer network is a group of connected devices that can communicate with one another and share information or resources. A network can be very simple, such as two computers connected by a cable, or extremely large, such as the Internet.</p>
+                <p>The important idea is that connected devices can exchange data and make use of services provided by other devices.</p>
+                <img src="{% static 'images/study/f-1.png' %}" alt="Two computers connected">
+                <p>Create a clean networking diagram showing two computers connected directly by a network cable. Label them PC1 and PC2, and visually show that the connection allows them to communicate.</p>
+
+                <h2>What Is a Network Node?</h2>
+                <p>A network node is a device that participates in a network. Nodes can have different roles depending on what they are doing and how they are connected.</p>
+                <p>Common examples of network nodes include:</p>
+                <p>• Computers and laptops<br>• Smartphones and tablets<br>• Servers<br>• Network printers<br>• Switches<br>• Routers<br>• Firewalls</p>
+                <p>Some nodes are used by people to access services, while others provide services, connect multiple devices, forward traffic, or protect the network.</p>
+                <img src="{% static 'images/study/f-2.png' %}" alt="Network nodes">
+                <p>Create a simple professional CCNA-style diagram showing a PC, laptop, server, switch, router, firewall, and network printer. Use clear labels and simple network connections.</p>
+
+                <h2>The Main Network Devices</h2>
+                <p>Several network devices appear repeatedly in CCNA networking. Understanding their basic purpose is important before learning more advanced topics.</p>
+                <p><strong>Router:</strong> Connects different networks and forwards traffic between them.<br><strong>Switch:</strong> Connects devices within the same local network, or LAN.<br><strong>Firewall:</strong> Controls and filters network traffic according to security rules.<br><strong>Server:</strong> Provides services or resources to other devices.<br><strong>Client:</strong> Requests or uses a service provided by another device.</p>
+                <p>These roles are related, but they are not always permanent. For example, the same computer can act as a client when requesting a file and as a server when providing a file to another device.</p>
+                <img src="{% static 'images/study/f-3.png' %}" alt="Main network devices">
+                <p>Create a clean overview diagram showing a client PC, server, switch, router, and firewall, with each device labeled and connected in a logical network.</p>
+
+                <h2>Key Points to Remember</h2>
+                <p>• A network allows connected devices to communicate and share resources.<br>• A node is a device that participates in a network.<br>• Clients request or use services.<br>• Servers provide services.<br>• Switches connect devices within a LAN.<br>• Routers connect different networks.<br>• Firewalls control and filter network traffic.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-interfaces">
+                <div class="breadcrumb">Network Fundamentals › Interfaces and Cables</div>
+                <h1>Interfaces and Cables</h1>
+
+                <h2>1. Network Interfaces and Ports</h2>
+                <p>A network interface is the point where a device connects to a network. These interfaces are commonly called ports.</p>
+                <p>Switches usually have many ports because they connect multiple end devices such as computers, printers, and servers.</p>
+                <p>For example, a switch may provide 24 Ethernet ports, with each port providing a physical connection for a network cable.</p>
+                <img src="{% static 'images/study/c-1.png' %}" alt="Switch ports">
+                <p>Show a modern switch with many Ethernet ports and several PCs connected. Clearly label the ports.</p>
+
+                <h2>2. RJ-45</h2>
+                <p>RJ-45 is the common connector and port used for many copper Ethernet connections.</p>
+                <p>You can find RJ-45 ports on computers, switches, routers, and other network devices. The RJ-45 connector is attached to the end of a copper Ethernet cable.</p>
+                <p>Different cables may have different colors or designs, but compatible RJ-45 connectors fit into the corresponding Ethernet ports.</p>
+                <img src="{% static 'images/study/c-2.png' %}" alt="RJ-45 connector">
+                <p>Show a close-up RJ-45 Ethernet port and an RJ-45 connector on a copper cable, with clear labels.</p>
+
+                <h2>3. Ethernet</h2>
+                <p>Ethernet is a collection of networking standards and technologies used for communication over local networks.</p>
+                <p>For this lesson, the important part is how Ethernet standards define physical connections, including cable types, interfaces, and supported speeds.</p>
+
+                <h2>Why Network Standards Matter</h2>
+                <p>Network devices need common rules so equipment from different manufacturers can communicate and connect correctly.</p>
+                <p>Standards define physical requirements such as connector shapes and cables, as well as logical communication rules such as IP.</p>
+                <p>Without common standards, a cable and a network device might not even be physically compatible.</p>
+                <img src="{% static 'images/study/c-3.png' %}" alt="Network standards">
+                <p>Show devices from different manufacturers communicating successfully because they follow common physical and networking standards.</p>
+
+                <h2>Bits and Bytes</h2>
+                <p>Network speeds are measured in bits per second (bps). A bit is a binary value represented by 0 or 1.</p>
+                <p>Eight bits make one byte. Network bandwidth is normally expressed in bits, such as Mbps or Gbps, while storage and file sizes are commonly expressed in bytes.</p>
+                <p>1 kilobit = 1,000 bits; 1 megabit = 1,000,000 bits; 1 gigabit = 1,000,000,000 bits; 1 terabit = 1,000,000,000,000 bits.</p>
+                <p>Because one byte contains eight bits, a gigabyte contains eight times as many bits as a gigabit.</p>
+                <img src="{% static 'images/study/c-4.png' %}" alt="Bits and bytes">
+                <p>Show 8 individual bits grouped into 1 byte, and compare Mbps/Gbps with MB/GB.</p>
+
+                <h2>Ethernet Standards for Copper</h2>
+                <p>Many Ethernet standards are defined by the IEEE 802.3 family.</p>
+                <p>Common copper Ethernet standards include 10BASE-T at 10 Mbps, 100BASE-T at 100 Mbps, 1000BASE-T at 1 Gbps, and 10GBASE-T at 10 Gbps.</p>
+                <p>These twisted-pair Ethernet connections commonly support up to 100 meters under the standard's normal specifications.</p>
+                <p>The T in these names refers to twisted-pair cabling.</p>
+                <img src="{% static 'images/study/c-5.png' %}" alt="Ethernet standards">
+                <p>Create a clean chart comparing 10BASE-T, 100BASE-T, 1000BASE-T, and 10GBASE-T by speed and distance.</p>
+
+                <h2>UTP Cables</h2>
+                <p>UTP stands for Unshielded Twisted Pair. It is one of the most common copper Ethernet cable types.</p>
+                <p>A UTP cable contains four twisted pairs, giving eight copper wires in total.</p>
+                <p>The twisting helps reduce the effects of electromagnetic interference (EMI). The cable is called unshielded because it does not have a metallic shield around the wire pairs.</p>
+                <p>A typical RJ-45 connector has eight contact positions, matching the eight conductors in the cable.</p>
+                <img src="{% static 'images/study/c-6.png' %}" alt="UTP cable">
+                <p>Show a cutaway UTP cable with four twisted pairs, eight wires, the outer jacket, and an RJ-45 connector.</p>
+
+                <h2>10BASE-T and 100BASE-T Pin Usage</h2>
+                <p>10BASE-T and 100BASE-T traditionally use two wire pairs, which means four conductors are used.</p>
+                <p>For a PC-to-switch connection, the PC transmits on pins 1 and 2 and receives on pins 3 and 6. The switch uses the opposite arrangement.</p>
+                <p>Using separate transmit and receive pairs allows full-duplex communication, meaning both devices can send and receive data at the same time.</p>
+                <img src="{% static 'images/study/c-7.png' %}" alt="Pin usage">
+                <p>Show a PC connected to a switch with pins 1-2 and 3-6 clearly labeled as Tx and Rx.</p>
+
+                <h2>Straight-Through Cables</h2>
+                <p>A straight-through cable keeps the same pin numbers connected from one end to the other: pin 1 to pin 1, pin 2 to pin 2, and so on.</p>
+                <p>This works for traditional connections such as PC-to-switch and router-to-switch because the devices use opposite transmit and receive pin arrangements.</p>
+                <img src="{% static 'images/study/c-8.png' %}" alt="Straight-through cable">
+                <p>Show both ends of a straight-through cable with identical pin numbers connected directly across.</p>
+
+                <h2>Crossover Cables</h2>
+                <p>A crossover cable swaps the transmit and receive pairs between the two ends.</p>
+                <p>For example, pins 1 and 2 on one end connect to pins 3 and 6 on the other end. This allows devices with the same traditional transmit/receive arrangement to communicate.</p>
+                <p>Crossover cables were traditionally used for connections such as PC-to-PC, switch-to-switch, router-to-router, and PC-to-router.</p>
+                <img src="{% static 'images/study/c-9.png' %}" alt="Crossover cable">
+                <p>Compare a straight-through and crossover cable. Clearly show the 1-2 and 3-6 pairs crossing on the crossover cable.</p>
+
+                <h2>Auto MDI-X</h2>
+                <p>Modern network devices commonly support Auto MDI-X.</p>
+                <p>Auto MDI-X detects the transmit and receive arrangement of the connected device and automatically adjusts the interface.</p>
+                <p>Because of this feature, modern devices can usually communicate without requiring you to choose between straight-through and crossover cables manually.</p>
+                <p>Understanding the traditional cable types is still important for CCNA knowledge and older equipment.</p>
+                <img src="{% static 'images/study/c-10.png' %}" alt="Auto MDI-X">
+                <p>Show two switches connected with a straight-through cable and a visual explanation of Auto MDI-X automatically adjusting Tx/Rx.</p>
+
+                <h2>1000BASE-T and 10GBASE-T</h2>
+                <p>Gigabit Ethernet and 10-Gigabit Ethernet over copper use all four twisted pairs, which means all eight conductors are involved.</p>
+                <p>The additional pairs are 4-5 and 7-8.</p>
+                <p>In 1000BASE-T and 10GBASE-T, each pair can carry data in both directions. This contributes to the higher speeds of these standards.</p>
+
+                <h2>Fiber-Optic Connections</h2>
+                <p>Copper UTP is useful for many local connections, but its typical Ethernet distance limit of about 100 meters can be a problem for longer links.</p>
+                <p>Fiber-optic technology uses light instead of electrical signals and supports much longer distances.</p>
+                <p>Networking equipment commonly uses SFP transceivers for fiber connections. SFP means Small Form-factor Pluggable.</p>
+                <p>A duplex fiber connection normally uses separate fibers for transmitting and receiving data.</p>
+                <img src="{% static 'images/study/c-11.png' %}" alt="SFP fiber">
+                <p>Show a switch with RJ-45 ports and SFP ports, an SFP transceiver inserted into a slot, and a duplex fiber cable with Tx/Rx labels.</p>
+
+                <p>A fiber-optic cable contains several layers. The core is the central glass section that carries light.</p>
+                <p>Cladding surrounds the core and helps keep the light inside the fiber.</p>
+                <p>A buffer provides additional protection, while the outer jacket protects the cable from the external environment.</p>
+                <img src="{% static 'images/study/c-12.png' %}" alt="Fiber layers">
+                <p>Show a labeled cross-section with core, cladding, buffer, and outer jacket.</p>
+
+                <h2>Multimode Fiber</h2>
+                <p>Multimode fiber has a larger core than single-mode fiber, allowing multiple paths of light to travel through it.</p>
+                <p>It supports longer distances than typical UTP copper, but shorter distances than single-mode fiber.</p>
+                <p>Multimode fiber is generally less expensive than single-mode fiber because it can use less expensive transmitters.</p>
+                <img src="{% static 'images/study/c-13.png' %}" alt="Multimode fiber">
+                <p>Show a wide fiber core with several light paths traveling at different angles.</p>
+
+                <h2>Single-Mode Fiber</h2>
+                <p>Single-mode fiber has a much narrower core and is designed for light to travel primarily along a single path.</p>
+                <p>It supports much longer distances than UTP and multimode fiber.</p>
+                <p>Single-mode fiber is generally more expensive because it commonly uses laser-based transmitters and specialized components.</p>
+                <img src="{% static 'images/study/c-14.png' %}" alt="Single-mode fiber">
+                <p>Compare multimode and single-mode fiber side by side, showing the different core sizes and light paths.</p>
+
+                <h2>Common Fiber-Optic Standards</h2>
+                <p>1000BASE-LX provides 1 Gbps fiber Ethernet and can operate over single-mode or multimode fiber, with distance depending on the fiber type.</p>
+                <p>10GBASE-SR provides 10 Gbps over multimode fiber and can support distances up to about 400 meters.</p>
+                <p>10GBASE-LR provides 10 Gbps over single-mode fiber and can support distances up to about 10 kilometers.</p>
+                <p>10GBASE-ER provides 10 Gbps over single-mode fiber and can support distances up to about 30 kilometers.</p>
+
+                <h2>UTP vs Fiber-Optic</h2>
+                <p>UTP copper cables are generally cheaper and are commonly used for connecting nearby end hosts to switches.</p>
+                <p>UTP connections are typically limited to about 100 meters and can be affected by electromagnetic interference.</p>
+                <p>Fiber-optic cables cost more but support much longer distances and use light instead of electrical signals.</p>
+                <p>Fiber connections use transceivers such as SFPs, which are generally more expensive than RJ-45 copper interfaces.</p>
+                <p>Fiber does not radiate an electrical signal in the same way copper does, which can provide an advantage in environments where signal leakage is a concern.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-tcpip">
+                <div class="breadcrumb">Network Fundamentals › TCP/IP Model</div>
+                <h1>TCP/IP Model</h1>
+
+                <h2>1. What Is the TCP/IP Model?</h2>
+                <p>TCP/IP is a family of networking protocols that allows devices to communicate across networks, including the Internet.</p>
+                <p>Protocols such as IP, TCP, UDP, and HTTP perform different parts of the communication process.</p>
+                <p>The TCP/IP model organizes networking functions into layers. Each layer has a specific responsibility, making it easier to understand how networking technologies work together.</p>
+                <p>The model is a practical framework. Different resources may use slightly different numbers or names of layers.</p>
+                <img src="{% static 'images/study/tcp-1.png' %}" alt="TCP/IP stack">
+                <p>Create a clean five-layer TCP/IP stack showing Application, Transport, Internet, Local Network, and Physical.</p>
+
+                <h2>2. Protocols and Standards</h2>
+                <p>A protocol is a set of rules that defines how devices communicate and exchange data over a network.</p>
+                <p>Protocols can be thought of as languages used by computers. Devices need compatible rules to understand one another.</p>
+                <p>Early networks often used proprietary protocols designed for specific vendors. This made communication between different manufacturers difficult.</p>
+                <p>Modern networks rely on open, vendor-neutral standards. When devices follow the same standards, equipment from different manufacturers can communicate.</p>
+                <img src="{% static 'images/study/tcp-2.png' %}" alt="Common standards">
+                <p>Show computers from different manufacturers communicating successfully because they use common standards.</p>
+
+                <h2>3. A Short History of TCP/IP</h2>
+                <p>The development of the networks that eventually became the Internet began in the 1960s.</p>
+                <p>ARPA funded ARPANET, which became operational in 1969 to connect computers at universities and research locations.</p>
+                <p>ARPANET originally used NCP, the Network Control Program.</p>
+                <p>In 1974, Vint Cerf and Bob Kahn began developing TCP as an internetworking protocol. It later evolved into the separate TCP and IP protocols.</p>
+                <p>ARPANET officially transitioned to TCP/IP on January 1, 1983.</p>
+                <p>TCP/IP became widely adopted because it was based on open standards and could operate over many types of networks.</p>
+                <img src="{% static 'images/study/tcp-3.png' %}" alt="TCP/IP history">
+                <p>Create a timeline showing ARPANET 1969, TCP/IP development 1974, and the ARPANET TCP/IP transition in 1983.</p>
+
+                <h2>4. Who Defines Networking Standards?</h2>
+                <p>Networking standards are generally created by independent standards organizations rather than by one vendor.</p>
+                <p>The IEEE develops many local-network technologies. Ethernet is defined by IEEE 802.3, while Wi-Fi is defined by IEEE 802.11.</p>
+                <p>The IETF develops many important Internet protocols, including TCP, IP, UDP, HTTP, and DNS.</p>
+                <p>The IETF publishes standards in documents called RFCs, or Requests for Comments.</p>
+                <p>Standards organizations define the rules, while vendors such as Cisco implement those standards in their products.</p>
+                <img src="{% static 'images/study/tcp-4.png' %}" alt="IEEE and IETF">
+                <p>Compare IEEE and IETF. Show IEEE → Ethernet 802.3 and Wi-Fi 802.11; IETF → TCP, IP, UDP, HTTP, DNS.</p>
+
+                <h2>5. Why Use Layers?</h2>
+                <p>Network communication involves many jobs: transmitting physical signals, delivering data on a LAN, routing between networks, maintaining end-to-end communication, and supporting applications.</p>
+                <p>A layered model groups related jobs together. Each layer has its own responsibility.</p>
+                <p>Each layer uses services from the layer below and provides services to the layer above.</p>
+                <p>Protocols generally belong to a particular layer. Together, protocols at different layers form a protocol stack.</p>
+                <img src="{% static 'images/study/tcp-5.png' %}" alt="Layered model">
+                <p>Show five stacked layers with arrows showing services moving between adjacent layers.</p>
+
+                <h2>6. The Mail-Delivery Analogy</h2>
+                <p>A useful way to understand layers is to compare networking with sending a letter.</p>
+                <p>The letter contains the message. The envelope contains destination information, while the delivery system moves it through different transportation steps.</p>
+                <p>Different parts of the process focus on different information. The message focuses on its content, the envelope focuses on the destination, and the delivery system focuses on moving it toward the next stop.</p>
+                <p>Network layers work similarly: each layer performs its own task while cooperating with the other layers.</p>
+                <img src="{% static 'images/study/tcp-6.png' %}" alt="Mail analogy">
+                <p>Show a letter traveling from a sender through two post offices to the recipient, with different information handled at each stage.</p>
+
+                <h2>7. The Five-Layer TCP/IP Model</h2>
+                <p>For this course, the TCP/IP model is divided into five layers:</p>
+                <p>1. <strong>Application</strong> — communication between network applications.<br>2. <strong>Transport</strong> — communication between application processes using port numbers.<br>3. <strong>Internet</strong> — communication between hosts across networks using IP addresses.<br>4. <strong>Local Network</strong> — delivery across a local network using technologies such as Ethernet and Wi-Fi.<br>5. <strong>Physical</strong> — transmission of bits as electrical, optical, or radio signals.</p>
+                <img src="{% static 'images/study/tcp-7.png' %}" alt="Five layers">
+                <p>Create a polished vertical five-layer diagram with the layer names, purpose, and important examples.</p>
+
+                <h2>8. Example: PC Communicating With a Server</h2>
+                <p>Imagine PC1 sending a web request to SRV1. PC1 runs a web browser, while SRV1 runs a web server and possibly other services.</p>
+                <p>The Application layer creates the request and defines its application format.</p>
+                <p>The Transport layer uses a port number to identify the correct service on SRV1.</p>
+                <p>The Internet layer uses the destination IP address so routers can move the packet toward SRV1.</p>
+                <p>The Local Network layer handles each local hop using technologies such as Ethernet and MAC addresses.</p>
+                <p>The Physical layer sends the bits as electrical, optical, or radio signals.</p>
+                <img src="{% static 'images/study/tcp-8.png' %}" alt="PC to server">
+                <p>Show PC1 → SW1 → R1 → R2 → SW2 → SRV1 and label what each TCP/IP layer contributes.</p>
+
+                <h2>9. Layer 1 — Physical Layer</h2>
+                <p>Layer 1 is responsible for sending and receiving bits as physical signals.</p>
+                <p>Signals can be electrical over copper, optical over fiber, or radio over wireless connections.</p>
+                <p>This layer covers physical characteristics such as cables, connectors, signal levels, link speeds, antennas, and network interface hardware.</p>
+                <p>Examples include UTP cables, fiber-optic cables, Wi-Fi radios, antennas, and network interface cards (NICs).</p>
+                <img src="{% static 'images/study/tcp-9.png' %}" alt="Physical layer">
+                <p>Show UTP, fiber, Wi-Fi radio signals, and a NIC connected to a Layer 1 label.</p>
+
+                <h2>10. Layer 2 — Local Network Layer</h2>
+                <p>Layer 2 provides hop-to-hop delivery on a local network.</p>
+                <p>A hop is one step between two devices on a path. For example, PC1 → R1 is one hop, R1 → R2 is another, and R2 → SRV1 is a third.</p>
+                <p>Switches connect devices within a LAN and forward frames, but the switch itself is not counted as a hop in this example.</p>
+                <p>Layer 2 uses MAC addresses to identify network interfaces.</p>
+                <p>Important Layer 2 technologies for the CCNA include Ethernet and Wi-Fi.</p>
+                <img src="{% static 'images/study/tcp-10.png' %}" alt="Local network layer">
+                <p>Show PC1 → R1 → R2 → SRV1 and highlight the three hops, with switches shown as LAN connection devices.</p>
+
+                <h2>11. Layer 3 — Internet Layer</h2>
+                <p>Layer 3 provides end-to-end delivery between hosts across multiple networks.</p>
+                <p>It uses IP addresses to identify source and destination hosts.</p>
+                <p>Routers mainly operate at this layer by examining destination IP information and forwarding traffic toward the destination.</p>
+                <p>Important CCNA Layer 3 protocols include IPv4, IPv6, and ICMP.</p>
+                <p>A simple way to remember Layer 3 is: IP addresses and routers.</p>
+                <img src="{% static 'images/study/tcp-11.png' %}" alt="Internet layer">
+                <p>Show PC1 sending a packet toward SRV1 through two routers, with source and destination IP addresses labeled.</p>
+
+                <h2>12. Layer 4 — Transport Layer</h2>
+                <p>Layer 4 provides communication between application processes on different hosts.</p>
+                <p>A server may run multiple services at the same time. Port numbers identify which service should receive incoming data.</p>
+                <p>For example, a web service may use port 80, while traditional FTP uses port 21.</p>
+                <p>A transport port is a logical number identifying a process or service; it is not a physical network port.</p>
+                <p>The two major Transport-layer protocols for the CCNA are TCP and UDP.</p>
+                <img src="{% static 'images/study/tcp-12.png' %}" alt="Transport layer">
+                <p>Show one server running multiple services and demonstrate how different port numbers identify the correct application.</p>
+
+                <h2>13. Layer 5 — Application Layer</h2>
+                <p>Layer 5 is where network communication interacts with applications.</p>
+                <p>It defines how application processes format, send, and interpret network data.</p>
+                <p>HTTP and HTTPS are used for web communication, while FTP and TFTP are examples of file-transfer protocols.</p>
+                <p>Routers and switches normally do not need to understand Application-layer details. The end hosts interpret the application data.</p>
+                <img src="{% static 'images/study/tcp-13.jfif' %}" alt="Application layer">
+                <p>Show a web browser communicating with a web server using HTTP/HTTPS.</p>
+
+                <h2>14. Encapsulation</h2>
+                <p>When data is sent, it moves down the protocol stack and each layer adds information needed for its task.</p>
+                <p>The Transport layer adds information such as source and destination port numbers.</p>
+                <p>The Internet layer adds source and destination IP addresses.</p>
+                <p>The Local Network layer adds a Layer 2 header and trailer, including MAC addressing and error-checking information.</p>
+                <p>The Physical layer transmits the resulting bits as signals.</p>
+                <p>This process of adding layer-specific information while data moves down the stack is called encapsulation.</p>
+                <img src="{% static 'images/study/tcp-14.jfif' %}" alt="Encapsulation">
+                <p>Show Data → Transport header → IP header → Ethernet header/trailer → Bits/signals.</p>
+
+                <h2>15. Decapsulation</h2>
+                <p>The receiving device gets the transmitted bits and passes them upward through its protocol stack.</p>
+                <p>Layer 2 examines and removes its header and trailer. Layer 3 removes its IP header, and Layer 4 removes its transport header.</p>
+                <p>The original application data eventually reaches the Application layer.</p>
+                <p>Decapsulation is essentially encapsulation performed in reverse.</p>
+                <img src="{% static 'images/study/tcp-15.jfif' %}" alt="Decapsulation">
+                <p>Show a receiving server removing Layer 2, Layer 3, and Layer 4 information until the original data reaches the application.</p>
+
+                <h2>16. Protocol Data Units (PDUs)</h2>
+                <p>Data has different names as it moves through the layers.</p>
+                <p>At Layer 4, TCP data plus its header is called a segment. UDP data plus its header is called a datagram.</p>
+                <p>At Layer 3, the transport information plus the IP header is called a packet.</p>
+                <p>At Layer 2, the packet plus the Ethernet header and trailer is called a frame.</p>
+                <p>These are also called Protocol Data Units (PDUs): Layer 4 PDU = segment/datagram, Layer 3 PDU = packet, Layer 2 PDU = frame.</p>
+                <p>The payload is the information carried inside a PDU, excluding that layer's own header and trailer.</p>
+                <img src="{% static 'images/study/tcp-16.jfif' %}" alt="PDUs">
+                <p>Create a flow: Data → Segment/Datagram → Packet → Frame → Bits. Label L4, L3, L2, and Physical transmission.</p>
+
+                <h2>17. Adjacent-Layer Interaction</h2>
+                <p>Each layer provides a service to the layer directly above it and receives services from the layer directly below it.</p>
+                <p>Layer 4 uses port numbers to deliver data to the correct application. Layer 3 uses IP addresses to deliver data to the correct host. Layer 2 uses MAC addresses to deliver a frame to the next hop. Layer 1 transmits bits as physical signals.</p>
+                <p>This relationship is called adjacent-layer interaction.</p>
+                <img src="{% static 'images/study/tcp-17.jfif' %}" alt="Adjacent layers">
+                <p>Show the five layers with arrows between adjacent layers and a short service description for each.</p>
+
+                <h2>18. Same-Layer Interaction</h2>
+                <p>Same-layer interaction describes the logical communication between corresponding layers on different devices.</p>
+                <p>For example, Application-layer communication occurs between applications on the two end hosts.</p>
+                <p>Transport information identifies the destination application, IP information identifies the destination host, and MAC information identifies the next hop.</p>
+                <p>The layers cooperate inside each device while supporting communication between corresponding layers.</p>
+                <img src="{% static 'images/study/tcp-18.jfif' %}" alt="Same-layer interaction">
+                <p>Show two hosts with matching TCP/IP layers and horizontal arrows between corresponding layers.</p>
+
+                <h2>19. Why Layer Separation Matters</h2>
+                <p>One major advantage of a layered architecture is flexibility.</p>
+                <p>A protocol at one layer can often be changed without redesigning every other layer.</p>
+                <p>For example, an application can use a different application protocol while the lower layers continue using IP and Ethernet. Likewise, Ethernet can be replaced with Wi-Fi without changing the higher layers.</p>
+                <p>This modular design makes networks easier to develop, replace, and troubleshoot.</p>
+                <img src="{% static 'images/study/tcp-19.jfif' %}" alt="Layer separation">
+                <p>Show the same application communication working over Ethernet and Wi-Fi while the upper layers remain unchanged.</p>
+
+                <h2>20. TCP/IP and the OSI Model</h2>
+                <p>The OSI model is another important networking reference model. It has seven layers: Application, Presentation, Session, Transport, Network, Data Link, and Physical.</p>
+                <p>TCP/IP became the dominant protocol suite used in real-world networks, while OSI remains widely used for teaching and describing networking layers.</p>
+                <p>In a common five-layer comparison, TCP/IP Application broadly corresponds to OSI Layers 5–7, Transport to Layer 4, Internet to Layer 3, Local Network to Layer 2, and Physical to Layer 1.</p>
+                <p>Many networking resources use the names Network for Layer 3 and Data Link for Layer 2. In practice, engineers commonly refer to these simply as Layer 3 and Layer 2.</p>
+                <img src="{% static 'images/study/tcp-20.jfif' %}" alt="TCP/IP vs OSI">
+                <p>Create a side-by-side comparison of the five-layer TCP/IP model and seven-layer OSI model, with corresponding layers aligned.</p>
+
+                <h2>CCNA Key Points</h2>
+                <p>• Protocols define rules for network communication.<br>• Standards allow devices from different vendors to work together.<br>• IEEE defines technologies such as Ethernet (802.3) and Wi-Fi (802.11).<br>• IETF defines many Internet protocols and publishes standards as RFCs.<br>• The five layers used here are Application, Transport, Internet, Local Network, and Physical.<br>• Layer 1 handles physical signals and media.<br>• Layer 2 provides hop-to-hop delivery and uses MAC addresses.<br>• Layer 3 provides host-to-host delivery across networks and uses IP addresses.<br>• Layer 4 provides process-to-process communication using port numbers; TCP and UDP are key protocols.<br>• Layer 5 handles communication between applications.<br>• Encapsulation adds headers/trailers as data moves down the stack.<br>• Decapsulation removes them as data moves up the stack.<br>• TCP uses segments, UDP uses datagrams, Layer 3 uses packets, and Layer 2 uses frames.<br>• Layered design makes networking technologies modular and easier to change.<br>• The OSI model has seven layers and is mainly used as a reference and teaching model.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-1">
                 <div class="breadcrumb">Network Fundamentals › VLAN</div>
                 <h1>VLAN (Virtual LAN)</h1>
                 <p>A VLAN (Virtual Local Area Network) is a logical grouping of devices within a physical network. It allows you to separate a switch into multiple broadcast domains, improving performance and security.</p>
