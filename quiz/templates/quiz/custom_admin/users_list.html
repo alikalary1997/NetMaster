@@ -58,6 +58,7 @@
                         <th>ID</th>
                         <th>Username</th>
                         <th>Email</th>
+                        <th>Phone Number</th>
                         <th>Status</th>
                         <th>Blocked Until</th>
                         <th>Actions</th>
@@ -76,6 +77,7 @@
                             </div>
                         </td>
                         <td class="mu-email">{{ user.email|default:"N/A" }}</td>
+                        <td class="mu-email">{{ user.userprofile.phone|default:"N/A" }}</td>
                         <td>
                             <div style="display:flex;gap:4px;flex-wrap:wrap">
                                 {% if user.is_superuser %}
