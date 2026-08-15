@@ -1,0 +1,49 @@
+/* Study Page */
+.study-page { display: flex; gap: 24px; max-width: 1400px; margin: 0 auto; padding: 24px 40px; min-height: 70vh; }
+.study-sidebar { width: 260px; flex-shrink: 0; }
+.study-sidebar-inner {
+    position: sticky; top: 90px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+    padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.study-sidebar h3 { font-size: 13px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: .08em; margin: 0 0 8px; padding: 0 8px; }
+.study-topic { margin-bottom: 4px; }
+.study-topic-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 9px 10px; font-size: 13px; font-weight: 600;
+    color: #0f172a; background: none; border: none; border-radius: 8px;
+    cursor: pointer; transition: background .15s;
+}
+.study-topic-btn:hover { background: #f1f5f9; }
+.study-topic-btn .arrow { font-size: 11px; color: #94a3b8; transition: transform .2s; }
+.study-topic.open .arrow { transform: rotate(90deg); }
+.study-lessons { display: none; padding: 2px 0 4px 16px; }
+.study-topic.open .study-lessons { display: block; }
+.study-lesson {
+    display: block; width: 100%; text-align: left;
+    padding: 7px 10px; font-size: 13px; color: #64748b;
+    background: none; border: none; border-radius: 8px; cursor: pointer;
+    transition: all .15s;
+}
+.study-lesson:hover { color: #0f172a; background: #f8fafc; }
+.study-lesson.active { color: #4f46e5; background: #eef2ff; font-weight: 600; }
+
+.study-content { flex: 1; min-width: 0; }
+.study-content-inner {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+    padding: 32px 36px; box-shadow: 0 1px 3px rgba(0,0,0,.04);
+}
+.lesson-section { display: none; }
+.lesson-section.active { display: block; }
+.lesson-section h1 { font-size: 24px; font-weight: 800; color: #0f172a; margin: 0 0 8px; }
+.lesson-section .breadcrumb { font-size: 12px; color: #94a3b8; margin-bottom: 16px; }
+.lesson-section h2 { font-size: 17px; font-weight: 700; color: #1e293b; margin: 24px 0 8px; }
+.lesson-section p { font-size: 14px; color: #475569; line-height: 1.7; margin: 0 0 14px; }
+.lesson-section img { max-width: 100%; height: auto; border-radius: 10px; margin: 12px 0; border: 1px solid #e2e8f0; }
+
+@media (max-width: 768px) {
+    .study-page { flex-direction: column; padding: 16px; }
+    .study-sidebar { width: 100%; }
+    .study-sidebar-inner { position: static; }
+    .study-content-inner { padding: 20px; }
+}

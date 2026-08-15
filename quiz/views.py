@@ -83,7 +83,24 @@ def landing_page(request):
 
 
 def study_view(request):
+    from .models import SiteSetting
+    setting, _ = SiteSetting.objects.get_or_create(pk=1)
+    # Show the live study page only to staff/admins (preview mode).
+    # Regular users keep seeing "Coming Soon" until we launch publicly.
+    if setting.study_live and request.user.is_authenticated and request.user.is_staff:
+        return render(request, "quiz/study_content.html")
     return render(request, "quiz/study.html")
+
+
+@user_passes_test(lambda u: u.is_staff)
+def toggle_study_live(request):
+    from .models import SiteSetting
+    setting, _ = SiteSetting.objects.get_or_create(pk=1)
+    setting.study_live = not setting.study_live
+    setting.save()
+    state = "ON" if setting.study_live else "OFF"
+    messages.success(request, f"Study page is now {state}.")
+    return redirect("landing_page")
 
 
 def about_view(request):

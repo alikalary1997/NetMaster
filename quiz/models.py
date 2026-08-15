@@ -64,6 +64,17 @@ class UserProfile(models.Model):
         return self.user.username + " Profile"
 
 
+class SiteSetting(models.Model):
+    """Singleton settings toggled from the admin panel."""
+
+    study_live = models.BooleanField(
+        default=False
+    )  # True when study content is visible to users
+
+    def __str__(self):
+        return "Site Settings"
+
+
 # --- NEW: Signals to Create/Save UserProfile Automatically ---
 # This ensures every new User automatically gets a UserProfile
 @receiver(post_save, sender=User)

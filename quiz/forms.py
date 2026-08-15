@@ -190,6 +190,13 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 # --- NEW: Custom User Creation Form for Signup Page ---
 class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(
+        required=True,
+        label="Email",
+        widget=forms.EmailInput(
+            attrs={"placeholder": "you@example.com"}
+        ),
+    )
     phone = forms.CharField(
         max_length=10,
         required=True,
@@ -201,7 +208,13 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = UserCreationForm.Meta.fields + ("phone",)
+        fields = ("username", "email")
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email", "").strip().lower()
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already registered.")
+        return email
 
     def clean_phone(self):
         phone = self.cleaned_data.get("phone", "").strip()
@@ -219,6 +232,8 @@ class CustomUserCreationForm(UserCreationForm):
                 placeholder_text = "Password"
             elif field_name == "username":
                 placeholder_text = "Choose a Username"
+            elif field_name == "email":
+                placeholder_text = "you@example.com"
             elif field_name == "phone":
                 placeholder_text = "7717000284"
 

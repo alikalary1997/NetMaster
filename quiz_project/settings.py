@@ -123,6 +123,9 @@ STATIC_URL = 'static/'
 # additive and does not affect any existing app-static resolution.
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
+# Study page feature toggle (False = users see "Coming Soon")
+STUDY_LIVE = False
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

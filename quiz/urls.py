@@ -29,6 +29,7 @@ urlpatterns = [
 
     # Test Views (User Facing)
     path('study/', views.study_view, name='study'),
+    path('admin/toggle-study-live/', views.toggle_study_live, name='toggle_study_live'),
     path('about/', views.about_view, name='about'),
 
     # Practice Exam

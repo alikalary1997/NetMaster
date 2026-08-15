@@ -1,0 +1,117 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+
+{% block title %}Study{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'quiz/css/study.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="study-page">
+
+    {# Sidebar #}
+    <aside class="study-sidebar">
+        <div class="study-sidebar-inner">
+            <h3>📚 Lessons</h3>
+
+            <div class="study-topic open">
+                <button class="study-topic-btn" onclick="toggleTopic(this)">
+                    <span>Network Fundamentals</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="study-lessons">
+                    <button class="study-lesson active" data-lesson="lesson-1" onclick="showLesson(this)">VLAN</button>
+                    <button class="study-lesson" data-lesson="lesson-2" onclick="showLesson(this)">Subnetting</button>
+                    <button class="study-lesson" data-lesson="lesson-3" onclick="showLesson(this)">OSI Model</button>
+                </div>
+            </div>
+
+            <div class="study-topic">
+                <button class="study-topic-btn" onclick="toggleTopic(this)">
+                    <span>IP Connectivity</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="study-lessons">
+                    <button class="study-lesson" data-lesson="lesson-4" onclick="showLesson(this)">Routing Basics</button>
+                    <button class="study-lesson" data-lesson="lesson-5" onclick="showLesson(this)">OSPF</button>
+                </div>
+            </div>
+
+            <div class="study-topic">
+                <button class="study-topic-btn" onclick="toggleTopic(this)">
+                    <span>Security Fundamentals</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="study-lessons">
+                    <button class="study-lesson" data-lesson="lesson-6" onclick="showLesson(this)">Firewalls</button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    {# Content #}
+    <main class="study-content">
+        <div class="study-content-inner">
+
+            <section class="lesson-section active" id="lesson-1">
+                <div class="breadcrumb">Network Fundamentals › VLAN</div>
+                <h1>VLAN (Virtual LAN)</h1>
+                <p>A VLAN (Virtual Local Area Network) is a logical grouping of devices within a physical network. It allows you to separate a switch into multiple broadcast domains, improving performance and security.</p>
+                <h2>Why Use VLANs?</h2>
+                <p>VLANs reduce broadcast traffic, improve security by isolating departments, and allow flexible network design without changing physical cabling.</p>
+                <h2>Example</h2>
+                <p>You can put the HR department on VLAN 10 and the IT department on VLAN 20 — even if they are connected to the same switch.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-2">
+                <div class="breadcrumb">Network Fundamentals › Subnetting</div>
+                <h1>Subnetting</h1>
+                <p>Subnetting is dividing a larger network into smaller, more manageable sub-networks. It helps reduce congestion and improves security.</p>
+                <h2>Example</h2>
+                <p>The network 192.168.1.0/24 can be divided into smaller subnets like 192.168.1.0/26, creating 4 subnets with 64 addresses each.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-3">
+                <div class="breadcrumb">Network Fundamentals › OSI Model</div>
+                <h1>OSI Model</h1>
+                <p>The OSI (Open Systems Interconnection) model is a 7-layer framework that standardizes how network devices communicate.</p>
+                <h2>The 7 Layers</h2>
+                <p>Physical, Data Link, Network, Transport, Session, Presentation, and Application.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-4">
+                <div class="breadcrumb">IP Connectivity › Routing Basics</div>
+                <h1>Routing Basics</h1>
+                <p>Routing is the process of forwarding packets between different networks. Routers use routing tables to determine the best path for data.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-5">
+                <div class="breadcrumb">IP Connectivity › OSPF</div>
+                <h1>OSPF (Open Shortest Path First)</h1>
+                <p>OSPF is a link-state routing protocol that calculates the shortest path to a destination using Dijkstra's algorithm.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-6">
+                <div class="breadcrumb">Security Fundamentals › Firewalls</div>
+                <h1>Firewalls</h1>
+                <p>A firewall is a network security device that monitors and filters incoming and outgoing traffic based on security rules.</p>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<script>
+function toggleTopic(btn) {
+    btn.parentElement.classList.toggle('open');
+}
+function showLesson(btn) {
+    document.querySelectorAll('.study-lesson').forEach(function(l){ l.classList.remove('active'); });
+    btn.classList.add('active');
+    document.querySelectorAll('.lesson-section').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById(btn.dataset.lesson).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+{% endblock %}
