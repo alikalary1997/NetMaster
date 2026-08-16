@@ -1540,6 +1540,17 @@ def custom_admin_users(request):
             Q(userprofile__blocked_until__isnull=True)
             | Q(userprofile__blocked_until__lt=timezone.now())
         )
+    elif filter_status == "premium":
+        users_queryset = users_queryset.filter(
+            userprofile__premium_expires_at__isnull=False,
+            userprofile__premium_expires_at__gt=timezone.now(),
+        )
+    elif filter_status == "free":
+        from django.db.models import Q
+        users_queryset = users_queryset.filter(
+            Q(userprofile__premium_expires_at__isnull=True)
+            | Q(userprofile__premium_expires_at__lt=timezone.now())
+        )
 
     context = {
         "users": users_queryset,
@@ -1776,7 +1787,7 @@ def custom_admin_toggle_full_access(request, user_id):
             status = "Free"
         else:
             profile.has_full_access = True
-            profile.premium_expires_at = timezone.now() + timedelta(days=30)
+            profile.premium_expires_at = timezone.now() + timedelta(days=31)
             status = "Premium"
         profile.save()
         messages.success(request, f"'{target_user.username}' plan changed to {status}.")

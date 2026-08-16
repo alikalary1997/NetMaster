@@ -45,6 +45,8 @@
             <a href="{% url 'custom_admin_users' %}?q={{ search_query }}&status=normal" class="mu-filter {% if filter_status == 'normal' %}active{% endif %}">Normal</a>
             <a href="{% url 'custom_admin_users' %}?q={{ search_query }}&status=blocked" class="mu-filter {% if filter_status == 'blocked' %}active{% endif %}">Blocked</a>
             <a href="{% url 'custom_admin_users' %}?q={{ search_query }}&status=active" class="mu-filter {% if filter_status == 'active' %}active{% endif %}">Active</a>
+            <a href="{% url 'custom_admin_users' %}?q={{ search_query }}&status=free" class="mu-filter {% if filter_status == 'free' %}active{% endif %}">Free</a>
+            <a href="{% url 'custom_admin_users' %}?q={{ search_query }}&status=premium" class="mu-filter {% if filter_status == 'premium' %}active{% endif %}">Premium</a>
         </div>
     </div>
 
@@ -87,7 +89,7 @@
                                 {% else %}
                                 <span class="mu-badge normal">Normal</span>
                                 {% if user.userprofile.is_premium %}
-                                <span class="mu-badge premium">Premium</span>
+                                <span class="mu-badge premium">Premium · {{ user.userprofile.premium_days_left }} days</span>
                                 {% else %}
                                 <span class="mu-badge free">Free</span>
                                 {% endif %}
