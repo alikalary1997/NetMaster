@@ -37,6 +37,7 @@
                 </button>
                 <div class="study-lessons">
                     <button class="study-lesson" data-lesson="lesson-ethernet" onclick="showLesson(this)">Ethernet LAN Switching</button>
+                    <button class="study-lesson" data-lesson="lesson-ethernet-deep" onclick="showLesson(this)">Ethernet LAN Switching — Deeper Concepts</button>
                 </div>
             </div>
 
@@ -509,6 +510,128 @@
 
                 <h2>22. Key Points to Remember</h2>
                 <p>• Ethernet LAN switching primarily operates at OSI Layer 2.<br>• A LAN covers a relatively small network area; routers connect separate LANs.<br>• A Layer 2 PDU is a frame.<br>• Ethernet frames contain a header and trailer around the encapsulated packet.<br>• MAC addresses are 48-bit Layer 2 addresses.<br>• The first 3 bytes of a MAC address form the OUI.<br>• A switch learns MAC addresses from the SOURCE MAC address of received frames.<br>• Unknown unicast frames are flooded out other interfaces.<br>• Known unicast frames are forwarded through the interface associated with the destination MAC.<br>• Dynamically learned MAC entries can age out after inactivity.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-ethernet-deep">
+                <div class="breadcrumb">Switching Fundamentals › Ethernet LAN Switching — Deeper Concepts</div>
+                <h1>Ethernet LAN Switching — Deeper Concepts</h1>
+
+                <p>This lesson goes deeper into Ethernet LAN switching. The main focus is how devices communicate inside the same LAN, how switches learn MAC addresses, and how ARP helps devices discover the MAC address associated with a known IP address.</p>
+                <p>We will also look at Ethernet frame details, MAC address tables, ping, and how to analyze traffic with Wireshark.</p>
+
+                <h2>Ethernet Frame Review</h2>
+                <p>The Preamble and Start Frame Delimiter (SFD) are transmitted with every Ethernet frame, but they are usually not counted as part of the Ethernet header.</p>
+                <p>The Ethernet header contains Destination MAC Address, Source MAC Address, and Type. The header is 14 bytes and the FCS trailer is 4 bytes, giving 18 bytes for the header and trailer.</p>
+                <p>The minimum Ethernet frame size is 64 bytes, not including the Preamble and SFD. Therefore, 64 − 18 = 46 bytes, so the minimum Ethernet payload is 46 bytes.</p>
+
+                <h2>Ethernet Padding</h2>
+                <p>When the payload is smaller than 46 bytes, Ethernet adds padding bytes. For example, a 34-byte payload requires 12 bytes of padding.</p>
+                <img src="{% static 'images/study/ln-1.png' %}" alt="Ethernet padding">
+
+                <h2>Network Topology</h2>
+                <p>Imagine a small LAN containing several PCs connected through two switches using Gigabit Ethernet interfaces such as G0/0, G0/1, and G0/2.</p>
+                <p>A MAC address is 48 bits and is normally written in hexadecimal, for example 0C2F.B011.9D00. The OUI identifies the manufacturer, while the remaining portion identifies the individual interface.</p>
+                <img src="{% static 'images/study/ln-2.png' %}" alt="Network topology">
+
+                <h2>IP Addresses and MAC Addresses</h2>
+                <p>Device — IP Address</p>
+                <p>PC1 — 192.168.1.1<br>PC2 — 192.168.1.2<br>PC3 — 192.168.1.3<br>PC4 — 192.168.1.4</p>
+                <p>The network can be represented as 192.168.1.0/24. When PC1 communicates with PC3, the IP packet uses source 192.168.1.1 and destination 192.168.1.3. PC1 initially does not know PC3's MAC address, so it must use ARP.</p>
+
+                <h2>ARP — Address Resolution Protocol</h2>
+                <p>ARP is used to discover the MAC address associated with a known IPv4 address on the local network. It uses two messages: ARP Request and ARP Reply.</p>
+                <p>The ARP Request is broadcast because the destination MAC is unknown. The ARP Reply is unicast directly back to the requesting device.</p>
+                <img src="{% static 'images/study/ln-3.png' %}" alt="ARP">
+
+                <h2>ARP Request</h2>
+                <p>PC1 knows PC3's IP address, 192.168.1.3, but not its MAC address. It creates an ARP Request with source IP 192.168.1.1, destination IP 192.168.1.3, PC1's source MAC, and destination MAC FFFF.FFFF.FFFF.</p>
+                <p>FFFF.FFFF.FFFF is the Ethernet broadcast MAC address, meaning the frame is delivered to all devices on the local Layer 2 network.</p>
+                <img src="{% static 'images/study/ln-4.png' %}" alt="ARP request">
+
+                <h2>How the Switch Handles the ARP Request</h2>
+                <p>When SW1 receives the request, it learns PC1's source MAC address as a dynamic entry. Because the destination is the broadcast MAC, SW1 floods the frame out the other relevant interfaces except the incoming interface.</p>
+                <p>PC2 ignores the request because the destination IP is not its own. SW2 also learns PC1's MAC address on the inter-switch interface and floods the broadcast. PC4 ignores it, while PC3 recognizes its IP address and sends an ARP Reply.</p>
+
+                <h2>ARP Reply</h2>
+                <p>The ARP Reply contains source IP 192.168.1.3, destination IP 192.168.1.1, PC3's source MAC, and PC1's destination MAC.</p>
+                <p>Because PC3 learned PC1's MAC from the ARP Request, it can send the reply as a unicast frame instead of broadcasting.</p>
+                <img src="{% static 'images/study/ln-5.png' %}" alt="ARP reply">
+
+                <h2>Known Unicast Forwarding</h2>
+                <p>SW2 receives the ARP Reply, learns PC3's MAC address, and already knows PC1's MAC address from the request. It therefore looks up PC1's MAC and forwards the frame only through the correct interface. It does not flood the frame.</p>
+                <p>SW1 performs the same lookup and forwards the reply toward PC1.</p>
+                <img src="{% static 'images/study/ln-6.png' %}" alt="Known unicast">
+
+                <h2>ARP Table</h2>
+                <p>After receiving the ARP Reply, PC1 stores the IP-to-MAC relationship in its ARP table. On Windows, macOS, and Linux, arp -a can display the ARP table.</p>
+                <p>Internet Address — Physical Address — Type<br>192.168.0.1 — MAC address — Dynamic</p>
+                <p>The Internet Address is the IP address, the Physical Address is the MAC address, and Type indicates whether the entry is static or dynamic.</p>
+                <img src="{% static 'images/study/ln-7.png' %}" alt="ARP table">
+
+                <h2>GNS3 and Network Simulation</h2>
+                <p>GNS3 can create virtual network topologies and can run actual Cisco IOS software virtually. Packet Tracer is a simulator designed to simulate Cisco networking behavior and is convenient for many CCNA labs. GNS3 can become useful later for more advanced networking practice.</p>
+
+                <h2>Ping</h2>
+                <p>Ping tests whether one device can reach another and measures round-trip time. It uses ICMP Echo Request and ICMP Echo Reply.</p>
+                <p>ping 192.168.1.3</p>
+                <p>An ICMP Echo Request is sent to a specific destination, not broadcast. Therefore, PC1 needs PC3's MAC address first, which is why ARP may occur before a successful ping.</p>
+                <img src="{% static 'images/study/ln-8.png' %}" alt="Ping">
+
+                <h2>Why the First Ping Can Fail</h2>
+                <p>If PC1 does not yet know PC3's MAC address, it must first perform ARP: ARP Request → ARP Reply → MAC address learned. After that, ICMP traffic can be sent normally.</p>
+
+                <h2>Wireshark Packet Capture</h2>
+                <p>Wireshark is a network protocol analyzer that captures and inspects network traffic. A typical sequence for this example is ARP Request, ARP Reply, ICMP Echo Request, and ICMP Echo Reply.</p>
+                <p>The ARP Request uses the broadcast destination MAC FFFF.FFFF.FFFF. The ARP Reply is unicast from PC3 to PC1. ICMP Echo Requests travel from PC1 to PC3, and Echo Replies travel back.</p>
+                <img src="{% static 'images/study/ln-9.png' %}" alt="Wireshark">
+
+                <h2>MAC Address Table</h2>
+                <p>A switch maintains a MAC address table to determine where Ethernet frames should be forwarded.</p>
+                <p>show mac address-table</p>
+                <p>Older Cisco IOS versions may use: show mac-address-table</p>
+                <p>The table contains VLAN, MAC Address, Type, and Port.</p>
+                <p>VLAN — MAC Address — Type — Port<br>1 — PC1 MAC — Dynamic — G0/0<br>1 — PC3 MAC — Dynamic — G0/1</p>
+                <img src="{% static 'images/study/ln-10.png' %}" alt="MAC table">
+
+                <h2>MAC Address Aging</h2>
+                <p>Dynamic MAC addresses do not remain in the table forever. If the switch does not receive traffic from a learned MAC address for 5 minutes, the dynamic entry is normally removed. This is called MAC address aging.</p>
+                <p>The basic process is: MAC learned → 5 minutes without traffic → MAC entry removed. If traffic arrives again, the switch can learn the MAC address again.</p>
+                <img src="{% static 'images/study/ln-11.png' %}" alt="MAC aging">
+
+                <h2>Clearing Dynamic MAC Addresses</h2>
+                <p>Dynamic entries can also be manually removed.</p>
+                <p>clear mac address-table dynamic</p>
+                <p>To remove one dynamic MAC address:</p>
+                <p>clear mac address-table dynamic address MAC_ADDRESS</p>
+                <p>To remove dynamic entries learned through one interface:</p>
+                <p>clear mac address-table dynamic interface gi0/0</p>
+                <img src="{% static 'images/study/ln-12.png' %}" alt="Clearing MAC">
+
+                <h2>Ethernet Frame Type Field</h2>
+                <p>The Ethernet Type field identifies the protocol carried inside the frame.</p>
+                <p>Protocol — EtherType<br>IPv4 — 0x0800<br>ARP — 0x0806<br>IPv6 — 0x86DD</p>
+                <p>The 0x prefix indicates hexadecimal.</p>
+
+                <h2>Ethernet Padding Example</h2>
+                <p>If an ICMP payload is 36 bytes, Ethernet must add 10 bytes of padding because the minimum payload is 46 bytes. Ten bytes appear as 20 hexadecimal zero digits.</p>
+                <img src="{% static 'images/study/ln-13.png' %}" alt="Padding example">
+
+                <h2>ARP EtherType</h2>
+                <p>ARP is carried inside Ethernet frames with EtherType 0x0806. IPv4 uses 0x0800 and IPv6 uses 0x86DD. The Type field helps identify the encapsulated protocol in Wireshark.</p>
+                <img src="{% static 'images/study/ln-14.png' %}" alt="ARP EtherType">
+
+                <h2>Complete Communication Process</h2>
+                <p>Step 1 — Destination IP: PC1 knows PC3's IP address: 192.168.1.3.<br>Step 2 — MAC Address Unknown: PC1 does not yet know PC3's MAC address.<br>Step 3 — ARP Request: PC1 sends an ARP Request as a broadcast.<br>Step 4 — Switch Learning: The switches learn PC1's source MAC address.<br>Step 5 — ARP Reply: PC3 sends an ARP Reply directly to PC1.<br>Step 6 — MAC Learning: The switches learn PC3's MAC address.<br>Step 7 — ARP Table: PC1 stores PC3's IP-to-MAC relationship.<br>Step 8 — Normal Data Transmission: PC1 creates an Ethernet frame with PC1/PC3 MAC addresses and IP addresses.<br>Step 9 — Switch Forwarding: The switches use their MAC tables to forward the frame toward PC3.</p>
+                <img src="{% static 'images/study/ln-15.png' %}" alt="Complete process">
+
+                <h2>Key Points to Remember</h2>
+                <p>• Preamble and SFD are transmitted with every Ethernet frame.<br>• They are usually not counted as part of the Ethernet header.<br>• Ethernet header = 14 bytes.<br>• FCS = 4 bytes.<br>• Minimum Ethernet frame size = 64 bytes.<br>• Minimum payload = 46 bytes.<br>• Padding is added when the payload is smaller than 46 bytes.</p>
+                <p>• ARP means Address Resolution Protocol.<br>• It maps a known IPv4 address to a MAC address.<br>• ARP Request = broadcast.<br>• ARP Reply = unicast.</p>
+                <p>• Ping tests network reachability.<br>• It uses ICMP Echo Request and ICMP Echo Reply.<br>• ARP may occur before the first successful ping when the destination MAC address is unknown.</p>
+                <p>A Cisco switch MAC address table contains VLAN, MAC Address, Type, and Port. Dynamic MAC addresses can age out after 5 minutes of inactivity.</p>
+                <p>show mac address-table<br>clear mac address-table dynamic<br>clear mac address-table dynamic address MAC_ADDRESS<br>clear mac address-table dynamic interface gi0/0</p>
+                <p>IPv4 → 0x0800<br>ARP → 0x0806<br>IPv6 → 0x86DD</p>
+                <p>Overall: IP Address Known → ARP Finds MAC Address → Ethernet Frame Created → Switches Forward Using MAC Addresses → Destination Receives the Frame.</p>
             </section>
 
             <section class="lesson-section" id="lesson-1">
