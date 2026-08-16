@@ -44,10 +44,12 @@
                     <div style="padding:4px 16px;font-size:10px;color:#94a3b8;text-transform:uppercase;letter-spacing:.1em;font-weight:700">Admin</div>
                     <a href="{% url 'custom_admin_tests' %}" style="display:block;padding:9px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Tests</a>
                     <a href="{% url 'custom_admin_questions' %}" style="display:block;padding:9px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Questions</a>
+                    {% if user.is_superuser %}
                     <a href="{% url 'custom_admin_users' %}" style="display:block;padding:9px 16px;font-size:13px;color:#0f172a;text-decoration:none;font-weight:500">Manage Users</a>
                     <form action="{% url 'toggle_study_live' %}" method="post" style="margin:0">{% csrf_token %}
                         <button type="submit" style="display:block;width:100%;text-align:left;padding:9px 16px;font-size:13px;color:#0f172a;background:none;border:none;cursor:pointer;font-weight:500">🔄 Toggle Study Page</button>
                     </form>
+                    {% endif %}
                     <div style="border-top:1px solid #f1f5f9;margin:4px 0"></div>
                     {% endif %}
                     <form action="{% url 'logout' %}" method="post" style="margin:0">{% csrf_token %}

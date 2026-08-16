@@ -1507,7 +1507,7 @@ def custom_admin_delete_question(request, question_id):
     )
 
 
-@user_passes_test(is_staff_check)
+@user_passes_test(lambda u: u.is_superuser)
 def custom_admin_users(request):
     filter_status = request.GET.get("status", "all")
     search_query = request.GET.get("q", "")
@@ -1623,7 +1623,7 @@ def custom_admin_delete_test(request, test_id):
     return render(request, "quiz/custom_admin/test_confirm_delete.html", context)
 
 
-@user_passes_test(is_staff_check)
+@user_passes_test(lambda u: u.is_superuser)
 def custom_admin_delete_user(request, user_id):
     user_to_delete = get_object_or_404(User, id=user_id)
     # Prevent superuser from deleting themselves or other superusers without extra confirmation
@@ -1645,7 +1645,7 @@ def custom_admin_delete_user(request, user_id):
     return render(request, "quiz/custom_admin/user_confirm_delete.html", context)
 
 
-@user_passes_test(is_staff_check)
+@user_passes_test(lambda u: u.is_superuser)
 def custom_admin_block_user(request, user_id):
     user_to_block = get_object_or_404(User, id=user_id)
     # Get or create UserProfile for the user
@@ -1690,7 +1690,7 @@ def custom_admin_block_user(request, user_id):
     return render(request, "quiz/custom_admin/user_block_form.html", context)
 
 
-@user_passes_test(is_staff_check)
+@user_passes_test(lambda u: u.is_superuser)
 def custom_admin_unblock_user(request, user_id):
     user_to_unblock = get_object_or_404(User, id=user_id)
     user_profile = user_to_unblock.userprofile
@@ -1706,7 +1706,7 @@ def custom_admin_unblock_user(request, user_id):
     return redirect("custom_admin_users")
 
 
-@user_passes_test(is_staff_check)
+@user_passes_test(lambda u: u.is_superuser)
 def custom_admin_toggle_staff(request, user_id):
     user_to_toggle = get_object_or_404(User, id=user_id)
     if request.method == "POST":
@@ -1736,7 +1736,7 @@ def custom_admin_toggle_staff(request, user_id):
     return redirect("custom_admin_users")
 
 
-@user_passes_test(is_staff_check)
+@user_passes_test(lambda u: u.is_superuser)
 def custom_admin_toggle_superuser(request, user_id):
     user_to_toggle = get_object_or_404(User, id=user_id)
     if request.method == "POST":
@@ -1763,7 +1763,7 @@ def custom_admin_toggle_superuser(request, user_id):
     return redirect("custom_admin_users")
 
 
-@user_passes_test(is_staff_check)
+@user_passes_test(lambda u: u.is_superuser)
 def custom_admin_toggle_full_access(request, user_id):
     target_user = get_object_or_404(User, id=user_id)
     if request.method == "POST":
@@ -1783,7 +1783,7 @@ def custom_admin_toggle_full_access(request, user_id):
     return redirect("custom_admin_users")
 
 
-@user_passes_test(is_staff_check)
+@user_passes_test(lambda u: u.is_superuser)
 def custom_admin_gift_days(request, user_id):
     target_user = get_object_or_404(User, id=user_id)
     if request.method == "POST":
@@ -1805,7 +1805,7 @@ def custom_admin_gift_days(request, user_id):
     return redirect("custom_admin_users")
 
 
-@user_passes_test(is_staff_check)
+@user_passes_test(lambda u: u.is_superuser)
 def custom_admin_change_password(request, user_id):
     target_user = get_object_or_404(User, id=user_id)
     if request.method == "POST":
