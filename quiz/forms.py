@@ -171,6 +171,14 @@ class UserBlockForm(forms.ModelForm):
 
 # --- Custom Authentication Form for Login Page ---
 class CustomAuthenticationForm(AuthenticationForm):
+    def confirm_login_allowed(self, user):
+        super().confirm_login_allowed(user)
+        if user.userprofile.is_currently_blocked():
+            raise forms.ValidationError(
+                "This account is blocked. Please contact the administrator.",
+                code="blocked",
+            )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Apply DaisyUI input classes to username and password fields
