@@ -32,6 +32,16 @@
 
             <div class="study-topic">
                 <button class="study-topic-btn" onclick="toggleTopic(this)">
+                    <span>Switching Fundamentals</span>
+                    <span class="arrow">▶</span>
+                </button>
+                <div class="study-lessons">
+                    <button class="study-lesson" data-lesson="lesson-ethernet" onclick="showLesson(this)">Ethernet LAN Switching</button>
+                </div>
+            </div>
+
+            <div class="study-topic">
+                <button class="study-topic-btn" onclick="toggleTopic(this)">
                     <span>IP Connectivity</span>
                     <span class="arrow">▶</span>
                 </button>
@@ -387,6 +397,118 @@
 
                 <h2>CCNA Key Points</h2>
                 <p>• Protocols define rules for network communication.<br>• Standards allow devices from different vendors to work together.<br>• IEEE defines technologies such as Ethernet (802.3) and Wi-Fi (802.11).<br>• IETF defines many Internet protocols and publishes standards as RFCs.<br>• The five layers used here are Application, Transport, Internet, Local Network, and Physical.<br>• Layer 1 handles physical signals and media.<br>• Layer 2 provides hop-to-hop delivery and uses MAC addresses.<br>• Layer 3 provides host-to-host delivery across networks and uses IP addresses.<br>• Layer 4 provides process-to-process communication using port numbers; TCP and UDP are key protocols.<br>• Layer 5 handles communication between applications.<br>• Encapsulation adds headers/trailers as data moves down the stack.<br>• Decapsulation removes them as data moves up the stack.<br>• TCP uses segments, UDP uses datagrams, Layer 3 uses packets, and Layer 2 uses frames.<br>• Layered design makes networking technologies modular and easier to change.<br>• The OSI model has seven layers and is mainly used as a reference and teaching model.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-ethernet">
+                <div class="breadcrumb">Network Fundamentals › Ethernet LAN Switching</div>
+                <h1>Ethernet LAN Switching</h1>
+
+                <h2>1. Ethernet LAN Switching</h2>
+                <p>Ethernet LAN switching focuses on how Ethernet frames travel between end devices and switches inside a local area network. The main topics are Layer 2 communication, MAC address learning, frame forwarding, and frame flooding.</p>
+                <img src="{% static 'images/study/et-1.png' %}" alt="Ethernet LAN switching">
+
+                <h2>2. OSI Physical Layer Review</h2>
+                <p>The Physical Layer defines the physical characteristics of the medium used to carry data between devices. This includes signal levels, maximum transmission distances, connectors, and cable specifications.</p>
+                <p>• Wired Ethernet uses electrical signals to represent bits.<br>• Wireless networks use radio signals.<br>• UTP cables, fiber-optic cables, RJ-45 connectors, and pin layouts are Physical Layer topics.</p>
+                <img src="{% static 'images/study/et-2.png' %}" alt="Physical layer">
+
+                <h2>3. OSI Data Link Layer Review</h2>
+                <p>Layer 2, the Data Link Layer, provides node-to-node connectivity and data transfer, such as PC-to-switch and switch-to-router communication.</p>
+                <p>• It defines how data is formatted for transmission over a physical medium.<br>• It can detect transmission errors.<br>• It uses Layer 2 addresses such as MAC addresses.<br>• MAC addresses are different from Layer 3 IP addresses.<br>• Ethernet operates across Layers 1 and 2.</p>
+                <img src="{% static 'images/study/et-3.png' %}" alt="Data link layer">
+
+                <h2>4. Local Area Networks (LANs)</h2>
+                <p>A LAN is a network contained within a relatively small area, such as a home, office, or office floor. Routers are used to connect separate LANs.</p>
+                <p>Adding switches can expand an existing LAN. Multiple switches can therefore belong to the same LAN, while different router interfaces can separate different LANs.</p>
+                <p>• Switches do not automatically create separate LANs.<br>• A router interface can belong to a particular LAN.<br>• This lesson focuses on traffic within a LAN.</p>
+                <img src="{% static 'images/study/et-4.png' %}" alt="LANs">
+
+                <h2>5. Protocol Data Units (PDUs)</h2>
+                <p>As data moves down the networking stack, each layer adds information needed for delivery. These different forms are called Protocol Data Units, or PDUs.</p>
+                <p>• Upper-layer information is called data.<br>• A Layer 4 header is added to form a segment.<br>• A Layer 3 header is added to form a packet.<br>• A Layer 2 header and trailer are added to form a frame.<br>• The Layer 2 PDU used by Ethernet is an Ethernet frame.</p>
+                <img src="{% static 'images/study/et-5.png' %}" alt="PDUs">
+
+                <h2>6. Ethernet Frame</h2>
+                <p>An Ethernet frame contains a header, an encapsulated packet, and a trailer. The header provides delivery information, while the trailer provides error-checking information.</p>
+                <p>• Preamble and SFD — synchronize the receiver and mark the beginning of the frame.<br>• Destination MAC — identifies the Layer 2 destination.<br>• Source MAC — identifies the Layer 2 sender.<br>• Type/Length — identifies the encapsulated Layer 3 protocol or indicates data length, depending on the Ethernet format.<br>• FCS — detects transmission errors.</p>
+                <img src="{% static 'images/study/et-6.png' %}" alt="Ethernet frame">
+
+                <h2>7. Preamble and Start Frame Delimiter (SFD)</h2>
+                <p>The preamble is 7 bytes, or 56 bits, and uses a repeating 1/0 pattern to synchronize the receiving device's clock.</p>
+                <p>The SFD is 1 byte, or 8 bits, with the pattern 10101011. It marks the end of the preamble and the beginning of the rest of the frame.</p>
+                <img src="{% static 'images/study/et-7.png' %}" alt="Preamble and SFD">
+
+                <h2>8. Destination and Source MAC Addresses</h2>
+                <p>Ethernet uses MAC addresses to identify the sender and receiver of a frame. MAC means Media Access Control.</p>
+                <p>• A MAC address is 6 bytes, or 48 bits.<br>• The destination MAC identifies the intended receiver.<br>• The source MAC identifies the sender.<br>• MAC addressing is separate from IP addressing.</p>
+                <img src="{% static 'images/study/et-8.png' %}" alt="MAC addresses">
+
+                <h2>9. Type / Length Field</h2>
+                <p>The Type/Length field is 2 bytes, or 16 bits. Depending on the value and Ethernet format, it can represent the length of the encapsulated data or identify the encapsulated protocol.</p>
+                <p>• 1500 or less can indicate length in bytes.<br>• 1536 or greater indicates protocol type.<br>• 0x0800 identifies IPv4.<br>• 0x86DD identifies IPv6.<br>• The prefix 0x indicates hexadecimal notation.</p>
+                <img src="{% static 'images/study/et-9.png' %}" alt="Type/length field">
+
+                <h2>10. Frame Check Sequence (FCS)</h2>
+                <p>The Ethernet trailer contains a 4-byte, 32-bit Frame Check Sequence. The receiver uses it to detect corrupted data.</p>
+                <p>FCS is generated using a Cyclic Redundancy Check (CRC). For CCNA purposes, remember that CRC is used for error detection and FCS carries the result in the Ethernet frame.</p>
+                <img src="{% static 'images/study/et-10.png' %}" alt="FCS">
+                <img src="{% static 'images/study/et-10-2.png' %}" alt="FCS detail">
+
+                <h2>11. Ethernet Frame Field Sizes</h2>
+                <p>• Preamble: 7 bytes<br>• SFD: 1 byte<br>• Destination MAC: 6 bytes<br>• Source MAC: 6 bytes<br>• Type/Length: 2 bytes<br>• FCS: 4 bytes</p>
+                <p>The lesson's listed fields total 26 bytes of framing information.</p>
+                <img src="{% static 'images/study/et-11.png' %}" alt="Frame field sizes">
+
+                <h2>12. MAC Addresses</h2>
+                <p>A MAC address is a 48-bit physical address associated with a network interface. It is often called a burned-in address (BIA) because it is commonly assigned when the device is manufactured.</p>
+                <p>• MAC addresses are written using 12 hexadecimal characters.<br>• The first 3 bytes form the OUI (Organizationally Unique Identifier).<br>• The OUI identifies the organization associated with the address range.<br>• The final 3 bytes identify the individual interface.<br>• Most MAC addresses are globally unique, although locally administered addresses also exist.</p>
+                <img src="{% static 'images/study/et-12.png' %}" alt="MAC address format">
+
+                <h2>13. Decimal Number System Review</h2>
+                <p>Decimal is a base-10 system using the digits 0 through 9. When a position reaches its maximum value, another position is added. For example, 10 represents one ten and zero ones, while 100 represents one hundred, zero tens, and zero ones.</p>
+
+                <h2>14. Hexadecimal Number System</h2>
+                <p>Hexadecimal is a base-16 system. It uses 0–9 and A–F, where A=10, B=11, C=12, D=13, E=14, and F=15.</p>
+                <p>After F, hexadecimal continues with 10, which represents decimal 16. Hexadecimal is commonly used for MAC addresses.</p>
+                <img src="{% static 'images/study/et-13.png' %}" alt="Hexadecimal">
+                <img src="{% static 'images/study/et-13-2.png' %}" alt="Hexadecimal detail">
+
+                <h2>15. MAC Addresses in a Switch Network</h2>
+                <p>Consider several PCs connected to a switch. Each PC has its own MAC address, and the switch uses those addresses to learn where devices can be reached.</p>
+                <img src="{% static 'images/study/et-14.png' %}" alt="Switch network">
+
+                <h2>16. Unicast Frames</h2>
+                <p>A unicast frame is intended for one specific destination. When PC1 sends a frame to PC2, the destination MAC identifies PC2 and the source MAC identifies PC1.</p>
+                <img src="{% static 'images/study/et-15.png' %}" alt="Unicast">
+
+                <h2>17. MAC Address Learning</h2>
+                <p>When a switch receives an Ethernet frame, it examines the source MAC address and the interface where the frame arrived. It can then record that relationship in its MAC address table.</p>
+                <p>• Switches learn from the SOURCE MAC address.<br>• The source MAC is associated with the receiving interface.<br>• The entry is dynamically learned.<br>• Switches use the MAC table to determine where destinations can be reached.</p>
+                <img src="{% static 'images/study/et-16.png' %}" alt="MAC learning">
+
+                <h2>18. Unknown Unicast and Flooding</h2>
+                <p>If a switch receives a unicast frame but does not know the destination MAC address, the frame is an unknown unicast.</p>
+                <p>The switch floods an unknown unicast by sending copies out of the other relevant interfaces except the interface on which the frame arrived.</p>
+                <p>• The incoming interface is excluded.<br>• A device whose MAC does not match the destination discards the frame.<br>• The intended destination processes the frame.<br>• A reply can allow the switch to learn the destination's MAC address.</p>
+                <img src="{% static 'images/study/et-17.png' %}" alt="Flooding">
+
+                <h2>19. Known Unicast and Forwarding</h2>
+                <p>When the destination MAC address is already in the MAC address table, the switch can forward the frame through the associated interface instead of flooding it.</p>
+                <p>• Unknown destination → flood.<br>• Known destination → forward to the appropriate interface.<br>• Switches continue learning source MAC addresses from received frames.</p>
+                <img src="{% static 'images/study/et-18.jfif' %}" alt="Forwarding">
+
+                <h2>20. MAC Address Aging</h2>
+                <p>Dynamically learned MAC entries can be removed after a period of inactivity. The lesson describes a 5-minute aging period on Cisco switches. If traffic is sent again, the switch can learn the MAC address again.</p>
+                <img src="{% static 'images/study/et-19.jfif' %}" alt="MAC aging">
+
+                <h2>21. MAC Learning Across Multiple Switches</h2>
+                <p>The same learning and forwarding rules apply when multiple switches are connected. Each switch learns the source MAC address and associates it with the interface where the frame arrived.</p>
+                <p>An interface in a MAC table does not necessarily mean the destination device is directly connected there. It means the switch knows that the destination can be reached through that interface.</p>
+                <p>If a destination is unknown, the frame can be flooded across the connected switches. As devices respond, the switches learn their MAC addresses. Later frames can then be forwarded directly.</p>
+                <img src="{% static 'images/study/et-20.jfif' %}" alt="Multi-switch learning">
+
+                <h2>22. Key Points to Remember</h2>
+                <p>• Ethernet LAN switching primarily operates at OSI Layer 2.<br>• A LAN covers a relatively small network area; routers connect separate LANs.<br>• A Layer 2 PDU is a frame.<br>• Ethernet frames contain a header and trailer around the encapsulated packet.<br>• MAC addresses are 48-bit Layer 2 addresses.<br>• The first 3 bytes of a MAC address form the OUI.<br>• A switch learns MAC addresses from the SOURCE MAC address of received frames.<br>• Unknown unicast frames are flooded out other interfaces.<br>• Known unicast frames are forwarded through the interface associated with the destination MAC.<br>• Dynamically learned MAC entries can age out after inactivity.</p>
             </section>
 
             <section class="lesson-section" id="lesson-1">
