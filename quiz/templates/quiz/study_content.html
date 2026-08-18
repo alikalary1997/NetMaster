@@ -26,6 +26,7 @@
                     <button class="study-lesson" data-lesson="lesson-tcpip" onclick="showLesson(this)">TCP/IP Model</button>
                     <button class="study-lesson" data-lesson="lesson-ethernet" onclick="showLesson(this)">Ethernet LAN Switching</button>
                     <button class="study-lesson" data-lesson="lesson-ethernet-deep" onclick="showLesson(this)">Ethernet LAN Switching — Deeper Concepts</button>
+                    <button class="study-lesson" data-lesson="lesson-ipv4" onclick="showLesson(this)">IPv4 Addresses and Binary</button>
                     <button class="study-lesson" data-lesson="lesson-1" onclick="showLesson(this)">VLAN</button>
                     <button class="study-lesson" data-lesson="lesson-2" onclick="showLesson(this)">Subnetting</button>
                     <button class="study-lesson" data-lesson="lesson-3" onclick="showLesson(this)">OSI Model</button>
@@ -649,6 +650,115 @@
                 <p>The OSI (Open Systems Interconnection) model is a 7-layer framework that standardizes how network devices communicate.</p>
                 <h2>The 7 Layers</h2>
                 <p>Physical, Data Link, Network, Transport, Session, Presentation, and Application.</p>
+            </section>
+
+            <section class="lesson-section" id="lesson-ipv4">
+                <div class="breadcrumb">Network Fundamentals › IPv4 Addresses and Binary</div>
+                <h1>IPv4 Addresses and Binary</h1>
+                <p>Layer 3 addressing, binary, IPv4 address classes, netmasks, and broadcast addresses.</p>
+
+                <h2>1. Network Layer Review</h2>
+                <p>The previous lessons focused on Ethernet LAN switching and communication within a LAN. This lesson moves from Layer 2, the Data Link layer, to Layer 3, the Network layer, where the focus is communication between different networks.</p>
+                <p>• The Network layer provides connectivity between end hosts on different networks.<br>• Layer 3 provides logical addressing, specifically IP addresses.<br>• Layer 2 uses MAC addresses, while Layer 3 uses logical IP addresses.<br>• Layer 3 provides path selection between source and destination.<br>• Routers operate at Layer 3.</p>
+                <img src="{% static 'images/study/ip-1.jfif' %}" alt="Layer 3 Network Layer and Routing">
+
+                <h2>2. Introduction to Routing</h2>
+                <p>A group of PCs connected through switches can remain part of the same LAN. For example, PCs can use the 192.168.1.0/24 network even when additional switches are added.</p>
+                <img src="{% static 'images/study/ip-2.jfif' %}" alt="LAN with multiple switches">
+                <p>When a router is placed between the switches, the network is divided into two separate Layer 3 networks. In the example, SW1, PC1, and PC2 use 192.168.1.0/24, while SW2, PC3, and PC4 use 192.168.2.0/24.</p>
+                <img src="{% static 'images/study/ip-3.jfif' %}" alt="Router separating two LANs">
+                <p>The router needs an IP address on each connected network. R1 G0/0 uses 192.168.1.254 and R1 G0/1 uses 192.168.2.254.</p>
+                <img src="{% static 'images/study/ip-4.jfif' %}" alt="Router interfaces with IP addresses">
+                <p>A Layer 2 broadcast is limited to the local network. A switch can flood the broadcast inside its LAN, but the router does not forward that Layer 2 broadcast into the other network.</p>
+                <img src="{% static 'images/study/ip-5.jfif' %}" alt="Broadcast boundary created by a router">
+
+                <h2>3. IPv4 Header</h2>
+                <p>IPv4 is the primary Layer 3 protocol discussed in this lesson. The IPv4 header contains many fields. Two important fields are the source IP address and destination IP address.</p>
+                <img src="{% static 'images/study/ip-6.jfif' %}" alt="IPv4 header with source and destination IP">
+                <p>The source and destination IPv4 address fields are each 32 bits long. Therefore, an IPv4 address is 32 bits, or 4 bytes, in length.</p>
+
+                <h2>4. IPv4 Addresses and Dotted Decimal</h2>
+                <p>An IPv4 address such as 192.168.1.254 contains four groups of numbers. Each group represents 8 bits, so the complete address contains four 8-bit octets.</p>
+                <img src="{% static 'images/study/ip-7.jfif' %}" alt="IPv4 address split into four octets">
+                <p>Computers represent these values in binary, using 0s and 1s. Because binary is difficult for humans to read, IPv4 addresses are normally written in dotted-decimal notation.</p>
+                <img src="{% static 'images/study/ip-8.jfif' %}" alt="IPv4 dotted decimal vs binary">
+
+                <h2>5. Decimal and Hexadecimal Review</h2>
+                <p>Decimal is base 10. Each position increases by a factor of 10. Hexadecimal is base 16, using digits 0–9 and letters A–F. The lesson uses decimal 3294 as an example of conversion between decimal and hexadecimal.</p>
+                <img src="{% static 'images/study/ip-9.jfif' %}" alt="Decimal and hexadecimal place values">
+
+                <h2>6. Binary Number System</h2>
+                <p>Binary is base 2, meaning each position increases by a factor of 2. An 8-bit binary octet uses the values 128, 64, 32, 16, 8, 4, 2, and 1.</p>
+                <img src="{% static 'images/study/ip-10.png' %}" alt="8-bit binary place values">
+                <p>For example, binary 11000000 represents 128 + 64 = 192. Binary 10101000 represents 128 + 32 + 8 = 168, and binary 11111110 represents 254.</p>
+                <img src="{% static 'images/study/ip-11.jfif' %}" alt="Binary to decimal example">
+                <p>Each group of eight bits in an IPv4 address is called an octet. Four octets make the complete 32-bit IPv4 address.</p>
+                <img src="{% static 'images/study/ip-12.png' %}" alt="IPv4 four-octet structure">
+
+                <h2>7. Binary to Decimal Conversion</h2>
+                <p>To convert an 8-bit binary octet to decimal, write the place values above the bits and add the values corresponding to every bit set to 1.</p>
+                <img src="{% static 'images/study/ip-13.png' %}" alt="Binary to decimal conversion method">
+                <p>Example: binary 10001111 equals 128 + 8 + 4 + 2 + 1 = 143.<br>Example: binary 01110110 equals 64 + 32 + 16 + 4 + 2 = 118.<br>The lesson also gives 11101100 as an example. Its decimal value is 236.</p>
+
+                <h2>8. Decimal to Binary Conversion</h2>
+                <p>To convert decimal to binary, begin with the 128 bit and determine whether each binary place value can be subtracted from the remaining decimal value. Write 1 when the value can be used and 0 when it cannot.</p>
+                <img src="{% static 'images/study/ip-14.png' %}" alt="Decimal to binary conversion method">
+                <p>Example: decimal 221 is converted by repeatedly subtracting 128, 64, 32, 16, 8, 4, 2, and 1 as appropriate. The source transcript explicitly flags its displayed result for 221 as an error: '(WRONG: CHECK ERRATA)'.</p>
+                <img src="{% static 'images/study/ip-15.png' %}" alt="Decimal 221 to binary worked example">
+                <p>Example: decimal 127 converts to binary 01111111.<br>Example: decimal 207 converts to binary 11001111.<br>An 8-bit binary value can represent numbers from 0 through 255 because 128 + 64 + 32 + 16 + 8 + 4 + 2 + 1 = 255.</p>
+                <img src="{% static 'images/study/ip-16.png' %}" alt="8-bit binary range 0 to 255">
+
+                <h2>9. IPv4 Network Portion and Host Portion</h2>
+                <p>An IPv4 address contains a network portion and a host portion. A prefix length such as /24 identifies how many of the 32 bits belong to the network portion.</p>
+                <img src="{% static 'images/study/ip-17.png' %}" alt="IPv4 network portion and host portion">
+                <img src="{% static 'images/study/ip-17-2.png' %}" alt="IPv4 network portion and host portion detail">
+                <p>With 192.168.1.254/24, the first 24 bits—or first three octets—are the network portion, and the final 8 bits—or last octet—are the host portion.</p>
+                <p>Hosts on the same network share the same network portion but have different host portions.</p>
+                <img src="{% static 'images/study/ip-18.png' %}" alt="Hosts sharing the same IPv4 network">
+                <p>A /16 prefix means the first 16 bits, or first two octets, are the network portion. A /8 prefix means the first 8 bits, or first octet, are the network portion.</p>
+                <img src="{% static 'images/study/ip-19.png' %}" alt="Prefix length examples /8 /16 /24">
+
+                <h2>10. IPv4 Address Classes</h2>
+                <p>The lesson introduces five IPv4 address classes based on the first octet: Class A, B, C, D, and E.</p>
+                <img src="{% static 'images/study/ip-20.png' %}" alt="IPv4 address classes A through E">
+                <p>• Class A: first octet range 0–127; leading bit begins with 0.<br>• Class B: first octet range 128–191; leading bits begin with 10.<br>• Class C: first octet range 192–223; leading bits begin with 110.<br>• Class D: first octet range 224–239; reserved for multicast.<br>• Class E: first octet range 240–255; reserved for experimental uses.</p>
+                <p>For the Class A range, the lesson explains that 127 is reserved for loopback, so the usual Class A range ends at 126.</p>
+                <img src="{% static 'images/study/ip-21.png' %}" alt="IPv4 class ranges and loopback boundary">
+                <img src="{% static 'images/study/ip-21-2.png' %}" alt="IPv4 class ranges detail">
+                <p>Class A uses a /8 prefix, Class B uses /16, and Class C uses /24 in the classful addressing model.</p>
+                <img src="{% static 'images/study/ip-22.png' %}" alt="Classful prefix lengths">
+                <p>Class A has fewer possible networks but many hosts per network. Class C has many possible networks but fewer hosts per network. Class B is between the two.</p>
+                <img src="{% static 'images/study/ip-23.png' %}" alt="Class A B C network and host capacity comparison">
+
+                <h2>11. Loopback Addresses</h2>
+                <p>The 127.0.0.0/8 range is reserved for loopback addresses. Traffic sent to an address in this range is processed back through the local device's network stack rather than being sent to another device.</p>
+                <img src="{% static 'images/study/ip-24.png' %}" alt="IPv4 loopback 127.0.0.0/8">
+                <p>The lesson demonstrates pinging 127.0.0.1 and another address in the 127.x.x.x range. The device responds to its own traffic, producing a round-trip time of 0 milliseconds in the example.</p>
+                <img src="{% static 'images/study/ip-25.png' %}" alt="Loopback ping example">
+
+                <h2>12. Prefix Lengths and Netmasks</h2>
+                <p>A prefix length can also be written using a dotted-decimal netmask. The network portion of the netmask is all 1s and the host portion is all 0s.</p>
+                <img src="{% static 'images/study/ip-26.png' %}" alt="Prefix length and dotted decimal netmask">
+                <p>• /8 = 255.0.0.0<br>• /16 = 255.255.0.0<br>• /24 = 255.255.255.0</p>
+                <p>Prefix length notation and dotted-decimal netmask notation represent the same division between network and host portions.</p>
+                <img src="{% static 'images/study/ip-27.png' %}" alt="Prefix length vs netmask comparison">
+
+                <h2>13. Network Address</h2>
+                <p>If the host portion of an IPv4 address is all 0s, the address is the network address. For 192.168.1.0/24, the first three octets identify the network and the host portion is 0.</p>
+                <img src="{% static 'images/study/ip-28.png' %}" alt="Network address with all-zero host portion">
+                <p>The network address cannot be assigned to a host. The first usable address is one greater than the network address; for 192.168.1.0/24, that is 192.168.1.1.</p>
+                <img src="{% static 'images/study/ip-29.png' %}" alt="Network address and first usable host address">
+
+                <h2>14. Broadcast Address</h2>
+                <p>If the host portion is all 1s, the address is the broadcast address for the network. For 192.168.1.0/24, the broadcast address is 192.168.1.255.</p>
+                <img src="{% static 'images/study/ip-30.png' %}" alt="Broadcast address with all-one host portion">
+                <p>The broadcast address cannot be assigned to a host. The last usable address is one less than the broadcast address; for 192.168.1.0/24, that is 192.168.1.254.</p>
+                <img src="{% static 'images/study/ip-31.png' %}" alt="Broadcast address and last usable host address">
+                <p>A Layer 3 broadcast packet is intended for all hosts on the local network. When the packet is carried inside an Ethernet frame, the destination MAC address is FFFF.FFFF.FFFF.</p>
+                <img src="{% static 'images/study/ip-32.png' %}" alt="IPv4 broadcast mapped to Ethernet broadcast MAC">
+
+                <h2>15. Lesson Review</h2>
+                <p>• IPv4 addresses are 32 bits long and are normally written in dotted-decimal notation.<br>• Each IPv4 address contains four 8-bit octets.<br>• Binary is base 2, decimal is base 10, and hexadecimal is base 16.<br>• IPv4 addresses contain a network portion and a host portion.<br>• Prefix lengths such as /8, /16, and /24 identify the length of the network portion.<br>• Class A, B, and C are the main address classes discussed for normal addressing in this lesson.<br>• 127.0.0.0/8 is reserved for loopback.<br>• A network address has a host portion of all 0s.<br>• A broadcast address has a host portion of all 1s.<br>• Network and broadcast addresses cannot be assigned to hosts.</p>
             </section>
 
             <section class="lesson-section" id="lesson-4">
